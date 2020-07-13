@@ -7,6 +7,10 @@ class RegisterState {
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final bool isPasswordConfirmed;
+  final String password;
+  final String confirmPassword;
+  final String name;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -16,6 +20,10 @@ class RegisterState {
     @required this.isSubmitting,
     @required this.isSuccess,
     @required this.isFailure,
+    @required this.isPasswordConfirmed,
+    @required this.password,
+    @required this.confirmPassword,
+    @required this.name,
   });
 
   factory RegisterState.initial() {
@@ -25,6 +33,10 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      isPasswordConfirmed: true,
+      password: "",
+      confirmPassword: "",
+      name: "",
     );
   }
 
@@ -35,6 +47,10 @@ class RegisterState {
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
+      isPasswordConfirmed: true,
+      password: "",
+      confirmPassword: "",
+      name: "",
     );
   }
 
@@ -45,6 +61,10 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
+      isPasswordConfirmed: true,
+      password: "",
+      confirmPassword: "",
+      name: "",
     );
   }
 
@@ -55,12 +75,20 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
+      isPasswordConfirmed: true,
+      password: "",
+      confirmPassword: "",
+      name: "",
     );
   }
 
   RegisterState update({
     bool isEmailValid,
     bool isPasswordValid,
+    bool isPasswordConfirmed,
+    String password,
+    String confirmPassword,
+    String name,
   }) {
     return copyWith(
       isEmailValid: isEmailValid,
@@ -68,6 +96,10 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      isPasswordConfirmed: isPasswordConfirmed,
+      password: password,
+      confirmPassword: confirmPassword,
+      name: name,
     );
   }
 
@@ -78,6 +110,10 @@ class RegisterState {
     bool isSubmitting,
     bool isSuccess,
     bool isFailure,
+    bool isPasswordConfirmed,
+    String password,
+    String confirmPassword,
+    String name,
   }) {
     return RegisterState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -85,6 +121,10 @@ class RegisterState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
+      isPasswordConfirmed: isPasswordConfirmed ?? this.isPasswordConfirmed,
+      password: password ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
+      name: name ?? this.name
     );
   }
 
@@ -96,6 +136,10 @@ class RegisterState {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      isPasswordConfirmed : $isPasswordConfirmed,
+      password : $password,
+      confirmPassword : $confirmPassword,
+      name : $name,
     }''';
   }
 }
