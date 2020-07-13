@@ -11,11 +11,12 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   RegisterBloc _registerBloc;
 
   bool get isPopulated =>
-      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && _confirmPasswordController.text.isNotEmpty;
 
   bool isRegisterButtonEnabled(RegisterState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
@@ -27,6 +28,7 @@ class _RegisterFormState extends State<RegisterForm> {
     _registerBloc = BlocProvider.of<RegisterBloc>(context);
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
+    _confirmPasswordController.addListener(_onConfirmPasswordChanged);
   }
 
   @override
@@ -101,6 +103,18 @@ class _RegisterFormState extends State<RegisterForm> {
                     validator: (_) {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },
+                  ),TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: 'Confirm Password',
+                    ),
+                    obscureText: true,
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return !state.isPasswordValid ? 'Invalid Confirm Password' : !state.isSame ? '동일한 비밀번호를 입력하세요.' : null;
+                    },
                   ),
                   RegisterButton(
                     onPressed: isRegisterButtonEnabled(state)
@@ -120,6 +134,7 @@ class _RegisterFormState extends State<RegisterForm> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -133,6 +148,15 @@ class _RegisterFormState extends State<RegisterForm> {
     _registerBloc.add(
       RegisterPasswordChanged(password: _passwordController.text),
     );
+  }
+
+  void _onConfirmPasswordChanged(){
+    if(_confirmPasswordController.text.isNotEmpty) {
+      _registerBloc.add(
+        RegisterConfirmPasswordChanged(password: _passwordController.text,
+            confirmPassword: _confirmPasswordController.text),
+      );
+    }
   }
 
   void _onFormSubmitted() {
