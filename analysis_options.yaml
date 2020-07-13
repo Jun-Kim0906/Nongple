@@ -3,7 +3,7 @@ include: package:pedantic/analysis_options.yaml
 analyzer:
   exclude: [build/**]
   errors:
-    omit_local_variable_types: error
+#    omit_local_variable_types: error
 #    prefer_single_quotes: error
 #    dead_code: ignore
 
