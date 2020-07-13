@@ -4,33 +4,43 @@ import 'package:meta/meta.dart';
 class RegisterState {
   final bool isEmailValid;
   final bool isPasswordValid;
-  final bool isConfirmPasswordValid;
-  final bool isSame;
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final bool isPasswordConfirmed;
+  final bool isSame;
+  final String password;
+  final String confirmPassword;
+  final String name;
 
-  bool get isFormValid => isEmailValid && isPasswordValid && isConfirmPasswordValid && isSame;
+  bool get isFormValid =>
+      isEmailValid && isPasswordValid && isPasswordConfirmed && isSame;
 
   RegisterState({
     @required this.isEmailValid,
     @required this.isPasswordValid,
-    @required this.isConfirmPasswordValid,
-    @required this.isSame,
     @required this.isSubmitting,
     @required this.isSuccess,
     @required this.isFailure,
+    @required this.isPasswordConfirmed,
+    @required this.isSame,
+    @required this.password,
+    @required this.confirmPassword,
+    @required this.name,
   });
 
   factory RegisterState.initial() {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
-      isConfirmPasswordValid: true,
-      isSame: true,
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      isPasswordConfirmed: true,
+      isSame: true,
+      password: "",
+      confirmPassword: "",
+      name: "",
     );
   }
 
@@ -38,11 +48,14 @@ class RegisterState {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
-      isConfirmPasswordValid: true,
-      isSame: true,
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
+      isPasswordConfirmed: true,
+      isSame: true,
+      password: "",
+      confirmPassword: "",
+      name: "",
     );
   }
 
@@ -50,11 +63,14 @@ class RegisterState {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
-      isConfirmPasswordValid: false,
-      isSame: true,
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
+      isPasswordConfirmed: true,
+      isSame: true,
+      password: "",
+      confirmPassword: "",
+      name: "",
     );
   }
 
@@ -62,50 +78,64 @@ class RegisterState {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
-      isConfirmPasswordValid: true,
-      isSame: true,
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
+      isPasswordConfirmed: true,
+      isSame: true,
+      password: "",
+      confirmPassword: "",
+      name: "",
     );
   }
 
   RegisterState update({
     bool isEmailValid,
     bool isPasswordValid,
-    bool isConfirmPasswordValid,
+    bool isPasswordConfirmed,
     bool isSame,
+    String password,
+    String confirmPassword,
+    String name,
   }) {
     return copyWith(
       isEmailValid: isEmailValid,
       isPasswordValid: isPasswordValid,
-      isConfirmPasswordValid: isConfirmPasswordValid,
-      isSame: isSame,
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      isPasswordConfirmed: isPasswordConfirmed,
+      isSame: isSame,
+      password: password,
+      confirmPassword: confirmPassword,
+      name: name,
     );
   }
 
   RegisterState copyWith({
     bool isEmailValid,
     bool isPasswordValid,
-    bool isConfirmPasswordValid,
-    bool isSame,
     bool isSubmitEnabled,
     bool isSubmitting,
     bool isSuccess,
     bool isFailure,
+    bool isPasswordConfirmed,
+    bool isSame,
+    String password,
+    String confirmPassword,
+    String name,
   }) {
     return RegisterState(
-      isEmailValid: isEmailValid ?? this.isEmailValid,
-      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
-      isConfirmPasswordValid: isConfirmPasswordValid ?? this.isConfirmPasswordValid,
-      isSame: isSame ?? this.isSame,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure,
-    );
+        isEmailValid: isEmailValid ?? this.isEmailValid,
+        isPasswordValid: isPasswordValid ?? this.isPasswordValid,
+        isSubmitting: isSubmitting ?? this.isSubmitting,
+        isSuccess: isSuccess ?? this.isSuccess,
+        isFailure: isFailure ?? this.isFailure,
+        isPasswordConfirmed: isPasswordConfirmed ?? this.isPasswordConfirmed,
+        isSame: isSame ?? this.isSame,
+        password: password ?? this.password,
+        confirmPassword: confirmPassword ?? this.confirmPassword,
+        name: name ?? this.name);
   }
 
   @override
@@ -113,11 +143,14 @@ class RegisterState {
     return '''RegisterState {
       isEmailValid: $isEmailValid,
       isPasswordValid: $isPasswordValid,
-      isConfirmPasswordValid: $isConfirmPasswordValid,
-      isSame: $isSame,
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      isPasswordConfirmed : $isPasswordConfirmed,
+      isSame : $isSame,
+      password : $password,
+      confirmPassword : $confirmPassword,
+      name : $name,
     }''';
   }
 }
