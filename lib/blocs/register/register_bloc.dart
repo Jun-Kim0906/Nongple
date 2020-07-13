@@ -43,6 +43,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       yield* _mapRegisterPasswordChangedToState(event.password);
     } else if (event is RegisterSubmitted) {
       yield* _mapRegisterSubmittedToState(event.email, event.password);
+    } else if (event is RegisterConfirmPasswordChanged) {
+      yield* _mapRegisterConfirmPasswordChangedToState(event.password, event.confirmPassword);
     }
   }
 
@@ -55,6 +57,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   Stream<RegisterState> _mapRegisterPasswordChangedToState(String password) async* {
     yield state.update(
       isPasswordValid: Validators.isValidPassword(password),
+    );
+  }
+
+  Stream<RegisterState> _mapRegisterConfirmPasswordChangedToState(String password, String confirmPassword) async* {
+    yield state.update(
+      isSame: password == confirmPassword,
     );
   }
 
