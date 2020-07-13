@@ -29,6 +29,9 @@ class HomeScreen extends StatelessWidget {
           Center(child: Text('Welcome $name!')),
         ],
       ),
+      drawer: Drawer(
+
+      ),
     );
   }
 }

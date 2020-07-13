@@ -32,6 +32,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        // ignore: missing_return
         builder: (context, state) {
           if (state is AuthenticationInitial) {
             return SplashScreen();
