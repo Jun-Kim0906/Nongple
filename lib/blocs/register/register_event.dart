@@ -33,15 +33,19 @@ class RegisterPasswordChanged extends RegisterEvent {
 }
 
 class RegisterConfirmPasswordChanged extends RegisterEvent {
+  final String password;
   final String confirmPassword;
 
-  const RegisterConfirmPasswordChanged({@required this.confirmPassword});
+  const RegisterConfirmPasswordChanged({
+    @required this.password,
+    @required this.confirmPassword
+  });
 
   @override
-  List<Object> get props => [confirmPassword];
+  List<Object> get props => [password, confirmPassword];
 
   @override
-  String toString() => 'RegisterConfirmPasswordChanged { confirm password: $confirmPassword }';
+  String toString() => 'RegisterConfirmPasswordChanged { password: $password, confirm password: $confirmPassword}';
 }
 
 class RegisterNameChanged extends RegisterEvent {

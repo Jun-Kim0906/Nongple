@@ -43,7 +43,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } else if (event is RegisterPasswordChanged) {
       yield* _mapRegisterPasswordChangedToState(event.password);
     } else if (event is RegisterConfirmPasswordChanged) {
-      yield* _mapRegisterConfirmPasswordChangedToState(event.confirmPassword);
+      yield* _mapRegisterConfirmPasswordChangedToState(event.password, event.confirmPassword);
     } else if (event is RegisterNameChanged) {
       yield* _mapRegisterNameChangedToState(event.name);
     } else if (event is RegisterSubmitted) {
@@ -63,17 +63,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     );
   }
 
-  Stream<RegisterState> _mapRegisterConfirmPasswordChangedToState(String password) async* {
-    bool judge;
-    if (password == state.password) {
-      judge = true;
-    } else if (password == null || password != state.password) {
-      judge = false;
-    }
-    yield state.update(
-      confirmPassword: password,
-      isPasswordConfirmed: judge,
-    );
+  Stream<RegisterState> _mapRegisterConfirmPasswordChangedToState(String password, String confirmPassword) async* {
+    yield state.update(isSame: password == confirmPassword);
+
+//    bool judge;
+//    if (password == state.password) {
+//      judge = true;
+//    } else if (password == null || password != state.password) {
+//      judge = false;
+//    }
+//    yield state.update(
+//      confirmPassword: password,
+//      isPasswordConfirmed: judge,
+//    );
   }
 
   Stream<RegisterState> _mapRegisterNameChangedToState(String name) async* {

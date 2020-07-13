@@ -8,11 +8,13 @@ class RegisterState {
   final bool isSuccess;
   final bool isFailure;
   final bool isPasswordConfirmed;
+  final bool isSame;
   final String password;
   final String confirmPassword;
   final String name;
 
-  bool get isFormValid => isEmailValid && isPasswordValid;
+  bool get isFormValid =>
+      isEmailValid && isPasswordValid && isPasswordConfirmed && isSame;
 
   RegisterState({
     @required this.isEmailValid,
@@ -21,6 +23,7 @@ class RegisterState {
     @required this.isSuccess,
     @required this.isFailure,
     @required this.isPasswordConfirmed,
+    @required this.isSame,
     @required this.password,
     @required this.confirmPassword,
     @required this.name,
@@ -34,6 +37,7 @@ class RegisterState {
       isSuccess: false,
       isFailure: false,
       isPasswordConfirmed: true,
+      isSame: true,
       password: "",
       confirmPassword: "",
       name: "",
@@ -48,6 +52,7 @@ class RegisterState {
       isSuccess: false,
       isFailure: false,
       isPasswordConfirmed: true,
+      isSame: true,
       password: "",
       confirmPassword: "",
       name: "",
@@ -62,6 +67,7 @@ class RegisterState {
       isSuccess: false,
       isFailure: true,
       isPasswordConfirmed: true,
+      isSame: true,
       password: "",
       confirmPassword: "",
       name: "",
@@ -76,6 +82,7 @@ class RegisterState {
       isSuccess: true,
       isFailure: false,
       isPasswordConfirmed: true,
+      isSame: true,
       password: "",
       confirmPassword: "",
       name: "",
@@ -86,6 +93,7 @@ class RegisterState {
     bool isEmailValid,
     bool isPasswordValid,
     bool isPasswordConfirmed,
+    bool isSame,
     String password,
     String confirmPassword,
     String name,
@@ -97,6 +105,7 @@ class RegisterState {
       isSuccess: false,
       isFailure: false,
       isPasswordConfirmed: isPasswordConfirmed,
+      isSame: isSame,
       password: password,
       confirmPassword: confirmPassword,
       name: name,
@@ -111,21 +120,22 @@ class RegisterState {
     bool isSuccess,
     bool isFailure,
     bool isPasswordConfirmed,
+    bool isSame,
     String password,
     String confirmPassword,
     String name,
   }) {
     return RegisterState(
-      isEmailValid: isEmailValid ?? this.isEmailValid,
-      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure,
-      isPasswordConfirmed: isPasswordConfirmed ?? this.isPasswordConfirmed,
-      password: password ?? this.password,
-      confirmPassword: confirmPassword ?? this.confirmPassword,
-      name: name ?? this.name
-    );
+        isEmailValid: isEmailValid ?? this.isEmailValid,
+        isPasswordValid: isPasswordValid ?? this.isPasswordValid,
+        isSubmitting: isSubmitting ?? this.isSubmitting,
+        isSuccess: isSuccess ?? this.isSuccess,
+        isFailure: isFailure ?? this.isFailure,
+        isPasswordConfirmed: isPasswordConfirmed ?? this.isPasswordConfirmed,
+        isSame: isSame ?? this.isSame,
+        password: password ?? this.password,
+        confirmPassword: confirmPassword ?? this.confirmPassword,
+        name: name ?? this.name);
   }
 
   @override
@@ -137,6 +147,7 @@ class RegisterState {
       isSuccess: $isSuccess,
       isFailure: $isFailure,
       isPasswordConfirmed : $isPasswordConfirmed,
+      isSame : $isSame,
       password : $password,
       confirmPassword : $confirmPassword,
       name : $name,

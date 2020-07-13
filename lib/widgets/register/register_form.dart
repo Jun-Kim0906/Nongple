@@ -20,7 +20,8 @@ class _RegisterFormState extends State<RegisterForm> {
   bool get isPopulated =>
       _emailController.text.isNotEmpty &&
       _passwordController.text.isNotEmpty &&
-      _nameController.text.isNotEmpty;
+      _nameController.text.isNotEmpty &&
+      _passwordConfirmController.text.isNotEmpty;
 
   bool isRegisterButtonEnabled(RegisterState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
@@ -133,7 +134,9 @@ class _RegisterFormState extends State<RegisterForm> {
                     autocorrect: false,
                     autovalidate: true,
                     validator: (_) {
-                      return !state.isPasswordConfirmed ? 'Unmatched Password' : null;
+                      return !state.isPasswordConfirmed
+                          ? 'Unmatched Password'
+                          : !state.isSame ? 'Re-type password' : null;
                     },
                   ),
                   RegisterButton(
@@ -170,8 +173,10 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   void _onPasswordConfirmChanged() {
-    _registerBloc.add(RegisterConfirmPasswordChanged(
-        confirmPassword: _passwordConfirmController.text));
+    if (_passwordConfirmController.text.isNotEmpty) {
+      _registerBloc.add(RegisterConfirmPasswordChanged(password: _passwordController.text,
+          confirmPassword: _passwordConfirmController.text));
+    }
   }
 
   void _onNameChanged() {
