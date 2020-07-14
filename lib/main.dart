@@ -41,7 +41,11 @@ class App extends StatelessWidget {
             return LoginScreen(userRepository: _userRepository);
           }
           if (state is AuthenticationSuccess) {
-            return HomeScreen(name: state.displayName);
+            return BlocProvider<HomeBloc>(
+              create: (BuildContext context) => HomeBloc(),
+              child: HomeScreen(name: state.displayName),
+            );
+//              HomeScreen(name: state.displayName);
           }
         },
       ),
