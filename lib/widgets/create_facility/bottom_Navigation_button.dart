@@ -4,7 +4,7 @@ class BottomNavigationButton extends StatelessWidget {
   final VoidCallback _onPressed;
   final String _title;
 
-  BottomNavigationButton({Key key, VoidCallback onPressed, String title})
+  BottomNavigationButton({Key key, VoidCallback onPressed, @required String title})
       : _onPressed = onPressed,
         _title = title,
         super(key: key);
@@ -17,8 +17,8 @@ class BottomNavigationButton extends StatelessWidget {
       child: RaisedButton(
         color: Colors.blue[600],
         child: Text(
-          _title??'다음',
-          style: TextStyle(color: Colors.white),
+          _title ?? '다음',
+          style: TextStyle(color: Colors.white, fontSize: 21.6),
         ),
         onPressed: _onPressed,
       ),
