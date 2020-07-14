@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:nongple/data_repository/user_repository/user_repository.dart';
 import 'package:nongple/blocs/register/bloc.dart';
 import 'package:nongple/widgets/validator/validators.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final UserRepository _userRepository;
@@ -41,10 +42,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       yield* _mapRegisterEmailChangedToState(event.email);
     } else if (event is RegisterPasswordChanged) {
       yield* _mapRegisterPasswordChangedToState(event.password);
-    } else if (event is RegisterSubmitted) {
-      yield* _mapRegisterSubmittedToState(event.email, event.password);
     } else if (event is RegisterConfirmPasswordChanged) {
       yield* _mapRegisterConfirmPasswordChangedToState(event.password, event.confirmPassword);
+    } else if (event is RegisterNameChanged) {
+      yield* _mapRegisterNameChangedToState(event.name);
+    } else if (event is RegisterSubmitted) {
+      yield* _mapRegisterSubmittedToState(event.email, event.password, event.name);
     }
   }
 
@@ -61,14 +64,31 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   Stream<RegisterState> _mapRegisterConfirmPasswordChangedToState(String password, String confirmPassword) async* {
+    yield state.update(isSame: password == confirmPassword);
+
+//    bool judge;
+//    if (password == state.password) {
+//      judge = true;
+//    } else if (password == null || password != state.password) {
+//      judge = false;
+//    }
+//    yield state.update(
+//      confirmPassword: password,
+//      isPasswordConfirmed: judge,
+//    );
+  }
+
+  Stream<RegisterState> _mapRegisterNameChangedToState(String name) async* {
     yield state.update(
-      isSame: password == confirmPassword,
+      name: name,
     );
   }
+
 
   Stream<RegisterState> _mapRegisterSubmittedToState(
       String email,
       String password,
+      String name,
       ) async* {
     yield RegisterState.loading();
     try {
@@ -76,6 +96,17 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         email: email,
         password: password,
       );
+
+      String uid = (await UserRepository().getUser()).uid;
+
+      await Firestore.instance.collection("User").document(uid).setData({
+        'bgUrl': "",
+        'fcmToken': '',
+        "uid": uid,
+        "email": (await UserRepository().getUser()).email,
+        "name": name,
+      });
+
       yield RegisterState.success();
     } catch (_) {
       yield RegisterState.failure();

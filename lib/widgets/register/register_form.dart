@@ -11,12 +11,17 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   RegisterBloc _registerBloc;
 
   bool get isPopulated =>
-      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && _confirmPasswordController.text.isNotEmpty;
+      _emailController.text.isNotEmpty &&
+      _passwordController.text.isNotEmpty &&
+      _nameController.text.isNotEmpty &&
+      _passwordConfirmController.text.isNotEmpty;
 
   bool isRegisterButtonEnabled(RegisterState state) {
     return state.isFormValid && isPopulated && !state.isSubmitting;
@@ -28,7 +33,8 @@ class _RegisterFormState extends State<RegisterForm> {
     _registerBloc = BlocProvider.of<RegisterBloc>(context);
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
-    _confirmPasswordController.addListener(_onConfirmPasswordChanged);
+    _passwordConfirmController.addListener(_onPasswordConfirmChanged);
+    _nameController.addListener(_onNameChanged);
   }
 
   @override
@@ -51,7 +57,8 @@ class _RegisterFormState extends State<RegisterForm> {
             );
         }
         if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationLoggedIn());
+          BlocProvider.of<AuthenticationBloc>(context)
+              .add(AuthenticationLoggedIn());
           Navigator.of(context).pop();
         }
         if (state.isFailure) {
@@ -79,6 +86,19 @@ class _RegisterFormState extends State<RegisterForm> {
               child: ListView(
                 children: <Widget>[
                   TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.person),
+                      labelText: 'Name',
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return _nameController.text.isEmpty ? 'Enter Name' : null;
+                    },
+                  ),
+                  TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
                       icon: Icon(Icons.email),
@@ -103,8 +123,9 @@ class _RegisterFormState extends State<RegisterForm> {
                     validator: (_) {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },
-                  ),TextFormField(
-                    controller: _confirmPasswordController,
+                  ),
+                  TextFormField(
+                    controller: _passwordConfirmController,
                     decoration: InputDecoration(
                       icon: Icon(Icons.lock),
                       labelText: 'Confirm Password',
@@ -113,7 +134,9 @@ class _RegisterFormState extends State<RegisterForm> {
                     autocorrect: false,
                     autovalidate: true,
                     validator: (_) {
-                      return !state.isPasswordValid ? 'Invalid Confirm Password' : !state.isSame ? '동일한 비밀번호를 입력하세요.' : null;
+                      return !state.isPasswordConfirmed
+                          ? 'Unmatched Password'
+                          : !state.isSame ? 'Re-type password' : null;
                     },
                   ),
                   RegisterButton(
@@ -134,7 +157,6 @@ class _RegisterFormState extends State<RegisterForm> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -150,13 +172,15 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-  void _onConfirmPasswordChanged(){
-    if(_confirmPasswordController.text.isNotEmpty) {
-      _registerBloc.add(
-        RegisterConfirmPasswordChanged(password: _passwordController.text,
-            confirmPassword: _confirmPasswordController.text),
-      );
+  void _onPasswordConfirmChanged() {
+    if (_passwordConfirmController.text.isNotEmpty) {
+      _registerBloc.add(RegisterConfirmPasswordChanged(password: _passwordController.text,
+          confirmPassword: _passwordConfirmController.text));
     }
+  }
+
+  void _onNameChanged() {
+    _registerBloc.add(RegisterNameChanged(name: _nameController.text));
   }
 
   void _onFormSubmitted() {
@@ -164,6 +188,7 @@ class _RegisterFormState extends State<RegisterForm> {
       RegisterSubmitted(
         email: _emailController.text,
         password: _passwordController.text,
+        name: _nameController.text,
       ),
     );
   }
