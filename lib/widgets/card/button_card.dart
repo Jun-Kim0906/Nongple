@@ -18,7 +18,9 @@ class ButtonCard extends StatelessWidget {
                   color: Colors.black,
                   size: 35.0,
                 ),
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute (builder: (context) => FacilityCreateScreen()));
+                },
               ),
               Text(
                 '농사 프로젝트 추가하기',
