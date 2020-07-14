@@ -5,7 +5,6 @@ import 'package:nongple/screens/screens.dart';
 import 'package:nongple/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:nongple/widgets/widgets.dart';
 
-
 class HomeScreen extends StatelessWidget {
   final String name;
 
@@ -15,46 +14,50 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
 //      appBar: AppBar(),
-        body: Padding(
-          padding: EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0),
-          child: Container(
-            child: Column(
-              children: [
-                Text('$name 님'),
-                Text('오늘도 풍성한 하루 되세요'),
-                Text(DateTime.now().toString()),
-                Container(
-                  child: Row(
-                    children: [
-                      RaisedButton(),
-                      RaisedButton(),
-                    ],
-                  ),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0),
+        child: Container(
+          child: Column(
+            children: [
+              Text('$name 님'),
+              Text('오늘도 풍성한 하루 되세요'),
+              Text(DateTime.now().toString()),
+              Container(
+                child: Row(
+                  children: [
+                    RaisedButton(),
+                    RaisedButton(),
+                  ],
                 ),
-                Expanded(
-                  child: Container(
-
-                  ),
-                ),
-                Card(
-                  child: Center(
-                    child: FlatButton(
-                      child: Column(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: (){},
-                          ),
-                          Text('농사 프로젝트 추가하기')
-                        ],
-                      ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              Card(
+                child: Center(
+                  child: FlatButton(
+                    child: Column(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        FacilityCreateScreen()));
+                          },
+                        ),
+                        Text('농사 프로젝트 추가하기')
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 
