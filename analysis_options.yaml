@@ -9,4 +9,4 @@ analyzer:
 
 linter:
   rules:
-    -
+#    -
