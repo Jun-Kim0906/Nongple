@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/screens/screens.dart';
+import 'package:nongple/blocs/blocs.dart';
 
 class ButtonCard extends StatelessWidget {
   @override
@@ -20,7 +22,15 @@ class ButtonCard extends StatelessWidget {
                   size: 35.0,
                 ),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute (builder: (context) => FacilityCreateScreen()));
+//                  return BlocProvider<AddFacilityBloc>(
+//                    create: (BuildContext context) =>
+//                      AddFacilityBloc(),
+//                    child:,
+//                  );
+                  Navigator.push(context, MaterialPageRoute (builder: (context) => BlocProvider<AddFacilityBloc>(
+                    create: (BuildContext context)=>AddFacilityBloc(),
+                    child: FacilityCreateScreen(),
+                  )));
                 },
               ),
               Text(
