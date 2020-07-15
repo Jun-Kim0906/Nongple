@@ -3,6 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 //final textTheme = Theme.of(context).textTheme;
 
+// style: Theme.of(context).textTheme.headline6,
+// style: H6,
+// style: Theme.of(context).textTheme.headline6.copyWith(color: Theme.of(context).primaryColor),
+
+
 var lightTheme = ThemeData(
 // Define the default brightness and colors.
   brightness: Brightness.light,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:nongple/utils/colors.dart';
+import 'package:nongple/utils/style.dart';
 import 'package:nongple/widgets/widgets.dart';
 
 class FacilityCreateScreen extends StatefulWidget {
@@ -13,12 +15,12 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: bodyColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         elevation: 0.0,
         leading: IconButton(
-          color: Colors.blue[600],
+          color: facilityGoBackButtonColor,
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
@@ -42,7 +44,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen> {
               height: MediaQuery.of(context).size.height / 25,
             ),
             Text('시설 이름',
-              style: TextStyle(fontSize: 14.4, color: Colors.grey[400]),
+              style: facilitySearchTitle,
             ),
             TextFormField(
               style: TextStyle(fontWeight: FontWeight.bold),
