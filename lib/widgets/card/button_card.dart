@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/screens/screens.dart';
+import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/utils/style.dart';
 
 class ButtonCard extends StatelessWidget {
@@ -16,10 +18,10 @@ class ButtonCard extends StatelessWidget {
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
             print('card tapped');
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FacilityCreateScreen()));
+            Navigator.push(context, MaterialPageRoute (builder: (context) => BlocProvider<AddFacilityBloc>(
+                    create: (BuildContext context)=>AddFacilityBloc(),
+                    child: FacilityCreateScreen(),
+                  )));
           },
           child: Center(
             child: Padding(

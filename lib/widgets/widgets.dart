@@ -5,6 +5,8 @@ export './card/card.dart';
 export './card/button_card.dart';
 export './listview_builder/listview_Builder.dart';
 export './create_facility/bottom_Navigation_button.dart';
+export './kakao_map/kakao_map.dart';
+export './kakao_map/kopo_model.dart';
 export './chip_button/chip_button.dart';
 export './tab_selector/tab_selector.dart';
 export './setting_list/setting_list.dart';
