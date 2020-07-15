@@ -45,11 +45,9 @@ class HomeScreen extends StatelessWidget {
               ),
               Container(
                 child: Row(
-//                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ActionChip(
                         avatar: CircleAvatar(
-//                          backgroundColor: Colors.grey.shade800,
                           child: Icon(Icons.wifi),
                         ),
                         label: Text('RSS'),
@@ -76,78 +74,10 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 child: ListViewBuilder(),
               ),
-//              Expanded(
-//                child: ListView.builder(
-//                  itemCount: 3,
-//                  itemBuilder: (BuildContext context, int index) {
-//                    if (index == 2) {
-//                      return ButtonCard();
-//                    }
-//                    else {
-//                      return HomePageCard();
-//                    }
-////                    return HomePageCard();
-//                  },
-//                ),
-//              ),
-//              ButtonCard(),
             ],
           ),
         ),
       ),
     );
   }
-
-//  @override
-//  Widget build(BuildContext context) {
-//    HomeBloc _homeBloc=BlocProvider.of<HomeBloc>(context);
-//    return BlocListener(
-//        bloc: BlocProvider.of<HomeBloc>(context),
-//        listener: (BuildContext context, HomeState state) {
-//          if (state.settingBtnPressed==true) {
-//            Navigator.push(
-//                context,
-//                MaterialPageRoute(
-//                  builder: (context) => BlocProvider<HomeBloc>.value(
-//                    value: _homeBloc,
-//                    child: SetBackgroundScreen(),
-//                  ),
-//                ));
-//          }
-//        },
-//        child: BlocBuilder<HomeBloc,HomeState>(
-//          builder: (context, state) {
-//            return Scaffold(
-//              appBar: AppBar(
-//                title: Text('Home'),
-//                actions: <Widget>[
-//                  IconButton(
-//                    icon: Icon(Icons.exit_to_app),
-//                    onPressed: () {
-//                      BlocProvider.of<AuthenticationBloc>(context).add(
-//                        AuthenticationLoggedOut(),
-//                      );
-//                    },
-//                  )
-//                ],
-//              ),
-//              body: Column(
-//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                children: <Widget>[
-//                  Center(child: Text('Welcome $name!')),
-//                  RaisedButton(
-//                    child: Text('Setting'),
-//                    onPressed: (){
-//                      BlocProvider.of<HomeBloc>(context).add(
-//                        SettingBtnPressed(),
-//                      );
-//                    },
-//                  )
-//                ],
-//              ),
-//              drawer: Drawer(),
-//            );
-//          }
-//        ));
-//  }
 }
