@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
 /// throughout all pages
-const mainBackgroundColor = Colors.white;
+const bodyColor = Colors.white; // color white
+const appBarColor = Colors.white; // color white
+
+
+/// colors for journal page
+const journalGoBackArrowColor = Color(0xFF9E9E9E); // color grey
+const journalIconColor1 = Color(0xFFEEEEEE); // color grey[200]
+const journalIconColor2 = Color(0xFF80D8FF); // color lightBlueAccent[100]
+const journalIconColor3 = Color(0xFFEF5350); // color red[400]
+
+
+/// colors for weather page
+const weatherGoBackArrowColor = Color(0xFF9E9E9E); // color grey
+
+/// colors for dictionary page
+const dictionaryGoBackArrowColor = Color(0xFF9E9E9E); // color grey
 
 
 /// facility page
-const facilityGoBackButton = Color.fromARGB(0, 47, 128, 237); // color blue
-const facitityNextButton = Color(0x2F80ED); // color blue
-const facilityTitle = Color(0x000000); // color black
-const faciltySearchTitle = Color(0xBDBDBD); // color gray
-
-
-
-//const mainColor = Color.fromARGB(255, 0, 61, 165);
-//const secondColor = Color.fromARGB(51, 67, 193, 170);
-//const dividerColor = Color.fromARGB(255, 246, 246, 246);
-//Widget divider = Container(
-//  height: 8,
-//  color: dividerColor,
-//);
-//const paddingSize = EdgeInsets.fromLTRB(20.0, 0, 20, 0);
-//const arrowColor = Color.fromRGBO(0, 0, 0, 0.58);
-//const iconColor = Color.fromRGBO(0, 0, 0, 0.54);
-//const noDataColor = Color(0xff757575);
+const facilityGoBackButtonColor = Color(0xFF1E88E5); // color blue[600]
+const facilityNextButtonColor = Color(0xFF1E88E5); // color blue[600]
+const facilitySearchTitleColor = Color(0xFFBDBDBD); // color grey[400]

@@ -4,3 +4,8 @@ export 'splash_screen/splash_screen.dart';
 export 'register/register_screen.dart';
 export 'set_background/set_background_screen.dart';
 export 'facility_create/create_screen.dart';
+export 'tab_screen/tab_screen.dart';
+export 'weather/weather.dart';
+export 'dictionary/dictionary.dart';
+export 'journal/journal.dart';
+export 'settings/settings.dart';

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nongple/blocs/blocs.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nongple/screens/screens.dart';
-import 'package:nongple/blocs/authentication_bloc/authentication_bloc.dart';
-import 'package:nongple/utils/colors.dart';
 import 'package:nongple/widgets/widgets.dart';
-import 'package:intl/intl.dart';
+import 'package:nongple/utils/utils.dart';
 
 class HomeScreen extends StatelessWidget {
   final String name;
@@ -14,16 +9,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String year = DateFormat('yyyy').format(now);
-    String month = DateFormat('MM').format(now);
-    String day = DateFormat('dd').format(now);
-    String weekday = DateFormat('EEEE').format(now);
-
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: bodyColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
+        elevation: 0.0,
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0),
@@ -33,43 +23,21 @@ class HomeScreen extends StatelessWidget {
             children: [
               Text(
                 '$name 님',
-                style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+//                style: Theme.of(context).textTheme.headline1,
+                style: homeMainTitle,
               ),
               Text(
                 '오늘도 풍성한 하루 되세요',
-                style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold,),
+//                style: Theme.of(context).textTheme.headline1,
+                style: homeMainTitle,
               ),
               Text(
                 '$year 년 $month 월 $day 일 $weekday',
-                style: TextStyle(fontSize: 20.0,),
+//                style: Theme.of(context).textTheme.headline2,
+                style: homeSubTitle,
               ),
               Container(
-                child: Row(
-                  children: [
-                    ActionChip(
-                        avatar: CircleAvatar(
-                          child: Icon(Icons.wifi),
-                        ),
-                        label: Text('RSS'),
-                        onPressed: () {
-                          print(
-                              "RSS");
-                        }),
-                    SizedBox(
-                      width: 20.0,
-                    ),
-                    ActionChip(
-                        avatar: CircleAvatar(
-//                          backgroundColor: Colors.grey.shade800,
-                          child: Icon(Icons.settings),
-                        ),
-                        label: Text('설정'),
-                        onPressed: () {
-                          print(
-                              "설정");
-                        }),
-                  ],
-                ),
+                child: ChipButton(),
               ),
               Expanded(
                 child: ListViewBuilder(),
