@@ -30,8 +30,17 @@ class KopoState extends State<Kopo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.close,
+            color: Colors.black,
+          ),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
         backgroundColor: widget.colour,
-        title: Text("주소검색"),
+        title: Text("주소검색", style: TextStyle(color: Colors.black),),
         elevation: 1.0,
       ),
       body: IndexedStack(

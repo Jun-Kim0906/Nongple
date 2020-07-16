@@ -12,9 +12,15 @@ class ChipButton extends StatelessWidget {
             elevation: 3.0,
             avatar: CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(Icons.rss_feed),
+              child: Icon(
+                Icons.rss_feed,
+                size: 20.0,
+              ),
             ),
-            label: Text('RSS'),
+            label: Text(
+              'RSS',
+              style: TextStyle(fontSize: 14.4),
+            ),
             onPressed: () {
               print("RSS");
             }),
@@ -26,15 +32,19 @@ class ChipButton extends StatelessWidget {
             elevation: 3.0,
             avatar: CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(Icons.settings),
+              child: Icon(
+                Icons.settings,
+                size: 20.0,
+              ),
             ),
-            label: Text('설정'),
+            label: Text(
+              '설정',
+              style: TextStyle(fontSize: 14.4),
+            ),
             onPressed: () {
               print("설정");
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Settings()));
+                  context, MaterialPageRoute(builder: (context) => Settings()));
             }),
       ],
     );

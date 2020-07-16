@@ -44,6 +44,7 @@ dependencies:
   flutter_launcher_icons: ^0.7.5
   flutter_emoji: ^2.2.1+1
   kopo: ^0.1.1
+  intl: ^0.16.1
 
 
 dev_dependencies:
@@ -58,6 +59,10 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+  fonts:
+    - family: MyFlutterApp
+      fonts:
+        - asset: assets/fonts/MyFlutterApp.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
