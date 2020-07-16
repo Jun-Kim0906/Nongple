@@ -8,9 +8,9 @@ class ButtonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320,
-      height: 143,
+      height: MediaQuery.of(context).size.height/5,
       child: Card(
+        elevation: 4.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -27,18 +27,19 @@ class ButtonCard extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.add_circle_outline,
-                    color: Colors.black,
-                    size: 35.0,
+                    color: Color.fromRGBO(0, 0, 0, 0.54),
+                    size: 45.0,
                   ),
-                  Expanded(
-                    child: Text(
-                      '농사 프로젝트 추가하기',
-                      style: cardWidgetAddProjButton,
-                    ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Text(
+                    '농사 프로젝트 추가하기',
+                    style: cardWidgetAddProjButton,
                   ),
                 ],
               ),

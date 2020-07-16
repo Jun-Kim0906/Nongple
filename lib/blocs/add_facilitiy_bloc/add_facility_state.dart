@@ -1,82 +1,79 @@
 import 'package:flutter/cupertino.dart';
 
 class AddFacilityState {
-  final bool firstPageButtonPressed;
   final bool isNameValid;
-  final bool secondPageButtonPressed;
   final bool isAddrValid;
+  final bool isCategoryValid;
 
   final String facilityName;
   final String facilityAddr;
+  final int facilityCategory;
 
   AddFacilityState({
-    @required this.firstPageButtonPressed,
     @required this.isNameValid,
-    @required this.secondPageButtonPressed,
     @required this.isAddrValid,
-
+    @required this.isCategoryValid,
     @required this.facilityName,
     @required this.facilityAddr,
+    @required this.facilityCategory,
   });
 
   factory AddFacilityState.empty() {
     return AddFacilityState(
-      firstPageButtonPressed: false,
       isNameValid: false,
-      secondPageButtonPressed: false,
       isAddrValid: false,
-
+      isCategoryValid: false,
       facilityName: '',
       facilityAddr: '',
+      facilityCategory: 0,
     );
   }
 
   AddFacilityState copyWith({
-    bool firstPageButtonPressed,
     bool isNameValid,
-    bool secondPageButtonPressed,
     bool isAddrValid,
+    bool isCategoryValid,
     String facilityName,
     String facilityAddr,
+    int facilityCategory,
   }) {
     return AddFacilityState(
-      firstPageButtonPressed:
-          firstPageButtonPressed ?? this.firstPageButtonPressed,
       isNameValid: isNameValid ?? this.isNameValid,
-      secondPageButtonPressed: secondPageButtonPressed ?? this.secondPageButtonPressed,
       isAddrValid: isAddrValid ?? this.isAddrValid,
+      isCategoryValid: isCategoryValid ?? this.isCategoryValid,
       facilityName: facilityName ?? this.facilityName,
       facilityAddr: facilityAddr ?? this.facilityAddr,
+      facilityCategory: facilityCategory ?? this.facilityCategory,
     );
   }
 
   AddFacilityState update({
-    bool firstPageButtonPressed,
     bool isNameValid,
-    bool secondPageButtonPressed,
     bool isAddrValid,
+    bool isCategoryValid,
     String facilityName,
     String facilityAddr,
+    int facilityCategory,
   }) {
     return copyWith(
-      firstPageButtonPressed: firstPageButtonPressed,
       isNameValid: isNameValid,
-      secondPageButtonPressed: secondPageButtonPressed,
       isAddrValid: isAddrValid,
+      isCategoryValid: isCategoryValid,
       facilityName: facilityName,
       facilityAddr: facilityAddr,
+      facilityCategory: facilityCategory,
     );
   }
 
   @override
   String toString() {
     return '''AddFacilityState{
-    firstPageButtonPressed: $firstPageButtonPressed,
     isNameValid: $isNameValid,
-    secondPageButtonPressed: $secondPageButtonPressed,
     isAddrValid: $isAddrValid,
+    isCategoryValid: $isCategoryValid,
     facilityName: $facilityName,
     facilityAddr: $facilityAddr,
+    facilityCategory: $facilityCategory,
     ''';
   }
 }
