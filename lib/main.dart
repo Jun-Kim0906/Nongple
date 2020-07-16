@@ -31,6 +31,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        backgroundColor: Colors.white,
+        primaryColor: Colors.black,
+        primaryColorLight: Colors.white,
+        accentColor: Colors.blue[600],
+      ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         // ignore: missing_return
         builder: (context, state) {
