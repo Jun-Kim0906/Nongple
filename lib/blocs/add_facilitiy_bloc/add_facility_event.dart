@@ -8,15 +8,6 @@ abstract class AddFacilityEvent extends Equatable{
   List<Object> get props => [];
 }
 
-class FirstPageButtonPressed extends AddFacilityEvent{
-  final String facilityName;
-
-  const FirstPageButtonPressed({@required this.facilityName});
-
-  @override
-  String toString() => 'First Page Button Pressed';
-}
-
 class FacilityNameChanged extends AddFacilityEvent{
   final String facilityname;
   const FacilityNameChanged({@required this.facilityname});
@@ -25,13 +16,6 @@ class FacilityNameChanged extends AddFacilityEvent{
   String toString() => 'Facility Name Changed: $facilityname';
 }
 
-class SecondPageButtonPressed extends AddFacilityEvent{
-  final String facilityAddr;
-  const SecondPageButtonPressed({@required this.facilityAddr});
-
-  @override
-  String toString() => 'Second Page Button Pressed';
-}
 
 class FacilityAddrChanged extends AddFacilityEvent{
   final String facilityAddr;
@@ -39,4 +23,12 @@ class FacilityAddrChanged extends AddFacilityEvent{
 
   @override
   String toString() => 'Facility Addr Changed: $facilityAddr';
+}
+
+class FacilityCategoryChanged extends AddFacilityEvent{
+  final int facilityCategory;
+  const FacilityCategoryChanged({@required this.facilityCategory});
+
+  @override
+  String toString() => 'Facility Category Changed: $facilityCategory';
 }

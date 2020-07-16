@@ -7,30 +7,24 @@ class AddFacilityBloc extends Bloc<AddFacilityEvent, AddFacilityState> {
 
   @override
   Stream<AddFacilityState> mapEventToState(AddFacilityEvent event) async* {
-    if(event is FirstPageButtonPressed){
-      yield* _mapFirstPageButtonPressedToState(event.facilityName);
-    }else if(event is FacilityNameChanged){
+    if(event is FacilityNameChanged){
       yield* _mapFacilityNameChangedToState(event.facilityname);
-    }else if (event is SecondPageButtonPressed){
-      yield* _mapSecondPageButtonPressedToState(event.facilityAddr);
     }else if (event is FacilityAddrChanged){
       yield* _mapFacilityAddrChangedToState(event.facilityAddr);
+    }else if (event is FacilityCategoryChanged){
+      yield* _mapFacilityCategoryChangedToState(event.facilityCategory);
     }
   }
 
-  Stream<AddFacilityState> _mapFirstPageButtonPressedToState(String facilityName)async*{
-    yield state.update(firstPageButtonPressed: true, facilityName: facilityName);
-  }
-
   Stream<AddFacilityState> _mapFacilityNameChangedToState(String facilityName) async*{
-    yield state.update(isNameValid: facilityName.isNotEmpty);
-  }
-
-  Stream<AddFacilityState> _mapSecondPageButtonPressedToState(String facilityAddr) async*{
-    yield state.update(secondPageButtonPressed: true, facilityAddr: facilityAddr);
+    yield state.update(isNameValid: facilityName.isNotEmpty, facilityName: facilityName);
   }
 
   Stream<AddFacilityState> _mapFacilityAddrChangedToState(String facilityAddr) async*{
-    yield state.update(isAddrValid: facilityAddr.isNotEmpty);
+    yield state.update(isAddrValid: facilityAddr.isNotEmpty, facilityAddr: facilityAddr);
+  }
+
+  Stream<AddFacilityState> _mapFacilityCategoryChangedToState(int facilityCatgory) async*{
+    yield state.update(isCategoryValid: true, facilityCategory: facilityCatgory);
   }
 }
