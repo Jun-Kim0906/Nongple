@@ -16,28 +16,32 @@ class HomeScreen extends StatelessWidget {
         elevation: 0.0,
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0),
+        padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0),
         child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '$name 님',
+                '$name님\n오늘도 풍성한 하루 되세요',
 //                style: Theme.of(context).textTheme.headline1,
                 style: homeMainTitle,
               ),
-              Text(
-                '오늘도 풍성한 하루 되세요',
-//                style: Theme.of(context).textTheme.headline1,
-                style: homeMainTitle,
+              SizedBox(
+                height: 8.0,
               ),
               Text(
-                '$year 년 $month 월 $day 일 $weekday',
+                '$year년 $month월 $day일 $weekday',
 //                style: Theme.of(context).textTheme.headline2,
                 style: homeSubTitle,
               ),
+              SizedBox(
+                height: 18.0,
+              ),
               Container(
                 child: ChipButton(),
+              ),
+              SizedBox(
+                height: 27.0,
               ),
               Expanded(
                 child: ListViewBuilder(),
