@@ -1,26 +1,40 @@
-import 'package:flutter/material.dart';
+
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.Dart';
 import 'package:nongple/utils/utils.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 5), () => print("Splash Screen"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/launcher_icon.png',
-                scale: 0.4,
-              ),
-              Text(
-                '농 플',
-                style: splashScreenTitleStyle,
-              ),
-            ],
-          ),
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              flex: 2,
+              child: Image.asset('assets/launcher_icon2.png'),
+            ),
+            Flexible(
+              flex: 2,
+              child: Text('농 플', style: splashScreenTitleStyle,),
+            )
+          ],
         ),
       ),
     );

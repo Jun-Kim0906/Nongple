@@ -10,4 +10,6 @@ export './kakao_map/kopo_model.dart';
 export './chip_button/chip_button.dart';
 export './tab_selector/tab_selector.dart';
 export './setting_list/setting_list.dart';
+export './alert_dialog/alert_dialog.dart';
 export './custom_icons/custom_icons.dart';
+
