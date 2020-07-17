@@ -15,7 +15,7 @@ TextStyle homeMainTitle = TextStyle(
   color: Colors.black,
 );
 TextStyle homeSubTitle = TextStyle(
-  fontSize: 2.0,
+  fontSize: 20.0,
   color: Color(0xFF828282),
 );
 
@@ -23,8 +23,8 @@ TextStyle homeSubTitle = TextStyle(
 
 // home page card style
 TextStyle cardWidgetFacilityNameStyle =
-    TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold);
-TextStyle cardWidgetAddrStyle = TextStyle(fontSize: 12.0,color: Color(0xFF828282));
+    TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
+TextStyle cardWidgetAddrStyle = TextStyle(fontSize: 10.0,color: Color(0xFF828282));
 TextStyle cardWidgetDetailButtonStyle = TextStyle(fontSize: 14.4, color: Color(0xFF2F80ED));
 TextStyle cardWidgetWeatherDataStyle =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 46.8);

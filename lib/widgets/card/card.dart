@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
@@ -9,6 +10,7 @@ class HomePageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Card(
       elevation: 4.0,
       shape: RoundedRectangleBorder(
@@ -22,22 +24,25 @@ class HomePageCard extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => BlocProvider<TabBloc>(
-                    create: (context) => TabBloc(),
-                    child: TabScreen(),
-                  )
-              )
-          );
+                        create: (context) => TabBloc(),
+                        child: TabScreen(),
+                      )));
         },
         child: Container(
-          height: height/5,
-          padding: EdgeInsets.fromLTRB(20.0, height/20, 15.0, 10.0),
+          height: height / 5,
+          padding: EdgeInsets.fromLTRB(
+              width / 25, height / 35, width / 25, height / 60),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              Flexible(
+                flex: 2,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           '성운이네 딸기 농장',
@@ -59,34 +64,38 @@ class HomePageCard extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 15.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Chip(
-                      backgroundColor: Colors.white,
-                      elevation: 1.0,
-                      label: Text(
-                        ' 자세히보기 ',
-                        style: cardWidgetDetailButtonStyle,
+              Flexible(
+                flex: 1,
+                child: Container(
+                  height: height / 5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Chip(
+                        backgroundColor: Colors.white,
+                        elevation: 1.0,
+                        label: Text(
+                          ' 자세히보기 ',
+                          style: cardWidgetDetailButtonStyle,
+                        ),
                       ),
+                      Container(
+//                        width: width,
+//                        height: height,
+                        child: Card(
+                          elevation: 2.0,
+                          child: Icon(
+                            CustomIcons.cow,
+                            color: Color(0xFF2F80ED),
+                            size: 25,
+                          ),
+                          shape: CircleBorder(),
+                          clipBehavior: Clip.antiAlias,
+                        ),
+                      )
+                    ],
                   ),
-                  Container(
-                    width: 40.0,
-                    height: 40.0,
-                    child: Card(
-                      elevation: 2.0,
-                      child: Icon(
-                        CustomIcons.cow,
-                        color: Color(0xFF2F80ED),
-                      ),
-                      shape: CircleBorder(),
-                      clipBehavior: Clip.antiAlias,
-                    ),
-                  )
-                ],
+                ),
               ),
             ],
           ),
