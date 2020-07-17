@@ -35,6 +35,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).primaryColorLight,
       appBar: AppBar(
         backgroundColor: Colors.white,

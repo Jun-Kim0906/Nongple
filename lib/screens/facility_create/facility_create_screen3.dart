@@ -5,6 +5,7 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:nongple/blocs/add_facilitiy_bloc/bloc.dart';
 import 'package:nongple/data_repository/data_repository.dart';
 import 'package:nongple/widgets/widgets.dart';
+import 'package:nongple/models/models.dart';
 import 'create_screen.dart';
 
 class FacilityCreateScreen3 extends StatefulWidget {
@@ -44,7 +45,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
             ),
           ),
           body: Padding(
-            padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+            padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,6 +93,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
                                     value: _addFacilityBloc,
                                     child: FacilityCreateScreen4(),
                                   )));
+//                      FacilityRepository().addNewFacility(Facility());
                       FacilityRepository().uploadFacility(
                         addr: state.facilityAddr,
                         name: state.facilityName,

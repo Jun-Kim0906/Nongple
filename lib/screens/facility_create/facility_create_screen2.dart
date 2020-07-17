@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:nongple/blocs/add_facilitiy_bloc/bloc.dart';
 import 'package:nongple/screens/facility_create/create_screen.dart';
@@ -22,6 +23,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
   AddFacilityBloc _addFacilityBloc;
   double height;
   String address;
+  bool enable=true;
 
   @override
   void initState() {
@@ -35,6 +37,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
     return BlocBuilder<AddFacilityBloc, AddFacilityState>(
         builder: (context, state) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).primaryColorLight,
           appBar: AppBar(
             backgroundColor: Colors.white,
@@ -84,6 +87,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                   controller: facilityAddrController..text = state.facilityAddr,
                   maxLines: null,
+                  enabled: enable,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.search),
                     hintText: '주소 검색하기',
