@@ -7,9 +7,9 @@ const appBarColor = Colors.white; // color white
 
 /// colors for journal page
 const journalGoBackArrowColor = Color(0xFF9E9E9E); // color grey
-const journalIconColor1 = Color(0xFFEEEEEE); // color grey[200]
-const journalIconColor2 = Color(0xFF80D8FF); // color lightBlueAccent[100]
-const journalIconColor3 = Color(0xFFEF5350); // color red[400]
+const journalIconColor1 = Color(0xFFF4F4F4); // color grey
+const journalIconColor2 = Color(0xFF56CCF2); // color lightBlue
+const journalIconColor3 = Color(0xFFEB5757); // color red
 
 
 /// colors for weather page
