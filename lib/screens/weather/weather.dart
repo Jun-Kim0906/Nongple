@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:nongple/utils/utils.dart';
 
-class Weather extends StatelessWidget {
+class Weather extends StatefulWidget {
+  @override
+  _WeatherState createState() => _WeatherState();
+}
+
+class _WeatherState extends State<Weather> {
+  String baseDate;
+  String baseTime;
+  String category;
+  String fcstDate;
+  String fcstTime;
+  String fcstValue;
+  int nx;
+  int ny;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: bodyColor,
-      appBar: AppBar(
-        backgroundColor: appBarColor,
-        elevation: 0.0,
-        leading: IconButton(
-          color: weatherGoBackArrowColor,
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Column(
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+      child: Container(
+        child: Column(
           children: [
-            Text(
-              '날씨',
-              style: tabAppBarTitleStyle,
-            ),
-            Text(
-              '성운이네 딸기농장',
-              style: tabAppBarSubtitleStyle,
-            ),
+            Text('baseDate' + baseDate)
           ],
         ),
-        centerTitle: true,
       ),
-      body: Container(),
     );
   }
 }

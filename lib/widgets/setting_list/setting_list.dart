@@ -12,52 +12,45 @@ class SettingTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
-    return BlocProvider.value(
-      value: _homeBloc,
-      child: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          if (state is FacilityListSet) {
-            return ListView(
-              children: [
-                ListTile(
-                  leading: Icon(Icons.collections),
-                  title: Text(
-                      '배경화면 관리', style: TextStyle(fontWeight: FontWeight.bold)),
-                  trailing: Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) =>
-                          SetBackgroundScreen(facList: state.facList)),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.exit_to_app),
-                  title: Text(
-                    '로그아웃',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  trailing: Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    showAlertDialog(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.error_outline),
-                  title: Text(
-                      '버전 정보', style: TextStyle(fontWeight: FontWeight.bold)),
-                  trailing: Icon(Icons.arrow_forward_ios),
-                  onTap: () {},
-                ),
-              ],
-            );
-          }
-          else {
-            return SplashScreen();
-          }
-        },
-      ),
+    return ListView(
+      children: [
+        ListTile(
+            leading: Icon(Icons.collections),
+            title: Text(
+                '배경화면 관리', style: TextStyle(fontWeight: FontWeight.bold)),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context)
+              =>
+                  BlocProvider.value(
+                    value: _homeBloc,
+                    child: SetBackgroundScreen(),
+                  )
+//                  SetBackgroundScreen(facList: state.facList)),
+              ));
+            }
+        ),
+        ListTile(
+          leading: Icon(Icons.exit_to_app),
+          title: Text(
+            '로그아웃',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: () {
+            showAlertDialog(context);
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.error_outline),
+          title: Text(
+              '버전 정보', style: TextStyle(fontWeight: FontWeight.bold)),
+          trailing: Icon(Icons.arrow_forward_ios),
+          onTap: () {},
+        ),
+      ],
     );
   }
 }
