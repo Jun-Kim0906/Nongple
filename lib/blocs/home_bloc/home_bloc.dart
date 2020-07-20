@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/testPage2.dart';
-
+import 'package:nongple/data_repository/data_repository.dart';
 import 'home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,38 +18,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState>{
     if (event is GetFacilityList) {
       yield* _mapGetFacilityListToState();
     }
-//    if(event is SettingBtnPressed){
-//      yield* _mapSettingBtnPressedToState();
-//    }else if(event is BackgroundImgChanged){
-//      yield* _mapBackgroundImgChangedToState(event.backgroundImg);
-//    }
   }
 
   Stream<HomeState> _mapGetFacilityListToState() async* {
     List<Facility> facList = [];
-    QuerySnapshot qs = await Firestore.instance.collection('Facility').getDocuments();
+    QuerySnapshot qs = await Firestore.instance.collection('Facility').where('uid', isEqualTo: (await UserRepository().getUser()).uid).getDocuments();
     qs.documents.forEach((ds) {
       facList.add(Facility.fromSnapshot(ds));
     });
     yield FacilityListSet(facList);
   }
-
-//  Stream<HomeState> _mapSettingBtnPressedToState() async*{
-//    yield state.update(
-//      settingBtnPressed: true,
-//    );
-//  }
-//
-//  Stream<HomeState> _mapBackgroundImgChangedToState(String backgroundImg) async*{
-//    String uid = (await FirebaseAuth.instance.currentUser()).uid;
-//
-//    await Firestore.instance
-//        .collection("User")
-//        .document(uid)
-//        .updateData({'bgUrl': backgroundImg});
-//
-//    yield state.update(
-//      backgroundImg: backgroundImg,
-//    );
-//  }
 }
