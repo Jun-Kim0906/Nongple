@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
 
-class Journal extends StatelessWidget {
+class JournalMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
