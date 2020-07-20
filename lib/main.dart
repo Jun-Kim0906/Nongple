@@ -11,24 +11,13 @@ import 'package:nongple/screens/screens.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
-//  final UserRepository userRepository = UserRepository();
+
   runApp(
     App(),
-//    BlocProvider(
-//      create: (context) => AuthenticationBloc(userRepository: userRepository)
-//        ..add(AuthenticationStarted()),
-//      child: App(userRepository: userRepository),
-//    ),
   );
 }
 
 class App extends StatefulWidget {
-//  final UserRepository _userRepository;
-//
-//  App({Key key, @required UserRepository userRepository})
-//      : assert(userRepository != null),
-//        _userRepository = userRepository,
-//        super(key: key);
 
   @override
   _AppState createState() => _AppState();
@@ -72,11 +61,11 @@ class _AppState extends State<App> {
                     return LoginScreen(userRepository: userRepository);
 //              SplashToLogin(userRepository: _userRepository);
                   } else if (state is AuthenticationSuccess) {
-                    return BlocProvider<HomeBloc>(
-                      create: (BuildContext context) => HomeBloc(),
-                      child: HomeScreen(name: state.displayName),
-                    );
-//              HomeScreen(name: state.displayName);
+                    return HomeScreen(name: state.displayName);
+//                      BlocProvider<HomeBloc>(
+//                      create: (BuildContext context) => HomeBloc(),
+//                      child: HomeScreen(name: state.displayName),
+//                      HomeScreen(name: state.displayName);
                   }
                   return SplashScreen();
                 },

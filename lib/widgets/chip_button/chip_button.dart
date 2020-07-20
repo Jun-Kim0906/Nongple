@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nongple/blocs/home_bloc/home.dart';
 import 'package:nongple/screens/screens.dart';
 
 class ChipButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
     return Row(
 //                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -44,7 +47,12 @@ class ChipButton extends StatelessWidget {
             onPressed: () {
               print("설정");
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Settings()));
+                  context, MaterialPageRoute(builder: (context) =>
+                  BlocProvider.value(
+                    value: _homeBloc,
+                    child: Settings(),
+                  )
+              ));
             }),
       ],
     );

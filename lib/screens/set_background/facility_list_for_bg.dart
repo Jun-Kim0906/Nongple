@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/screens/set_background/pick_image.dart';
 import 'package:nongple/testPage2.dart';
 import 'package:nongple/widgets/custom_icons/custom_icons.dart';
 
 class FacilityListForBackground extends StatelessWidget {
-  final FacilityList facList;
+  final Facility facList;
 
   FacilityListForBackground({
     Key key,

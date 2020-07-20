@@ -9,6 +9,8 @@ abstract class HomeEvent extends Equatable{
   List<Object> get props => [];
 }
 
+class GetFacilityList extends HomeEvent{}
+
 class SettingBtnPressed extends HomeEvent{
   @override
   String toString()=>'Setting Button Pressed';

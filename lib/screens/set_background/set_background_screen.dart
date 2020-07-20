@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nongple/blocs/blocs.dart';
+import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/screens/set_background/facility_list_for_bg.dart';
 import 'package:nongple/testPage2.dart';
 import 'package:nongple/utils/utils.dart';
 
 class SetBackgroundScreen extends StatefulWidget {
-  final List<FacilityList> facList;
+  final List<Facility> facList;
 
   SetBackgroundScreen({
     Key key,
