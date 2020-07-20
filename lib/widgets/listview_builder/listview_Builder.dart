@@ -24,31 +24,40 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
       itemCount: widget.facList.length,
       itemBuilder: (BuildContext context, int index) {
 //        return Container();
-        if (index == widget.facList.length - 1) {
-          return Column(
-            children: [
-
-              HomePageCard(facList: widget.facList[index],),
-              SizedBox(
-                height: height * 0.017,
-              ),
-              ButtonCard(),
-              SizedBox(
-                height: height * 0.017,
-              ),
-            ],
-          );
-        } else {
-          return Column(
-            children: [
-
-              HomePageCard(facList: widget.facList[index],),
-              SizedBox(
-                height: height * 0.017,
-              ),
-            ],
-          );
-        }
+        return Column(
+          children: <Widget>[
+            HomePageCard(
+              facList: widget.facList[index],
+            ),
+            SizedBox(height: height*0.017,),
+            index == widget.facList.length -1
+                ?ButtonCard()
+                :Container(),
+          ],
+        );
+//        if (index == widget.facList.length - 1) {
+//          return Column(
+//            children: [
+//              HomePageCard(facList: widget.facList[index],),
+//              SizedBox(
+//                height: height * 0.017,
+//              ),
+//              ButtonCard(),
+//              SizedBox(
+//                height: height * 0.017,
+//              ),
+//            ],
+//          );
+//        } else {
+//          return Column(
+//            children: [
+//              HomePageCard(facList: widget.facList[index],),
+//              SizedBox(
+//                height: height * 0.017,
+//              ),
+//            ],
+//          );
+//        }
 //                    return HomePageCard();
       },
     );
