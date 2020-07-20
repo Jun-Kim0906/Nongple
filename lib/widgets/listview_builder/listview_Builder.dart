@@ -27,23 +27,25 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
         if (index == widget.facList.length - 1) {
           return Column(
             children: [
-              SizedBox(
-                height: height - 670,
-              ),
+
               HomePageCard(facList: widget.facList[index],),
               SizedBox(
-                height: height - 670,
+                height: height * 0.017,
               ),
               ButtonCard(),
+              SizedBox(
+                height: height * 0.017,
+              ),
             ],
           );
         } else {
           return Column(
             children: [
-              SizedBox(
-                height: height - 670,
-              ),
+
               HomePageCard(facList: widget.facList[index],),
+              SizedBox(
+                height: height * 0.017,
+              ),
             ],
           );
         }

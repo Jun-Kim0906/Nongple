@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: homeMainTitle,
                             ),
                             SizedBox(
-                              height: height - 680,
+                              height: height *0.009,
                             ),
                             Text(
                               '$year년 $month월 $day일 $weekday',
@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: homeSubTitle,
                             ),
                             SizedBox(
-                              height: height - 675,
+                              height: height * 0.018,
                             ),
                             Container(
                               child: BlocProvider.value(
@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             SizedBox(
-                              height: height - 680,
+                              height: height *0.016,
                             ),
                             Expanded(
                               child: ListViewBuilder(
