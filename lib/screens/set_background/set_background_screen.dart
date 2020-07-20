@@ -6,42 +6,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/facility/facility.dart';
+import 'package:nongple/screens/screens.dart';
 import 'package:nongple/screens/set_background/facility_list_for_bg.dart';
 import 'package:nongple/testPage2.dart';
 import 'package:nongple/utils/utils.dart';
 
 class SetBackgroundScreen extends StatefulWidget {
-  final List<Facility> facList;
-
-  SetBackgroundScreen({
-    Key key,
-    this.facList,
-  }) : super(key: key);
 
   @override
   _SetBackgroundScreenState createState() => _SetBackgroundScreenState();
 }
 
 class _SetBackgroundScreenState extends State<SetBackgroundScreen> {
-//  QuerySnapshot qs;
-//  List<FacilityList> facList;
-
-//  File _image;
-//  final picker = ImagePicker();
-//
-//  Future getImage() async {
-//    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-//    _image = File(pickedFile.path);
-//  }
-
-//  @override
-//  void initState() async {
-//    super.initState();
-//    qs = await Firestore.instance.collection('Facility').getDocuments();
-//    qs.documents.forEach((ds) {
-//      facList.add(FacilityList.fromSnapshot(ds));
-//    });
-//  }
 
   @override
   void initState() {
@@ -68,14 +44,22 @@ class _SetBackgroundScreenState extends State<SetBackgroundScreen> {
         ),
         centerTitle: true,
       ),
-      body: ListView.separated(
-          itemCount: widget.facList.length,
-          separatorBuilder: (BuildContext context, int index) => Divider(
-                thickness: 1.0,
-              ),
-          itemBuilder: (BuildContext context, int index) {
-            return FacilityListForBackground(facList: widget.facList[index]);
-          }),
+      body: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state){
+          if (state is FacilityListSet) {
+            return ListView.separated(
+                itemCount: state.facList.length,
+                separatorBuilder: (BuildContext context, int index) => Divider(
+                  thickness: 1.0,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return FacilityListForBackground(facList: state.facList[index]);
+                });
+          } else {
+            return SplashScreen();
+          }
+        },
+      )
     );
   }
 }

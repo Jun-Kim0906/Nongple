@@ -18,7 +18,6 @@ void main() {
 }
 
 class App extends StatefulWidget {
-
   @override
   _AppState createState() => _AppState();
 }
@@ -61,12 +60,14 @@ class _AppState extends State<App> {
                     return LoginScreen(userRepository: userRepository);
 //              SplashToLogin(userRepository: _userRepository);
                   } else if (state is AuthenticationSuccess) {
-                    return HomeScreen(name: state.displayName);
-//                      BlocProvider<HomeBloc>(
-//                      create: (BuildContext context) => HomeBloc(),
-//                      child: HomeScreen(name: state.displayName),
+//                    return HomeScreen(name: state.displayName);
+                    return BlocProvider<HomeBloc>(
+                        create: (BuildContext context) =>
+                            HomeBloc()..add(GetFacilityList()),
+                        child: HomeScreen(name: state.displayName));
 //                      HomeScreen(name: state.displayName);
                   }
+                  ;
                   return SplashScreen();
                 },
               ),

@@ -47,6 +47,7 @@ class _HomePageCardState extends State<HomePageCard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
     return Card(
       elevation: 4.0,
       shape: RoundedRectangleBorder(
@@ -59,10 +60,23 @@ class _HomePageCardState extends State<HomePageCard> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => BlocProvider<TabBloc>(
-                        create: (context) => TabBloc(),
-                        child: TabScreen(),
-                      )));
+                  builder: (context) =>
+                      MultiBlocProvider(
+                        providers: [
+                          BlocProvider<TabBloc>(
+                            create: (context) => TabBloc(),
+                          ),
+                          BlocProvider.value(
+                            value: _homeBloc,
+                          )
+                        ],
+                        child: TabScreen(facList : widget.facList),
+                      )
+//                      BlocProvider<TabBloc>(
+//                        create: (context) => TabBloc(),
+//                        child: TabScreen(),
+//                      )
+              ));
         },
         child: Container(
           height: height / 5,
