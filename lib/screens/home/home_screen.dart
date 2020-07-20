@@ -17,28 +17,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  HomeBloc _homeBloc;
   String name;
 
   @override
   void initState() {
     super.initState();
     this.name = widget.name;
-    _homeBloc = HomeBloc();
-    _homeBloc.add(GetFacilityList());
   }
 
   @override
   Widget build(BuildContext context) {
+    HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return _homeBloc == null
-        ? Scaffold(
-            body: SplashScreen(),
-          )
-        : BlocProvider.value(
-            value: _homeBloc,
-            child: BlocBuilder<HomeBloc, HomeState>(
+    return BlocBuilder<HomeBloc, HomeState>(
               builder: (context, state) {
                 if (state is FacilityListSet) {
                   return Scaffold(
@@ -79,9 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: height *0.016,
                             ),
                             Expanded(
-                              child: ListViewBuilder(
-                                facList: state.facList,
+                              child: BlocProvider.value(
+                                value: _homeBloc,
+                                child: ListViewBuilder(),
                               ),
+//                              ListViewBuilder(
+//                                facList: state.facList,
+//                              ),
                             ),
                           ],
                         ),
@@ -92,13 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SplashScreen();
                 }
               },
-            ),
-          );
-  }
-
-  @override
-  void dispose() {
-    _homeBloc.distinct();
-    super.dispose();
+            );
   }
 }

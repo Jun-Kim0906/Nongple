@@ -6,3 +6,4 @@ export 'home_bloc/home.dart';
 export 'add_facilitiy_bloc/bloc.dart';
 export 'tab/tab.dart';
 export 'journal_main_bloc/bloc.dart';
+export 'weather_bloc/weather.dart';
