@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nongple/models/models.dart';
 import 'package:nongple/data_repository/data_repository.dart';
 
 class FacilityRepository{
@@ -6,19 +7,9 @@ class FacilityRepository{
   DocumentReference reference;
 
   void uploadFacility({
-    String addr,
-    int category,
-    String name,
+    Facility facility,
   }) async {
-    DocumentReference reference = _firestore.collection('Facility').document();
-    await reference.setData({
-      'addr' : addr,
-      'bgUrl' : '',
-      'category' : category,
-      'fid': reference.documentID,
-      'name': name,
-      'temperature':'',
-      'uid': (await UserRepository().getUser()).uid,
-    });
+    DocumentReference reference = _firestore.collection('Facility').document(facility.fid);
+    await reference.setData(facility.toMap());
   }
 }
