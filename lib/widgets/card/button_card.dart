@@ -21,8 +21,7 @@ class ButtonCard extends StatelessWidget {
             Navigator.push(context, MaterialPageRoute (builder: (context) => BlocProvider<AddFacilityBloc>(
                     create: (BuildContext context)=>AddFacilityBloc(),
                     child: FacilityCreateScreen(),
-                  )));
-//                .then((value) => BlocProvider.of<HomeBloc>(context).add(GetFacilityList));
+                  ))).then((value) => BlocProvider.of<HomeBloc>(context).add(GetFacilityList()));
           },
           child: Center(
             child: Padding(
