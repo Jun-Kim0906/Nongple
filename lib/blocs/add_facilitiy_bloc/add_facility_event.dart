@@ -32,3 +32,5 @@ class FacilityCategoryChanged extends AddFacilityEvent{
   @override
   String toString() => 'Facility Category Changed: $facilityCategory';
 }
+
+class FacilityUpload extends AddFacilityEvent{}

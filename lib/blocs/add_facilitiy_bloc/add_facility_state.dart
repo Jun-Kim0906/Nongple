@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 
 class AddFacilityState {
   final bool isNameValid;
@@ -8,15 +9,18 @@ class AddFacilityState {
   final String facilityName;
   final String facilityAddr;
   final int facilityCategory;
+  final String fid;
+  final String uid;
 
-  AddFacilityState({
-    @required this.isNameValid,
-    @required this.isAddrValid,
-    @required this.isCategoryValid,
-    @required this.facilityName,
-    @required this.facilityAddr,
-    @required this.facilityCategory,
-  });
+  AddFacilityState(
+      {@required this.isNameValid,
+      @required this.isAddrValid,
+      @required this.isCategoryValid,
+      @required this.facilityName,
+      @required this.facilityAddr,
+      @required this.facilityCategory,
+      @required this.fid,
+      @required this.uid});
 
   factory AddFacilityState.empty() {
     return AddFacilityState(
@@ -26,6 +30,8 @@ class AddFacilityState {
       facilityName: '',
       facilityAddr: '',
       facilityCategory: 0,
+      fid: '',
+      uid: '',
     );
   }
 
@@ -36,6 +42,8 @@ class AddFacilityState {
     String facilityName,
     String facilityAddr,
     int facilityCategory,
+    String fid,
+    String uid,
   }) {
     return AddFacilityState(
       isNameValid: isNameValid ?? this.isNameValid,
@@ -44,6 +52,8 @@ class AddFacilityState {
       facilityName: facilityName ?? this.facilityName,
       facilityAddr: facilityAddr ?? this.facilityAddr,
       facilityCategory: facilityCategory ?? this.facilityCategory,
+      uid: uid ?? this.uid,
+      fid: fid ?? this.fid,
     );
   }
 
@@ -54,6 +64,8 @@ class AddFacilityState {
     String facilityName,
     String facilityAddr,
     int facilityCategory,
+    String fid,
+    String uid,
   }) {
     return copyWith(
       isNameValid: isNameValid,
@@ -62,6 +74,8 @@ class AddFacilityState {
       facilityName: facilityName,
       facilityAddr: facilityAddr,
       facilityCategory: facilityCategory,
+      uid: uid,
+      fid: fid,
     );
   }
 
@@ -74,6 +88,8 @@ class AddFacilityState {
     facilityName: $facilityName,
     facilityAddr: $facilityAddr,
     facilityCategory: $facilityCategory,
+    uid: $uid,
+    fid: $fid,
     ''';
   }
 }
