@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/testPage2.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/custom_icons/custom_icons.dart';
 
 class PickBackground extends StatefulWidget {
-  final FacilityList facList;
+  final Facility facList;
 
   PickBackground({
     Key key,

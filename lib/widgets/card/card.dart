@@ -1,12 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:nongple/blocs/blocs.dart';
+import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/screens/screens.dart';
+import 'package:nongple/testPage2.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/custom_icons/custom_icons.dart';
 
-class HomePageCard extends StatelessWidget {
+class HomePageCard extends StatefulWidget {
+  final Facility facList;
+
+  HomePageCard({
+    Key key,
+    this.facList,
+  }) : super(key: key);
+
+  @override
+  _HomePageCardState createState() => _HomePageCardState();
+}
+
+class _HomePageCardState extends State<HomePageCard> {
+  String addr;
+  String bgUrl;
+  int category;
+  String fid;
+  String name;
+  String temperature;
+  String uid;
+
+
+  @override
+  void initState() {
+    super.initState();
+    addr = widget.facList.addr;
+    bgUrl = widget.facList.bgUrl;
+    category = widget.facList.category;
+    fid = widget.facList.fid;
+    name = widget.facList.name;
+    temperature = widget.facList.temperature;
+    uid = widget.facList.uid;
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -45,20 +81,20 @@ class HomePageCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '성운이네 딸기 농장',
+                          name,
                           style: cardWidgetFacilityNameStyle,
                         ),
                         SizedBox(
                           height: 6.0,
                         ),
                         Text(
-                          '경북 포항시 북구 양덕로 30번길 62-1',
+                          addr,
                           style: cardWidgetAddrStyle,
                         ),
                       ],
                     ),
                     Text(
-                      '25' + degrees + 'C',
+                      temperature + degrees + 'C',
                       style: cardWidgetWeatherDataStyle,
                     ),
                   ],
@@ -84,11 +120,11 @@ class HomePageCard extends StatelessWidget {
 //                        height: height,
                         child: Card(
                           elevation: 2.0,
-                          child: Icon(
-                            CustomIcons.cow,
-                            color: Color(0xFF2F80ED),
-                            size: 25,
-                          ),
+                          child: (category == 1 || category == 2)
+                              ? Icon(CustomIcons.tractor, color: Color(0xFF2F80ED), size: 25,)
+                              : (category == 3)
+                              ? Icon(CustomIcons.cow, color: Color(0xFF2F80ED), size: 25,)
+                              : Icon(CustomIcons.plant, color: Color(0xFF2F80ED), size: 25,),
                           shape: CircleBorder(),
                           clipBehavior: Clip.antiAlias,
                         ),
