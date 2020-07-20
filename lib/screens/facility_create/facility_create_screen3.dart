@@ -62,7 +62,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
                 ),
                 Expanded(
                   child: GridView.count(
-                    physics: NeverScrollableScrollPhysics(),
+                      physics: NeverScrollableScrollPhysics(),
                       crossAxisCount: 2,
                       children: List.generate(4, (index) {
                         return Padding(
@@ -70,9 +70,10 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
                           child: SelectCategoryCard(
                             width: width / 3,
                             selected: state.facilityCategory,
-                            index: index+1,
-                            onPressed: (){
-                              _addFacilityBloc.add(FacilityCategoryChanged(facilityCategory: index+1));
+                            index: index + 1,
+                            onPressed: () {
+                              _addFacilityBloc.add(FacilityCategoryChanged(
+                                  facilityCategory: index + 1));
                             },
                           ),
                         );
@@ -83,8 +84,9 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
           ),
           bottomNavigationBar: BottomNavigationButton(
               title: '완료',
-              onPressed: state.facilityCategory!=0
+              onPressed: state.facilityCategory != 0
                   ? () {
+                      _addFacilityBloc.add(FacilityUpload());
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -94,11 +96,6 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
                                     child: FacilityCreateScreen4(),
                                   )));
 //                      FacilityRepository().addNewFacility(Facility());
-                      FacilityRepository().uploadFacility(
-                        addr: state.facilityAddr,
-                        name: state.facilityName,
-                        category: state.facilityCategory
-                      );
                     }
                   : null));
     });

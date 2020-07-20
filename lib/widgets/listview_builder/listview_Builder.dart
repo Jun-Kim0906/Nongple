@@ -36,43 +36,42 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
             itemCount: state.facList.length,
             itemBuilder: (BuildContext context, int index) {
 //        return Container();
-              if (index == state.facList.length - 1) {
-                return Column(
-                  children: [
-                    BlocProvider.value(
+        return Column(
+          children: <Widget>[
+            BlocProvider.value(
                       value: _homeBloc,
                       child: HomePageCard(facList: state.facList[index],),
                     ),
-//                    HomePageCard(facList: state.facList[index],),
-                    SizedBox(
-                      height: height * 0.017,
-                    ),
-                    ButtonCard(),
-                    SizedBox(
-                      height: height * 0.017,
-                    ),
-                  ],
-                );
-              } else {
-                return Column(
-                  children: [
-                    BlocProvider.value(
-                      value: _homeBloc,
-                      child: HomePageCard(facList: state.facList[index],),
-                    ),
-//                    HomePageCard(facList: state.facList[index],),
-                    SizedBox(
-                      height: height * 0.017,
-                    ),
-                  ],
-                );
-              }
+            SizedBox(height: height*0.017,),
+            index == widget.facList.length -1
+                ?ButtonCard()
+                :Container(),
+          ],
+        );
+//        if (index == widget.facList.length - 1) {
+//          return Column(
+//            children: [
+//              HomePageCard(facList: widget.facList[index],),
+//              SizedBox(
+//                height: height * 0.017,
+//              ),
+//              ButtonCard(),
+//              SizedBox(
+//                height: height * 0.017,
+//              ),
+//            ],
+//          );
+//        } else {
+//          return Column(
+//            children: [
+//              HomePageCard(facList: widget.facList[index],),
+//              SizedBox(
+//                height: height * 0.017,
+//              ),
+//            ],
+//          );
+//        }
 //                    return HomePageCard();
-            },
-          );
-        } else {
-          return SplashScreen();
-        }
       },
     );
   }

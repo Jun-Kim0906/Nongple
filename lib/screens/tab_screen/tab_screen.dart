@@ -79,7 +79,7 @@ class _TabScreenState extends State<TabScreen> {
                   ],
                   child: WeatherScreen(),
                 )
-              : (activeTab == AppTab.journal) ? Journal() : Dictionary(),
+              : (activeTab == AppTab.journal) ? JournalMain() : Dictionary(),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
             onTabSelected: (tab) =>

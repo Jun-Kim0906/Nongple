@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nongple/data_repository/data_repository.dart';
+import 'package:meta/meta.dart';
 
 class Facility {
   static const ADDR = 'addr';
@@ -10,30 +11,45 @@ class Facility {
   static const TEMPERATURE = 'temperature';
   static const UID = 'uid';
 
-  String _addr;
-  String _bgUrl;
-  int _category;
-  String _fid;
-  String _name;
-  String _temperature;
-  String _uid;
+  String addr;
+  String bgUrl;
+  int category;
+  String fid;
+  String name;
+  String temperature;
+  String uid;
 
-  String get addr => _addr;
-  String get bgUrl => _bgUrl;
-  int get category => _category;
-  String get fid => _fid;
-  String get name => _name;
-  String get temperature => _temperature;
-  String get uid => _uid;
+  Facility({
+    @required this.addr,
+    this.bgUrl,
+    @required this.category,
+    this.fid,
+    @required this.name,
+    this.temperature,
+    this.uid,
+  });
 
-  Facility.fromSnapshot(DocumentSnapshot snapshot){
-    Map data = snapshot.data;
-    _addr=data[ADDR];
-    _bgUrl=data[BGURL];
-    _category=data[CATEGORY];
-    _fid=data[FID];
-    _name=data[NAME];
-    _temperature=data[TEMPERATURE];
-    _uid=data[UID];
+  factory Facility.fromSnapshot(DocumentSnapshot snapshot){
+    return Facility(
+      addr: snapshot[ADDR],
+      bgUrl: snapshot[BGURL],
+      category: snapshot[CATEGORY],
+      fid: snapshot[FID],
+      name: snapshot[NAME],
+      temperature: snapshot[TEMPERATURE],
+      uid: snapshot[UID],
+    );
+  }
+
+  Map<String, dynamic> toMap(){
+    return {
+    'addr' : addr,
+    'bgUrl' : bgUrl ?? '',
+    'category' : category,
+    'fid': fid,
+    'name': name,
+    'temperature': temperature ?? '',
+    'uid': uid,
+    };
   }
 }
