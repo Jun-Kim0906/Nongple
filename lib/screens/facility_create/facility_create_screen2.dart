@@ -100,8 +100,8 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
                       ),
                     );
                     if (model != null) {
-                      address =
-                          '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''} ${model.zonecode} ';
+                      address = 'postcod1=${model.hname}, postcode2=${model.roadname}, postcodeSeq=${model.roadnameCode}';
+//                          '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''} ${model.zonecode} ';
                       _addFacilityBloc
                           .add(FacilityAddrChanged(facilityAddr: address));
                     }

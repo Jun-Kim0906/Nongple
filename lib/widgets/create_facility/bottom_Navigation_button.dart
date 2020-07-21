@@ -15,7 +15,7 @@ class BottomNavigationButton extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: 64.0,
       child: RaisedButton(
-        color: Colors.blue[600],
+        color: Color(0xFF2F80ED),
         child: Text(
           _title ?? '다음',
           style: TextStyle(color: Colors.white, fontSize: 21.6),
