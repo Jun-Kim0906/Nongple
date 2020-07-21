@@ -25,12 +25,12 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     String pageNo = '1';
     String numOfRows = '10';
     String dataType = 'JSON';
-    String base_date = '20200720';
+    String base_date = '20200721';
     String base_time = '0630';
     String nx = '55';
     String ny = '127';
     String head = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?$serviceKey&pageNo=1&numOfRows=10&dataType=JSON';
-    String testUrl = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?serviceKey=i4IEpXIP0gP8v4Kvwnz%2FwRwVVcDse7fMVVsqDhG0DeEjXXM7TtD2qHHgeMz%2BMeq6WV0EJ4gLNnLJugGw%2BPBYnw%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&base_date=20200720&base_time=0630&nx=55&ny=127&';
+    String testUrl = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?serviceKey=i4IEpXIP0gP8v4Kvwnz%2FwRwVVcDse7fMVVsqDhG0DeEjXXM7TtD2qHHgeMz%2BMeq6WV0EJ4gLNnLJugGw%2BPBYnw%3D%3D&pageNo=1&numOfRows=999&dataType=JSON&base_date=20200720&base_time=0630&nx=55&ny=127&';
     http.Response weatherInfo;
     print('testing URL : $head&base_date=$base_date&base_time=$base_time&nx=$nx&ny=$ny&');
     weatherInfo = await http.get('$head&base_date=$base_date&base_time=$base_time&nx=$nx&ny=$ny&');
