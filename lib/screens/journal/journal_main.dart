@@ -134,9 +134,14 @@ class _JournalMainState extends State<JournalMain> {
           floatingActionButton: FloatingActionButton.extended(
             icon: Icon(Icons.add),
             onPressed: () {
-              Navigator.push(context,MaterialPageRoute(
-                builder: (context) => JournalCreateScreen()
-              ));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                      BlocProvider<JournalMainBloc>.value(
+                        value: _journalMainBloc,
+                        child: JournalCreateScreen(),
+                      )));
             },
             label: Text('오늘의 활동 기록하기'),
           ),
