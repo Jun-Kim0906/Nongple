@@ -4,6 +4,8 @@ DateTime now = DateTime.now();
 String year = DateFormat('yyyy').format(now);
 String month = DateFormat('MM').format(now);
 String day = DateFormat('dd').format(now);
+String hour = DateFormat('HH').format(now);
+String minute = DateFormat('mm').format(now);
 String weekday = daysOfWeek(index: now.weekday);
 
 String daysOfWeek({int index, bool shorter = false}) {
@@ -12,3 +14,8 @@ String daysOfWeek({int index, bool shorter = false}) {
     return shorter ? day.substring(0, 1) : day;
   }).toList()[index - 1];
 }
+
+//String hHour = format(hour, locale: 'ko', allowFromNow: true);
+String base_date = '$year$month$day';
+String base_time = '$hour$minute';
+

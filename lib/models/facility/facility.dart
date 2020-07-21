@@ -10,6 +10,8 @@ class Facility {
   static const NAME = 'name';
   static const TEMPERATURE = 'temperature';
   static const UID = 'uid';
+  static const LAT = 'lat';
+  static const LNG = 'lng';
 
   String addr;
   String bgUrl;
@@ -18,6 +20,8 @@ class Facility {
   String name;
   String temperature;
   String uid;
+  String lat;
+  String lng;
 
   Facility({
     @required this.addr,
@@ -27,9 +31,11 @@ class Facility {
     @required this.name,
     this.temperature,
     this.uid,
+    this.lat,
+    this.lng,
   });
 
-  factory Facility.fromSnapshot(DocumentSnapshot snapshot){
+  factory Facility.fromSnapshot(DocumentSnapshot snapshot) {
     return Facility(
       addr: snapshot[ADDR],
       bgUrl: snapshot[BGURL],
@@ -38,18 +44,22 @@ class Facility {
       name: snapshot[NAME],
       temperature: snapshot[TEMPERATURE],
       uid: snapshot[UID],
+      lat: snapshot[LAT],
+      lng: snapshot[LNG],
     );
   }
 
-  Map<String, dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     return {
-    'addr' : addr,
-    'bgUrl' : bgUrl ?? '',
-    'category' : category,
-    'fid': fid,
-    'name': name,
-    'temperature': temperature ?? '',
-    'uid': uid,
+      'addr': addr,
+      'bgUrl': bgUrl ?? '',
+      'category': category,
+      'fid': fid,
+      'name': name,
+      'temperature': temperature ?? '',
+      'uid': uid,
+      'lat': lat ?? '127',
+      'lng': lng ?? '55',
     };
   }
 }
