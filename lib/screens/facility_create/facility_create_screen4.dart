@@ -38,7 +38,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen4> {
                   color: Colors.blue[600],
                   icon: Icon(Icons.close),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                 ),
               ),
