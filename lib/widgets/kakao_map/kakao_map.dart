@@ -8,7 +8,7 @@ class Kopo extends StatefulWidget {
   Kopo({
     Key key,
     this.title = '주소검색',
-    this.colour = Colors.white,
+    this.color = Colors.white,
     this.apiKey = '',
   }) : super(key: key);
 
@@ -16,7 +16,7 @@ class Kopo extends StatefulWidget {
   KopoState createState() => KopoState();
 
   final String title;
-  final Color colour;
+  final Color color;
   final String apiKey;
 }
 
@@ -39,7 +39,7 @@ class KopoState extends State<Kopo> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: widget.colour,
+        backgroundColor: widget.color,
         title: Text("주소검색", style: TextStyle(color: Colors.black),),
         elevation: 1.0,
       ),
