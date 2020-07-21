@@ -66,6 +66,9 @@ class _HomePageCardState extends State<HomePageCard> {
                           BlocProvider<TabBloc>(
                             create: (context) => TabBloc(),
                           ),
+                          BlocProvider<JournalMainBloc>(
+                            create: (context) => JournalMainBloc()..add(GetJournalList(fid: fid)),
+                          ),
                           BlocProvider.value(
                             value: _homeBloc,
                           )
