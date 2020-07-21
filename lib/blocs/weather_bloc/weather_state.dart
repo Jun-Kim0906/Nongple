@@ -12,14 +12,16 @@ class WeatherState {
 class InitializeWeatherState extends WeatherState{}
 
 class WeatherListSet extends WeatherState{
-  final List<Weather> weatherList;
+  final List<Weather> skyList;
+  final List<Weather> tmpList;
+  final List<Weather> humidList;
 
-  const WeatherListSet(this.weatherList);
+  const WeatherListSet(this.skyList, this.tmpList, this.humidList);
 
-  List<Object> get props => [weatherList];
+  List<Object> get props => [skyList, tmpList, humidList];
 
   @override
-  String toString()=>'FacilityListSet { facList : $weatherList }';
+  String toString()=>'FacilityListSet { skyList : $skyList, tmpList : $tmpList, humidList : $humidList }';
 }
 
 

@@ -18,34 +18,30 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   }
 
   Stream<WeatherState> _mapGetWeatherToState() async* {
-    List<Weather> weatherList = [];
-    String headUrl = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?';
-    String serviceKey =
-        'serviceKey=i4IEpXIP0gP8v4Kvwnz%2FwRwVVcDse7fMVVsqDhG0DeEjXXM7TtD2qHHgeMz%2BMeq6WV0EJ4gLNnLJugGw%2BPBYnw%3D%3D';
-    String pageNo = '1';
-    String numOfRows = '10';
-    String dataType = 'JSON';
-    String base_date = '20200721';
-    String base_time = '0630';
-    String nx = '55';
-    String ny = '127';
-    String head = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?$serviceKey&pageNo=1&numOfRows=10&dataType=JSON';
-    String testUrl = 'http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?serviceKey=i4IEpXIP0gP8v4Kvwnz%2FwRwVVcDse7fMVVsqDhG0DeEjXXM7TtD2qHHgeMz%2BMeq6WV0EJ4gLNnLJugGw%2BPBYnw%3D%3D&pageNo=1&numOfRows=999&dataType=JSON&base_date=20200720&base_time=0630&nx=55&ny=127&';
+    List<Weather> skyList = [];
+    List<Weather> tmpList = [];
+    List<Weather> humidList = [];
+
     http.Response weatherInfo;
-    print('testing URL : $head&base_date=$base_date&base_time=$base_time&nx=$nx&ny=$ny&');
-    weatherInfo = await http.get('$head&base_date=$base_date&base_time=$base_time&nx=$nx&ny=$ny&');
-//    weatherInfo = await http.get('$testUrl');
-//    weatherInfo = await http.get('http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtFcst?serviceKey=i4IEpXIP0gP8v4Kvwnz%2FwRwVVcDse7fMVVsqDhG0DeEjXXM7TtD2qHHgeMz%2BMeq6WV0EJ4gLNnLJugGw%2BPBYnw%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&base_date=20200720&base_time=0630&nx=55&ny=127&');
+
+    weatherInfo = await http.get('http://apis.data.go.kr/1360000/VilageFcstInfoService/getVilageFcst?serviceKey=i4IEpXIP0gP8v4Kvwnz%2FwRwVVcDse7fMVVsqDhG0DeEjXXM7TtD2qHHgeMz%2BMeq6WV0EJ4gLNnLJugGw%2BPBYnw%3D%3D&pageNo=1&numOfRows=999&dataType=JSON&base_date=20200721&base_time=0500&nx=1&ny=1&');
     if (weatherInfo.statusCode == 200) {
       json
           .decode(weatherInfo.body)['response']['body']['items']['item']
           .forEach((dynamic data) {
-        weatherList.add(Weather.fromJSON(data));
+            if(data['category'] == "REH") {
+              humidList.add(Weather.fromJSON(data));
+            } else if(data['category'] == "SKY") {
+              skyList.add(Weather.fromJSON(data));
+            } else if (data['category'] == "T3H") {
+              tmpList.add(Weather.fromJSON(data));
+            } else {
+              ;
+            }
       });
     } else {
       throw Exception('Failed to load weather');
     }
-    print(weatherList);
-    yield WeatherListSet(weatherList);
+    yield WeatherListSet(skyList, tmpList, humidList);
   }
 }
