@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/testPage2.dart';
 import 'package:nongple/utils/utils.dart';
+import 'package:nongple/widgets/create_facility/bottom_Navigation_button.dart';
 import 'package:nongple/widgets/custom_icons/custom_icons.dart';
 
 class PickBackground extends StatefulWidget {
@@ -109,11 +110,10 @@ class _PickBackgroundState extends State<PickBackground> {
           ),
         ]),
       ),
-      bottomNavigationBar: RaisedButton(
-        child: Text('저장'),
-        color: Colors.blue,
-        textColor: Colors.white,
-      ),
+      bottomNavigationBar: BottomNavigationButton(
+          title: '저장',
+          onPressed: () {},
+      )
     );
   }
 }

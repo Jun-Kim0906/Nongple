@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
@@ -43,10 +42,26 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     children: [
                       Container(
                         padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
-                        child: Icon(
+                        child: (int.parse(state.skyList_short[0].fcstValue) <= 1)
+                            ? Icon(
                           CustomIcons.sun,
                           size: 100,
                           color: Colors.yellow[700],
+                        )
+                            : (int.parse(state.skyList_short[0].fcstValue) >
+                            1 &&
+                            int.parse(state
+                                .skyList_short[0].fcstValue) <
+                                4)
+                            ? Icon(
+                          CustomIcons.cloud,
+                          size: 100,
+                          color: Colors.grey[400],
+                        )
+                            : Icon(
+                          CustomIcons.rain,
+                          size: 100,
+                          color: Colors.blue[600],
                         ),
                       ),
                       Container(
@@ -60,7 +75,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                   style: TextStyle(color: Colors.blue[600]),
                                 ),
                                 Text(
-                                  '25' + degrees + 'C',
+                                  state.tmpList_short[0].fcstValue + degrees + 'C',
                                   style: TextStyle(
                                       fontSize: 35.0,
                                       fontWeight: FontWeight.bold),
@@ -74,7 +89,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                   style: TextStyle(color: Colors.blue[600]),
                                 ),
                                 Text(
-                                  '90%',
+                                  state.humidList_short[0].fcstValue + '%',
                                   style: TextStyle(
                                       fontSize: 35.0,
                                       fontWeight: FontWeight.bold),
@@ -92,7 +107,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: state.tmpList.length,
+//                    itemCount: state.tmpList.length,
+                    itemCount: 8,
                     itemBuilder: (BuildContext context, int index) {
                       String fcstTime = state.tmpList[index].fcstTime;
                       return ListTile(
@@ -100,17 +116,29 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            (int.parse(state.skyList[index].fcstValue) <= 5)
-                                ? Icon(CustomIcons.sun, color: Colors.yellow[700],)
+                            (int.parse(state.skyList[index].fcstValue) <= 1)
+                                ? Icon(
+                                    CustomIcons.sun,
+                                    color: Colors.yellow[700],
+                                  )
                                 : (int.parse(state.skyList[index].fcstValue) >
-                                            5 &&
-                                        int.parse(
-                                                state.skyList[index].fcstValue) <
-                                            9)
-                                    ? Icon(CustomIcons.cloud, color: Colors.grey[400],)
-                                    : Icon(CustomIcons.rain, color: Colors.blue[600],),
-                            SizedBox(width: width * 0.008,),
-                            Text(state.tmpList[index].fcstValue + degrees + 'C'),
+                                            1 &&
+                                        int.parse(state
+                                                .skyList[index].fcstValue) <
+                                            4)
+                                    ? Icon(
+                                        CustomIcons.cloud,
+                                        color: Colors.grey[400],
+                                      )
+                                    : Icon(
+                                        CustomIcons.rain,
+                                        color: Colors.blue[600],
+                                      ),
+                            SizedBox(
+                              width: width * 0.008,
+                            ),
+                            Text(
+                                state.tmpList[index].fcstValue + degrees + 'C'),
                           ],
                         ),
                         trailing: Container(

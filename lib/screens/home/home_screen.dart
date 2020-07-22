@@ -18,16 +18,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String name;
-
+  HomeBloc _homeBloc;
   @override
   void initState() {
     super.initState();
+    _homeBloc = BlocProvider.of<HomeBloc>(context)..add(GetFacilityList());
     this.name = widget.name;
   }
 
   @override
   Widget build(BuildContext context) {
-    HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return BlocBuilder<HomeBloc, HomeState>(
