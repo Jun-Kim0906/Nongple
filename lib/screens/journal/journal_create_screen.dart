@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
@@ -7,58 +10,136 @@ import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class JournalCreateScreen extends StatefulWidget {
+  final String fid;
+  JournalCreateScreen({this.fid});
+
   @override
   _JournalCreateScreenState createState() => _JournalCreateScreenState();
 }
 
 class _JournalCreateScreenState extends State<JournalCreateScreen> {
-  JournalMainBloc _journalMainBloc;
+  JournalCreateBloc _journalCreateBloc;
   double height;
   TextEditingController _contentTextEditingController = TextEditingController();
-  List<Asset> images = List<Asset>();
-  String _error = 'No Error Dectected';
+  List<Asset> imageList = List<Asset>();
 
   @override
   void initState() {
     super.initState();
-    _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
+    _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
     _contentTextEditingController.addListener(() {
-      _journalMainBloc.add(ContentChanged(content: _contentTextEditingController.text));
+      _journalCreateBloc
+          .add(ContentChanged(content: _contentTextEditingController.text));
     });
+  }
+
+  Future<File> writeToFile(ByteData data, int i) async {
+    final buffer = data.buffer;
+    final String dttm = Timestamp.now().millisecondsSinceEpoch.toString();
+
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    var filePath = tempPath +
+        '/file_0${dttm}.tmp'; // file_01.tmp is dump file, can be anything
+    return File(filePath).writeAsBytes(
+        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  }
+
+  getImage(JournalCreateState state) async {
+    List<Asset> resultList = List<Asset>();
+    resultList =
+        await MultiImagePicker.pickImages(maxImages: 10, enableCamera: true);
+
+    if (resultList.isNotEmpty) {
+      _journalCreateBloc.add(ImageSeleted(assetList: resultList));
+      for (int i = 0; i < resultList.length; i++) {
+//        if(state.assetList.where((element) => element.identifier==resultList[i].identifier).length==0){
+        ByteData a = await resultList[i].getByteData();
+        File file = await writeToFile(a, i);
+        _journalCreateBloc.add(AddImageFile(imageFile: file));
+//        }
+      }
+    }
+  }
+
+  getCameraImage() async{
+    File imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    if(imageFile!=null){
+      _journalCreateBloc.add(AddImageFile(imageFile: imageFile));
+    }
+  }
+
+  Widget _imagewidget(
+      BuildContext context, int index, JournalCreateState state) {
+    return Container(
+        padding: EdgeInsets.all(10.0),
+        width: height * 0.143,
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: FractionalOffset.bottomLeft,
+              child: Container(
+                height: height * 0.108,
+                width: height * 0.108,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: FileImage(
+                      state.imageList[index],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Align(
+                alignment: FractionalOffset.topRight,
+                child: InkWell(
+                  onTap: () {
+                    _journalCreateBloc.add(DeleteImageFile(removedFile: state.imageList[index]));
+                  },
+                  child: Icon(
+                    Icons.cancel,
+                    color: Color(0xFF6F6F6F),
+                  ),
+                )),
+          ],
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    return BlocBuilder<JournalMainBloc, JournalMainState>(
+    height = MediaQuery.of(context).size.height;
+    return BlocBuilder<JournalCreateBloc, JournalCreateState>(
         builder: (context, state) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              leading: IconButton(
-                color: journalGoBackArrowColor,
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              elevation: 0.0,
-              title: Text(
-                '일지작성',
-                style: TextStyle(color: Colors.black),
-              ),
-              backgroundColor: Colors.white,
-            ),
-            body: Padding(
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            color: journalGoBackArrowColor,
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          elevation: 0.0,
+          title: Text(
+            '일지작성',
+            style: TextStyle(color: Colors.black),
+          ),
+          backgroundColor: Colors.white,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
               padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   FlatButton(
                     child: Row(
@@ -67,10 +148,10 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                         Text(
                           state.isDateSeleted
                               ? DateFormat('yyyy년 MM월 dd일')
-                              .format(state.selectedDate.toDate())
+                                  .format(state.selectedDate.toDate())
                               : '$year년 $month월 $day일',
-                          style:
-                          TextStyle(color: Color(0xFF929292), fontSize: 13.6),
+                          style: TextStyle(
+                              color: Color(0xFF929292), fontSize: 13.6),
                         ),
                         Icon(
                           Icons.keyboard_arrow_down,
@@ -84,12 +165,12 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                         showTitleActions: true,
                         onConfirm: (date) {
                           print('confirm $date');
-                          _journalMainBloc.add(
-                              DateSeleted(
-                                  selectedDate: Timestamp.fromDate(date)));
+                          _journalCreateBloc.add(DateSeleted(
+                              selectedDate: Timestamp.fromDate(date)));
                         },
-                        currentTime: state.isDateSeleted ? state.selectedDate
-                            .toDate() : DateTime.now(),
+                        currentTime: state.isDateSeleted
+                            ? state.selectedDate.toDate()
+                            : DateTime.now(),
                         locale: LocaleType.ko,
                       );
                     },
@@ -154,7 +235,9 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                                   ),
                                 ],
                               ),
-                              onPressed: loadAssets,
+                              onPressed: () {
+                                getImage(state);
+                              },
                             )),
                       ),
                       Expanded(
@@ -185,117 +268,52 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                                 )
                               ],
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              getCameraImage();
+                            },
                           ),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: height * 0.031,
-                  ),
-                  Expanded(
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      children: <Widget>[
-                        Container(
-                            height: height * 0.143,
-                            width: height * 0.143,
-                            child: Stack(
-                              children: <Widget>[
-                                Image.asset('assets/launcher_icon.png'),
-                                Align(
-                                  alignment: FractionalOffset.topRight,
-                                  child: Icon(
-                                    Icons.remove_circle,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ],
-                            )),
-                        Container(
-                            height: height * 0.143,
-                            width: height * 0.143,
-                            child: Stack(
-                              children: <Widget>[
-                                Image.asset('assets/launcher_icon.png'),
-                                Align(
-                                  alignment: FractionalOffset.topRight,
-                                  child: Icon(Icons.play_circle_filled),
-                                ),
-                              ],
-                            )),
-                        Container(
-                            height: height * 0.143,
-                            width: height * 0.143,
-                            child: Stack(
-                              children: <Widget>[
-                                Image.asset('assets/launcher_icon.png'),
-                                Align(
-                                  alignment: FractionalOffset.topRight,
-                                  child: Icon(Icons.play_circle_filled),
-                                ),
-                              ],
-                            )),
-                        Container(
-                            height: height * 0.143,
-                            width: height * 0.143,
-                            child: Stack(
-                              children: <Widget>[
-                                Image.asset('assets/launcher_icon.png'),
-                                Align(
-                                  alignment: FractionalOffset.topRight,
-                                  child: Icon(Icons.play_circle_filled),
-                                ),
-                              ],
-                            )),
-                      ],
-                    ),
+                    height: height * 0.02,
                   ),
                 ],
               ),
             ),
-            bottomNavigationBar: BottomNavigationButton(
-              title: '완료',
-              onPressed: () {
-//                getImage();
-                },
+            Flexible(
+              child: Container(
+                height: height * 0.143,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: ClampingScrollPhysics(),
+                  itemCount: state.imageList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return index == 0
+                        ? Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 30.0,
+                              ),
+                              _imagewidget(context, index, state),
+                            ],
+                          )
+                        : _imagewidget(context, index, state);
+                  },
+                ),
+              ),
             ),
-          );
-        });
-  }
-  Future<void> loadAssets() async {
-    List<Asset> resultList = List<Asset>();
-    String error = 'No Error Dectected';
-
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 300,
-        enableCamera: true,
-        selectedAssets: images,
-        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        materialOptions: MaterialOptions(
-          actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
-          useDetailsView: false,
-          selectCircleStrokeColor: "#000000",
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationButton(
+          title: '완료',
+          onPressed: () {
+            _journalCreateBloc.add(UploadJournal(fid: widget.fid));
+            Navigator.pop(context);
+          },
         ),
       );
-    } on Exception catch (e) {
-      error = e.toString();
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      images = resultList;
-      _error = error;
     });
   }
 }
