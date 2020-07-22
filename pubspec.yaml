@@ -46,7 +46,7 @@ dependencies:
   kopo: ^0.1.1
   intl: ^0.16.1
   multi_image_picker: ^4.6.4
-
+  path_provider: ^1.6.11
 
 
 dev_dependencies:
