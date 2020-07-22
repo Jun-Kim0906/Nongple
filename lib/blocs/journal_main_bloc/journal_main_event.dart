@@ -16,19 +16,3 @@ class GetJournalList extends JournalMainEvent{
   @override
   String toString() =>'Journal fid : $fid';
 }
-
-class DateSeleted extends JournalMainEvent{
-  final Timestamp selectedDate;
-  const DateSeleted({@required this.selectedDate});
-
-  @override
-  String toString()=>'SelectedDate: $selectedDate';
-}
-
-class ContentChanged extends JournalMainEvent{
-  final String content;
-  const ContentChanged({@required this.content});
-
-  @override
-  String toString() =>'content: $content';
-}
