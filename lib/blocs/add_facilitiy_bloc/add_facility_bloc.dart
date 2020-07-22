@@ -40,7 +40,6 @@ class AddFacilityBloc extends Bloc<AddFacilityEvent, AddFacilityState> {
   }
 
   Stream<AddFacilityState> _mapFacilityUploadToState() async* {
-    print('여기는');
     FacilityRepository().uploadFacility(
         facility: Facility(
       addr: state.facilityAddr,
