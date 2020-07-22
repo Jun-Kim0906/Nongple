@@ -45,6 +45,8 @@ dependencies:
   flutter_emoji: ^2.2.1+1
   kopo: ^0.1.1
   intl: ^0.16.1
+  multi_image_picker: ^4.6.4
+
 
 
 dev_dependencies:

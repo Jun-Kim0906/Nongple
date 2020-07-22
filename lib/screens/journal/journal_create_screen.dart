@@ -6,7 +6,7 @@ import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-//import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 
 class JournalCreateScreen extends StatefulWidget {
@@ -18,7 +18,8 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
   JournalMainBloc _journalMainBloc;
   double height;
   TextEditingController _contentTextEditingController = TextEditingController();
-//  List<Asset> imageList = List<Asset>();
+  List<Asset> images = List<Asset>();
+  String _error = 'No Error Dectected';
 
   @override
   void initState() {
@@ -153,9 +154,7 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                                   ),
                                 ],
                               ),
-                              onPressed: () {
-//                                getImage();
-                              },
+                              onPressed: loadAssets,
                             )),
                       ),
                       Expanded(
@@ -267,12 +266,36 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
           );
         });
   }
-//  getImage() async {
-//    List<Asset> resultList = List<Asset>();
-//    resultList =
-//    await MultiImagePicker.pickImages(maxImages: 10, enableCamera: true, selectedAssets: imageList);
-//    setState(() {
-//      imageList = resultList;
-//    });
-//  }
+  Future<void> loadAssets() async {
+    List<Asset> resultList = List<Asset>();
+    String error = 'No Error Dectected';
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 300,
+        enableCamera: true,
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+      _error = error;
+    });
+  }
 }
