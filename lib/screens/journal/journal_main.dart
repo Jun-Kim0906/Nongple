@@ -138,10 +138,10 @@ class _JournalMainState extends State<JournalMain> {
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
-                      BlocProvider<JournalMainBloc>.value(
-                        value: _journalMainBloc,
-                        child: JournalCreateScreen(),
-                      )));
+                      BlocProvider<JournalCreateBloc>(
+                        create: (BuildContext context)=>JournalCreateBloc(),
+                        child: JournalCreateScreen(fid: widget.fid),
+                      ))).then((value) => _journalMainBloc.add(GetJournalList()));
             },
             label: Text('오늘의 활동 기록하기'),
           ),
