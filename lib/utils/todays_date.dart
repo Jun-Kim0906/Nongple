@@ -15,7 +15,7 @@ String daysOfWeek({int index, bool shorter = false}) {
   }).toList()[index - 1];
 }
 
-//String hHour = format(hour, locale: 'ko', allowFromNow: true);
 String base_date = '$year$month$day';
 String base_time = '$hour$minute';
+List<String> villageFcstBT = ['02', '05', '08', '11', '14', '17', '20', '23'];
 

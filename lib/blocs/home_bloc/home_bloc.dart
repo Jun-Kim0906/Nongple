@@ -7,14 +7,12 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
-class HomeBloc extends Bloc<HomeEvent, HomeState>{
+class HomeBloc extends Bloc<HomeEvent, HomeState> {
+  @override
+  HomeState get initialState => Initial();
 
   @override
-  HomeState get initialState=> Initial();
-
-  @override
-  Stream<HomeState> mapEventToState(HomeEvent event)async*{
+  Stream<HomeState> mapEventToState(HomeEvent event) async* {
     if (event is GetFacilityList) {
       yield* _mapGetFacilityListToState();
     }
@@ -22,7 +20,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState>{
 
   Stream<HomeState> _mapGetFacilityListToState() async* {
     List<Facility> facList = [];
-    QuerySnapshot qs = await Firestore.instance.collection('Facility').where('uid', isEqualTo: (await UserRepository().getUser()).uid).getDocuments();
+    QuerySnapshot qs = await Firestore.instance
+        .collection('Facility')
+        .where('uid', isEqualTo: (await UserRepository().getUser()).uid)
+        .getDocuments();
     qs.documents.forEach((ds) {
       facList.add(Facility.fromSnapshot(ds));
     });

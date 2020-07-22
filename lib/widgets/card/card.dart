@@ -30,7 +30,6 @@ class _HomePageCardState extends State<HomePageCard> {
   String temperature;
   String uid;
 
-
   @override
   void initState() {
     super.initState();
@@ -45,114 +44,141 @@ class _HomePageCardState extends State<HomePageCard> {
 
   @override
   Widget build(BuildContext context) {
+    String blank =
+        'https://firebasestorage.googleapis.com/v0/b/nongple2-9440e.appspot.com/o/white.PNG?alt=media&token=44ff38dd-2022-4954-9235-d3ea40caabac';
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
     return Card(
       elevation: 4.0,
+      semanticContainer: true,
+      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: InkWell(
-        splashColor: Colors.blue.withAlpha(30),
-        onTap: () {
-          print('card tapped');
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MultiBlocProvider(
-                        providers: [
-                          BlocProvider<TabBloc>(
-                            create: (context) => TabBloc(),
-                          ),
-                          BlocProvider<JournalMainBloc>(
-                            create: (context) => JournalMainBloc()..add(GetJournalList(fid: fid)),
-                          ),
-                          BlocProvider.value(
-                            value: _homeBloc,
+      child: Stack(
+        fit: StackFit.loose,
+        children: [
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: bgUrl.isNotEmpty ? Image.network(bgUrl, fit: BoxFit.cover,) : Image.network(blank),
+            ),
+          ),
+          InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            onTap: () {
+              print('card tapped');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider<TabBloc>(
+                                create: (context) => TabBloc(),
+                              ),
+                              BlocProvider<JournalMainBloc>(
+                                create: (context) => JournalMainBloc()
+                                  ..add(GetJournalList(fid: fid)),
+                              ),
+                              BlocProvider.value(
+                                value: _homeBloc,
+                              )
+                            ],
+                            child: TabScreen(facList: widget.facList),
                           )
-                        ],
-                        child: TabScreen(facList : widget.facList),
-                      )
 //                      BlocProvider<TabBloc>(
 //                        create: (context) => TabBloc(),
 //                        child: TabScreen(),
 //                      )
-              ));
-        },
-        child: Container(
-          height: height / 5,
-          padding: EdgeInsets.fromLTRB(
-              width / 25, height / 35, width / 25, height / 60),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                flex: 2,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
+                      ));
+            },
+            child: Container(
+              height: height / 5,
+              padding: EdgeInsets.fromLTRB(
+                  width / 25, height / 35, width / 25, height / 60),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          name,
-                          style: cardWidgetFacilityNameStyle,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              name,
+                              style: cardWidgetFacilityNameStyle,
+                            ),
+                            SizedBox(
+                              height: 6.0,
+                            ),
+                            Text(
+                              addr,
+                              style: cardWidgetAddrStyle,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: 6.0,
-                        ),
                         Text(
-                          addr,
-                          style: cardWidgetAddrStyle,
+                          temperature + degrees + 'C',
+                          style: cardWidgetWeatherDataStyle,
                         ),
                       ],
                     ),
-                    Text(
-                      temperature + degrees + 'C',
-                      style: cardWidgetWeatherDataStyle,
-                    ),
-                  ],
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: Container(
-                  height: height / 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Chip(
-                        backgroundColor: Colors.white,
-                        elevation: 1.0,
-                        label: Text(
-                          ' 자세히보기 ',
-                          style: cardWidgetDetailButtonStyle,
-                        ),
-                      ),
-                      Container(
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      height: height / 5,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Chip(
+                            backgroundColor: Colors.white,
+                            elevation: 1.0,
+                            label: Text(
+                              ' 자세히보기 ',
+                              style: cardWidgetDetailButtonStyle,
+                            ),
+                          ),
+                          Container(
 //                        width: width,
 //                        height: height,
-                        child: Card(
-                          elevation: 2.0,
-                          child: (category == 1 || category == 2)
-                              ? Icon(CustomIcons.tractor, color: Color(0xFF2F80ED), size: 25,)
-                              : (category == 3)
-                              ? Icon(CustomIcons.cow, color: Color(0xFF2F80ED), size: 25,)
-                              : Icon(CustomIcons.plant, color: Color(0xFF2F80ED), size: 25,),
-                          shape: CircleBorder(),
-                          clipBehavior: Clip.antiAlias,
-                        ),
-                      )
-                    ],
+                            child: Card(
+                              elevation: 2.0,
+                              child: (category == 1 || category == 2)
+                                  ? Icon(
+                                      CustomIcons.tractor,
+                                      color: Color(0xFF2F80ED),
+                                      size: 25,
+                                    )
+                                  : (category == 3)
+                                      ? Icon(
+                                          CustomIcons.cow,
+                                          color: Color(0xFF2F80ED),
+                                          size: 25,
+                                        )
+                                      : Icon(
+                                          CustomIcons.plant,
+                                          color: Color(0xFF2F80ED),
+                                          size: 25,
+                                        ),
+                              shape: CircleBorder(),
+                              clipBehavior: Clip.antiAlias,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
