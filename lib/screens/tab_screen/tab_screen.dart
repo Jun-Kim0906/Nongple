@@ -40,6 +40,7 @@ class _TabScreenState extends State<TabScreen> {
               color: journalGoBackArrowColor,
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
+//                _homeBloc.add(GetFacilityList());
                 Navigator.pop(context);
               },
             ),
@@ -74,7 +75,9 @@ class _TabScreenState extends State<TabScreen> {
                       value: _homeBloc,
                     ),
                     BlocProvider<WeatherBloc>(
-                      create: (BuildContext context) => WeatherBloc()..add(GetWeather()),
+                      create: (BuildContext context) => WeatherBloc()
+                        ..add(GetWeather(widget.facList.fid, widget.facList.lat,
+                            widget.facList.lng)),
                     )
                   ],
                   child: WeatherScreen(),

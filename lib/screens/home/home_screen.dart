@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _homeBloc = BlocProvider.of<HomeBloc>(context)..add(GetFacilityList());
+    _homeBloc = BlocProvider.of<HomeBloc>(context);
     this.name = widget.name;
   }
 

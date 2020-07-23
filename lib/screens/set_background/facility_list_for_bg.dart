@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:nongple/blocs/background_image_bloc/bloc.dart';
 import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/screens/set_background/pick_image.dart';
 import 'package:nongple/testPage2.dart';
@@ -28,7 +30,11 @@ class FacilityListForBackground extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PickBackground(facList: facList)),
+          MaterialPageRoute(
+              builder: (context) => BlocProvider<BgBloc>(
+                    create: (BuildContext context) => BgBloc()..add(UpdateBgUrl('')),
+                    child: PickBackground(facList: facList),
+                  )),
         );
       },
     );

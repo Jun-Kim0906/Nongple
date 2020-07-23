@@ -1,10 +1,10 @@
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:nongple/models/facility/facility.dart';
-import 'package:nongple/testPage2.dart';
+
 
 @immutable
-class HomeState {
+class HomeState extends Equatable{
   const HomeState();
 
   @override

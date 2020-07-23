@@ -8,3 +8,4 @@ export 'tab/tab.dart';
 export 'journal_main_bloc/bloc.dart';
 export 'weather_bloc/weather.dart';
 export 'journal_create/bloc.dart';
+export 'background_image_bloc/bloc.dart';

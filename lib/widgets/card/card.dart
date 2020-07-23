@@ -22,6 +22,7 @@ class HomePageCard extends StatefulWidget {
 }
 
 class _HomePageCardState extends State<HomePageCard> {
+  HomeBloc _homeBloc;
   String addr;
   String bgUrl;
   int category;
@@ -40,6 +41,7 @@ class _HomePageCardState extends State<HomePageCard> {
     name = widget.facList.name;
     temperature = widget.facList.temperature;
     uid = widget.facList.uid;
+    _homeBloc = BlocProvider.of<HomeBloc>(context);
   }
 
   @override
@@ -48,7 +50,6 @@ class _HomePageCardState extends State<HomePageCard> {
         'https://firebasestorage.googleapis.com/v0/b/nongple2-9440e.appspot.com/o/white.PNG?alt=media&token=44ff38dd-2022-4954-9235-d3ea40caabac';
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
     return Card(
       elevation: 4.0,
       semanticContainer: true,
@@ -62,7 +63,14 @@ class _HomePageCardState extends State<HomePageCard> {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: bgUrl.isNotEmpty ? Image.network(bgUrl, fit: BoxFit.cover,) : Image.network(blank),
+              child: bgUrl.isNotEmpty
+                  ? Image.network(
+                      bgUrl,
+                      fit: BoxFit.cover,
+                      color: Color.fromRGBO(255, 255, 255, 100),
+                      colorBlendMode: BlendMode.modulate,
+                    )
+                  : Image.network(blank),
             ),
           ),
           InkWell(
@@ -95,6 +103,7 @@ class _HomePageCardState extends State<HomePageCard> {
             },
             child: Container(
               height: height / 5,
+              width: width,
               padding: EdgeInsets.fromLTRB(
                   width / 25, height / 35, width / 25, height / 60),
               child: Column(
@@ -106,21 +115,24 @@ class _HomePageCardState extends State<HomePageCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              name,
-                              style: cardWidgetFacilityNameStyle,
-                            ),
-                            SizedBox(
-                              height: 6.0,
-                            ),
-                            Text(
-                              addr,
-                              style: cardWidgetAddrStyle,
-                            ),
-                          ],
+                        Container(
+                          width: width * 0.5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                style: cardWidgetFacilityNameStyle,
+                              ),
+                              SizedBox(
+                                height: 6.0,
+                              ),
+                              Text(
+                                addr,
+                                style: cardWidgetAddrStyle,
+                              ),
+                            ],
+                          ),
                         ),
                         Text(
                           temperature + degrees + 'C',
