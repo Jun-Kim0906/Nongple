@@ -10,17 +10,3 @@ abstract class HomeEvent extends Equatable{
 }
 
 class GetFacilityList extends HomeEvent{}
-
-class SettingBtnPressed extends HomeEvent{
-  @override
-  String toString()=>'Setting Button Pressed';
-}
-
-class BackgroundImgChanged extends HomeEvent{
-  String backgroundImg;
-
-  BackgroundImgChanged({@required this.backgroundImg});
-
-  @override
-  String toString()=>'Background Image: $backgroundImg';
-}

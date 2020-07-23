@@ -20,6 +20,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     super.initState();
     _homeBloc = BlocProvider.of<HomeBloc>(context);
     _weatherBloc = BlocProvider.of<WeatherBloc>(context);
+    _homeBloc.add(GetFacilityList());
   }
 
   @override
@@ -42,27 +43,28 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     children: [
                       Container(
                         padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
-                        child: (int.parse(state.skyList_short[0].fcstValue) <= 1)
+                        child: (int.parse(state.skyList_short[0].fcstValue) <=
+                                1)
                             ? Icon(
-                          CustomIcons.sun,
-                          size: 100,
-                          color: Colors.yellow[700],
-                        )
+                                CustomIcons.sun,
+                                size: 100,
+                                color: Colors.yellow[700],
+                              )
                             : (int.parse(state.skyList_short[0].fcstValue) >
-                            1 &&
-                            int.parse(state
-                                .skyList_short[0].fcstValue) <
-                                4)
-                            ? Icon(
-                          CustomIcons.cloud,
-                          size: 100,
-                          color: Colors.grey[400],
-                        )
-                            : Icon(
-                          CustomIcons.rain,
-                          size: 100,
-                          color: Colors.blue[600],
-                        ),
+                                        1 &&
+                                    int.parse(
+                                            state.skyList_short[0].fcstValue) <
+                                        4)
+                                ? Icon(
+                                    CustomIcons.cloud,
+                                    size: 100,
+                                    color: Colors.grey[400],
+                                  )
+                                : Icon(
+                                    CustomIcons.rain,
+                                    size: 100,
+                                    color: Colors.blue[600],
+                                  ),
                       ),
                       Container(
                         child: Row(
@@ -75,7 +77,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                   style: TextStyle(color: Colors.blue[600]),
                                 ),
                                 Text(
-                                  state.tmpList_short[0].fcstValue + degrees + 'C',
+                                  state.tmpList_short[0].fcstValue +
+                                      degrees +
+                                      'C',
                                   style: TextStyle(
                                       fontSize: 35.0,
                                       fontWeight: FontWeight.bold),
