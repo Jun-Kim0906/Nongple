@@ -26,7 +26,7 @@ class JournalCreateState {
 
   factory JournalCreateState.empty(){
     return JournalCreateState(
-      selectedDate: null,
+      selectedDate: Timestamp.now(),
       isDateSeleted: false,
       content: '',
       assetList: [],

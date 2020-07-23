@@ -12,10 +12,12 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nongple/models/models.dart';
 
 class JournalCreateScreen extends StatefulWidget {
-  final String fid;
-  JournalCreateScreen({this.fid});
+  final Facility facility;
+
+  JournalCreateScreen({this.facility});
 
   @override
   _JournalCreateScreenState createState() => _JournalCreateScreenState();
@@ -54,22 +56,26 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
     resultList =
         await MultiImagePicker.pickImages(maxImages: 10, enableCamera: true);
 
-    if (resultList.isNotEmpty) {
-      _journalCreateBloc.add(ImageSeleted(assetList: resultList));
-      for (int i = 0; i < resultList.length; i++) {
+    try {
+      if (resultList.isNotEmpty) {
+        _journalCreateBloc.add(ImageSeleted(assetList: resultList));
+        for (int i = 0; i < resultList.length; i++) {
 //        if(state.assetList.where((element) => element.identifier==resultList[i].identifier).length==0){
-        ByteData a = await resultList[i].getByteData();
-        File file = await writeToFile(a, i);
-        _journalCreateBloc.add(AddImageFile(imageFile: file));
+          ByteData a = await resultList[i].getByteData();
+          File file = await writeToFile(a, i);
+          _journalCreateBloc.add(AddImageFile(imageFile: file));
 //        }
+        }
       }
+    } catch (e) {
+      print(e);
     }
   }
 
-  getCameraImage() async{
+  getCameraImage() async {
     File imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
 
-    if(imageFile!=null){
+    if (imageFile != null) {
       _journalCreateBloc.add(AddImageFile(imageFile: imageFile));
     }
   }
@@ -101,7 +107,8 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                 alignment: FractionalOffset.topRight,
                 child: InkWell(
                   onTap: () {
-                    _journalCreateBloc.add(DeleteImageFile(removedFile: state.imageList[index]));
+                    _journalCreateBloc.add(
+                        DeleteImageFile(removedFile: state.imageList[index]));
                   },
                   child: Icon(
                     Icons.cancel,
@@ -140,10 +147,13 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
             Padding(
               padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   FlatButton(
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
                           state.isDateSeleted
@@ -309,7 +319,7 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
         bottomNavigationBar: BottomNavigationButton(
           title: '완료',
           onPressed: () {
-            _journalCreateBloc.add(UploadJournal(fid: widget.fid));
+            _journalCreateBloc.add(UploadJournal(fid: widget.facility.fid));
             Navigator.pop(context);
           },
         ),

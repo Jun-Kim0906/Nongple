@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 class Picture {
   String fid;
@@ -8,7 +9,7 @@ class Picture {
   Timestamp dttm;
 
 
-  Picture({this.fid, this.jid, this.pid, this.url, this.dttm});
+  Picture({@required this.fid,@required this.jid,@required this.pid,@required this.url,@required this.dttm});
 
   factory Picture.fromSnapshot(DocumentSnapshot snapshot) {
     return Picture(
