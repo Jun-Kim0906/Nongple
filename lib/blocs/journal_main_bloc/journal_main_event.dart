@@ -9,10 +9,18 @@ abstract class JournalMainEvent extends Equatable{
   List<Object> get props => [];
 }
 
-class GetJournalList extends JournalMainEvent{
+class GetJournalPictureList extends JournalMainEvent{
   final String fid;
-  const GetJournalList({@required this.fid});
+  const GetJournalPictureList({@required this.fid});
 
   @override
-  String toString() =>'Journal fid : $fid';
+  String toString() =>'fid : $fid';
+}
+
+class AllDateSeleted extends JournalMainEvent{
+  final Timestamp selectedDate;
+  const AllDateSeleted({@required this.selectedDate});
+
+  @override
+  String toString()=>'SelectedDate: $selectedDate';
 }

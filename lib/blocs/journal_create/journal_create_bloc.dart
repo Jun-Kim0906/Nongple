@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nongple/data_repository/data_repository.dart';
 import 'package:nongple/data_repository/journal_repository/journal_repository.dart';
 import 'bloc.dart';
 import 'package:bloc/bloc.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nongple/models/models.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:nongple/utils/utils.dart';
 
 class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
   @override
@@ -62,17 +65,54 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
     );
   }
   Stream<JournalCreateState> _mapUploadJournalToState(String fid) async* {
+    Journal _journal = Journal(content: state.content,
+      date: state.selectedDate,
+      moddttm: state.selectedDate,
+      fid: fid,
+      jid: Firestore.instance.collection('Journal').document().documentID,);
+
     JournalRepository().uploadJournal(
-        journal: Journal(
-          content: state.content,
-          date: state.selectedDate,
-          moddttm: state.selectedDate,
+        journal: _journal
+    );
+
+    List<File> imageList=state.imageList;
+    String pid = '';
+
+    if(imageList.isNotEmpty) {
+      imageList.forEach((File file) async {
+        pid = Firestore.instance
+            .collection('Picture')
+            .document()
+            .documentID;
+        Picture _picture = Picture(
           fid: fid,
-          jid: Firestore.instance.collection('Journal').document().documentID,
-        ));
+          jid: _journal.jid,
+          pid: pid,
+          url: (await uploadImageFile(file, pid)),
+          dttm: Timestamp.now(),
+        );
+
+        PictureRepository().uploadPicture(
+          picture: _picture,
+        );
+      });
+    }
+
     yield state.update(
-        jid: Firestore.instance.collection('Journal').document().documentID,
+        jid: _journal.jid,
         fid: fid,
     );
+  }
+
+  Future<String> uploadImageFile(File file, String pid) async{
+    FirebaseStorage storage = FirebaseStorage();
+    String url='';
+
+    final StorageReference ref = storage.ref().child('journal_pictures').child(UserUtil.getUser().uid).child('$pid.jpg');
+    final StorageUploadTask uploadTask = ref.putFile(file);
+
+    await (await uploadTask.onComplete).ref.getDownloadURL().then((value) => url = value);
+
+    return url;
   }
 }

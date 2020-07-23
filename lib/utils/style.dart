@@ -51,5 +51,5 @@ TextStyle facilityTextFormStyle = TextStyle(fontWeight: FontWeight.bold);
 
 
 // journal page style
-TextStyle journalBodyTitleStyle1 = TextStyle(fontSize: 20.0, color: Colors.black);
-TextStyle journalViewAllButtonStyle = TextStyle(color: Colors.grey);
+TextStyle journalBodyTitleStyle1 = TextStyle(fontSize: 21.6, fontWeight: FontWeight.bold);
+TextStyle journalViewAllButtonStyle = TextStyle(fontSize: 16.8, fontWeight: FontWeight.bold, color: Color(0xFF828282));
