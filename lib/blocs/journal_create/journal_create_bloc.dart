@@ -62,8 +62,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
     );
   }
   Stream<JournalCreateState> _mapUploadJournalToState(String fid) async* {
-    print('여기는');
-    JournalRepository().uploadFacility(
+    JournalRepository().uploadJournal(
         journal: Journal(
           content: state.content,
           date: state.selectedDate,
