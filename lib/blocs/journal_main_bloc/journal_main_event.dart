@@ -16,3 +16,11 @@ class GetJournalPictureList extends JournalMainEvent{
   @override
   String toString() =>'fid : $fid';
 }
+
+class AllDateSeleted extends JournalMainEvent{
+  final Timestamp selectedDate;
+  const AllDateSeleted({@required this.selectedDate});
+
+  @override
+  String toString()=>'SelectedDate: $selectedDate';
+}

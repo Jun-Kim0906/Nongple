@@ -13,6 +13,8 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
   Stream<JournalMainState> mapEventToState(JournalMainEvent event) async* {
     if (event is GetJournalPictureList) {
       yield* _mapGetJournalPictureListToState(event.fid);
+    } else if (event is AllDateSeleted) {
+      yield* _mapAllDateSeletedToState(event.selectedDate);
     }
   }
 
@@ -37,9 +39,23 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     });
     pictureList.sort((a, b) => b.dttm.compareTo(a.dttm));
 
+
     yield state.update(
       journalList: journalList,
       pictureList: pictureList,
     );
+  }
+
+  Stream<JournalMainState> _mapAllDateSeletedToState(
+      Timestamp selectedDate) async* {
+    List<Journal> monthList = state.journalList;
+
+    monthList=monthList.where((element) => element.date.toDate().month == selectedDate.toDate().month &&
+        element.date.toDate().year == selectedDate.toDate().year).toList();
+//    monthList.forEach((element) =>
+//    element.date.toDate().month == selectedDate.toDate().month &&
+//        element.date.toDate().year == selectedDate.toDate().year);
+
+    yield state.update(selectedDate: selectedDate, monthJournalList: monthList);
   }
 }
