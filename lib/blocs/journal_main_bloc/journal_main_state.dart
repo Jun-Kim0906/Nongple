@@ -1,35 +1,40 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meta/meta.dart';
 import 'package:nongple/models/models.dart';
 
 
 class JournalMainState {
   final List<Journal> journalList;
+  final List<Picture> pictureList;
 
   JournalMainState({
     @required this.journalList,
+    @required this.pictureList,
   });
 
   factory JournalMainState.empty(){
     return JournalMainState(
       journalList: [],
+      pictureList: [],
     );
   }
 
   JournalMainState copyWith({
     List<Journal> journalList,
+    List<Picture> pictureList,
   }) {
     return JournalMainState(
       journalList: journalList ?? this.journalList,
+      pictureList: pictureList ?? this.pictureList,
     );
   }
 
   JournalMainState update({
     List<Journal> journalList,
+    List<Picture> pictureList,
   }) {
     return copyWith(
       journalList: journalList,
+      pictureList: pictureList,
     );
   }
 
@@ -37,6 +42,7 @@ class JournalMainState {
   String toString() {
     return '''JournalMainState{
     journalList: $journalList,
+    pictureList: $pictureList,
     }''';
   }
 }
