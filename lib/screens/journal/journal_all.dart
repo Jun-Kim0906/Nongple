@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/models.dart';
@@ -42,7 +42,9 @@ class _JournalAllState extends State<JournalAll> {
             image: DecorationImage(
               fit: BoxFit.cover,
               image: NetworkImage(
-                state.pictureList[index].url,
+                  'https://cdnweb01.wikitree.co.kr/webdata/editor/202005/27/img_20200527081152_f8e2150d.jpg',
+
+//            state.pictureList[index].url,
               ),
             ),
           ),
@@ -106,53 +108,54 @@ class _JournalAllState extends State<JournalAll> {
                   onPressed: () {
                     DatePicker.showDatePicker(
                       context,
-
-                      showTitleActions: true,
-                      onConfirm: (date) {
+                      onConfirm: (date, i) {
                         print('confirm $date');
                         _journalMainBloc.add(AllDateSeleted(
                             selectedDate: Timestamp.fromDate(date)));
                       },
-                      currentTime: state.selectedDate.toDate(),
-                      locale: LocaleType.ko,
+                      dateFormat: 'yyyy-MM',
+                      initialDateTime: state.selectedDate.toDate(),
+                      locale: DateTimePickerLocale.ko,
+                      onClose: () => print("----- onClose -----"),
+                      onCancel: () => print('onCancel'),
                     );
                   },
                 ),
                 state.monthJournalList.isNotEmpty
                     ? ListView.builder(
-                  itemCount: state.monthJournalList.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    Journal now = state.monthJournalList[index];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  0.0, 0.0, 8.0, 8.0),
-                              child: DateIcon(
-                                date: now.date,
+                        itemCount: state.monthJournalList.length,
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          Journal now = state.monthJournalList[index];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.fromLTRB(0.0, 0.0, 8.0, 8.0),
+                                    child: DateIcon(
+                                      date: now.date,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      now.content == ''
+                                          ? '입력한 내용이 없습니다.'
+                                          : now.content,
+                                      maxLines: 2,
+                                      style:
+                                          TextStyle(color: Color(0xFFB8B8B8)),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                now.content == ''
-                                    ? '입력한 내용이 없습니다.'
-                                    : now.content,
-                                maxLines: 2,
-                                style: TextStyle(
-                                    color: Color(0xFFB8B8B8)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                )
+                            ],
+                          );
+                        },
+                      )
                     : Container(),
               ],
             ),
