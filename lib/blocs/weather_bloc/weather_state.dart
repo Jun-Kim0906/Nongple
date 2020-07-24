@@ -31,5 +31,5 @@ class WeatherListSet extends WeatherState {
 
   @override
   String toString() =>
-      'FacilityListSet { skyList : $skyList, tmpList : $tmpList, humidList : $humidList, skyList_short : $skyList_short, tmpList_short : $tmpList_short, humidList_short : $humidList_short}';
+      'WeatherListSet { skyList : $skyList, tmpList : $tmpList, humidList : $humidList, skyList_short : $skyList_short, tmpList_short : $tmpList_short, humidList_short : $humidList_short}';
 }

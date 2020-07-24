@@ -46,8 +46,9 @@ class _HomePageCardState extends State<HomePageCard> {
 
   @override
   Widget build(BuildContext context) {
+    print('[Home Screen Card] $name : $temperature');
     String blank =
-        'https://firebasestorage.googleapis.com/v0/b/nongple2-9440e.appspot.com/o/white.PNG?alt=media&token=44ff38dd-2022-4954-9235-d3ea40caabac';
+        'https://firebasestorage.googleapis.com/v0/b/nongple2-9440e.appspot.com/o/white.png?alt=media&token=44ff38dd-2022-4954-9235-d3ea40caabac';
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Card(
@@ -70,7 +71,7 @@ class _HomePageCardState extends State<HomePageCard> {
                       color: Color.fromRGBO(255, 255, 255, 100),
                       colorBlendMode: BlendMode.modulate,
                     )
-                  : Image.network(blank),
+                  : Image.asset("assets/white.png"),
             ),
           ),
           InkWell(
