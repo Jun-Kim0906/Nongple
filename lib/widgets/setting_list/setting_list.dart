@@ -8,7 +8,6 @@ import 'package:nongple/testPage2.dart';
 import 'package:nongple/widgets/widgets.dart';
 
 class SettingTiles extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
@@ -16,22 +15,20 @@ class SettingTiles extends StatelessWidget {
       children: [
         ListTile(
             leading: Icon(Icons.collections),
-            title: Text(
-                '배경화면 관리', style: TextStyle(fontWeight: FontWeight.bold)),
+            title:
+                Text('배경화면 관리', style: TextStyle(fontWeight: FontWeight.bold)),
             trailing: Icon(Icons.arrow_forward_ios),
             onTap: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context)
-              =>
-                  BlocProvider.value(
-                    value: _homeBloc,
-                    child: SetBackgroundScreen(),
-                  )
+                  MaterialPageRoute(
+                      builder: (context) => BlocProvider.value(
+                            value: _homeBloc,
+                            child: SetBackgroundScreen(),
+                          )
 //                  SetBackgroundScreen(facList: state.facList)),
-              ));
-            }
-        ),
+                      ));
+            }),
         ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text(
@@ -45,10 +42,17 @@ class SettingTiles extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(Icons.error_outline),
-          title: Text(
-              '버전 정보', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text('버전 정보', style: TextStyle(fontWeight: FontWeight.bold)),
           trailing: Icon(Icons.arrow_forward_ios),
-          onTap: () {},
+          onTap: () {
+            showAboutDialog(
+                context: context,
+              applicationVersion: '1.0.0',
+              applicationIcon: Image.asset('assets/launcher_icon.png'),
+              applicationLegalese: '개발자 : \nOat Kim / Grain Park\n(Prod. may2nd)',
+              children: [],
+            );
+          },
         ),
       ],
     );
