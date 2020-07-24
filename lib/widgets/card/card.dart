@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/screens/screens.dart';
@@ -46,8 +46,6 @@ class _HomePageCardState extends State<HomePageCard> {
 
   @override
   Widget build(BuildContext context) {
-    String blank =
-        'https://firebasestorage.googleapis.com/v0/b/nongple2-9440e.appspot.com/o/white.PNG?alt=media&token=44ff38dd-2022-4954-9235-d3ea40caabac';
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Card(
@@ -64,13 +62,16 @@ class _HomePageCardState extends State<HomePageCard> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
               child: bgUrl.isNotEmpty
-                  ? Image.network(
+                  ?
+//              Image.asset('assets/flutter_logo.png')
+
+              Image.network(
                       bgUrl,
                       fit: BoxFit.cover,
                       color: Color.fromRGBO(255, 255, 255, 100),
                       colorBlendMode: BlendMode.modulate,
                     )
-                  : Image.network(blank),
+                  : Image.asset('assets/flutter_logo.png'),
             ),
           ),
           InkWell(
