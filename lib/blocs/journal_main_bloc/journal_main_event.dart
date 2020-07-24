@@ -14,7 +14,7 @@ class GetJournalPictureList extends JournalMainEvent{
   const GetJournalPictureList({@required this.fid});
 
   @override
-  String toString() =>'fid : $fid';
+  String toString() =>'Get Journal Picture List { fid : $fid }';
 }
 
 class AllDateSeleted extends JournalMainEvent{
@@ -22,5 +22,5 @@ class AllDateSeleted extends JournalMainEvent{
   const AllDateSeleted({@required this.selectedDate});
 
   @override
-  String toString()=>'SelectedDate: $selectedDate';
+  String toString()=>'All Date Seleted {SelectedDate: $selectedDate}';
 }
