@@ -3,10 +3,12 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/weather/weather.dart';
 import 'package:http/http.dart' as http;
+import 'package:nongple/screens/set_background/pick_image.dart';
 import 'package:nongple/utils/todays_date.dart';
 import 'package:nongple/utils/weather_util/api_addr.dart';
 
@@ -22,7 +24,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   }
 
   Stream<WeatherState> _mapGetWeatherToState(GetWeather event) async* {
-    print('//////////////////////////////// Weather API Start ///////////////////////////////////////');
+    print(
+        '//////////////////////////////// Weather API Start ///////////////////////////////////////');
     List<Weather> skyList = [];
     List<Weather> tmpList = [];
     List<Weather> humidList = [];
@@ -35,6 +38,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     String ny = event.ny;
     print('nx : $nx, ny : $ny');
 
+    String bb;
+    String bb_short;
     String bt;
     String bt_short;
 
@@ -47,22 +52,32 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     /// short fcst info
     if (int.parse(minute) > 30) {
       bt_short = hour + '30';
+      bb_short = base_date;
     } else if (int.parse(minute) == 30) {
       bt_short = hour + '00';
+      bb_short = base_date;
     } else if (int.parse(minute) < 30) {
       int tempHour = int.parse(hour) - 1;
-      (tempHour.toString().length < 2)
-          ? bt_short = '0' + tempHour.toString() + '30'
-          : bt_short = tempHour.toString() + '30';
+      if (tempHour < 0) {
+        bt_short = '2330';
+        int tempDay = int.parse(day) - 1;
+        bb_short = year + month + tempDay.toString();
+      } else {
+        (tempHour.toString().length < 2)
+            ? bt_short = '0' + tempHour.toString() + '30'
+            : bt_short = tempHour.toString() + '30';
+        bb_short = base_date;
+      }
     } else {
       throw Exception('[if-else] Failed to load short fcst weather');
     }
     print('bt_short : ' + bt_short);
+    print('bb_short : ' + bb_short);
 
     http.Response shortWeatherInfo;
 
     shortWeatherInfo = await http.get(
-        '$ultraSrtFcstHeader&base_date=$base_date&base_time=$bt_short&nx=$nx&ny=$ny&');
+        '$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$nx&ny=$ny&');
 
     if (shortWeatherInfo.statusCode == 200) {
       json
@@ -86,28 +101,41 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     String startingTime = tmpList_short[0].fcstTime;
 
     print(
-        'Starting item of short fcst list { starting temperature : $startingTemp, starting time : $startingTime');
+        'Starting item of short fcst list { starting temperature : $startingTemp, starting time : $startingTime }');
 
     /// village weather info
     /// base_time : 0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300
-    villageFcstBT.forEach((element) {
-      if (int.parse(hour) >= int.parse(element)) {
-        bt = element + '00';
-      } else if (int.parse(hour) < int.parse(element)) {
-        ;
-      } else if (int.parse(element) < 02) {
+    villageFcstBT.forEach((time) {
+      if (int.parse(hour) >= 00 && int.parse(hour) < 02) {
+        bt = '2000';
+        int tempDay = int.parse(day) - 1;
+        bb = year + month + tempDay.toString();
+      } else if (int.parse(hour) >= 02 && int.parse(hour) <= 05) {
         bt = '2300';
+        int tempDay = int.parse(day) - 1;
+        bb = year + month + tempDay.toString();
+      } else if (int.parse(hour) > 23 && int.parse(hour) < 24) {
+        bt = '2000';
+        bb = base_date;
+      } else if (int.parse(hour) <= int.parse(time)) {
+        int index = villageFcstBT.indexOf(time);
+        bt = villageFcstBT[index - 1] + '00';
+        bb = base_date;
+        print('index : $index');
+      } else if(int.parse(hour) > int.parse(time)) {
+        ; // skip
       } else {
-        throw Exception('[if-else] Failed to load village weather');
+        throw Exception('[if-else] Problem has occured in getting village API { time : $base_time, date : $base_date }');
       }
     });
 
     print('bt : ' + bt);
+    print('bb : ' + bb);
 
     http.Response villageWeatherInfo;
 
-    villageWeatherInfo = await http.get(
-        '$villageFcstHeader&base_date=$base_date&base_time=$bt&nx=$nx&ny=$ny&');
+    villageWeatherInfo = await http
+        .get('$villageFcstHeader&base_date=$bb&base_time=$bt&nx=$nx&ny=$ny&');
 
     if (villageWeatherInfo.statusCode == 200) {
       json
@@ -127,12 +155,16 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       throw Exception('[category] Failed to load village weather');
     }
 
-    print('////////////////////// Finished Getting Weather API ///////////////////////////////////');
+    print(
+        '////////////////////// Finished Getting Weather API ///////////////////////////////////');
 
     /// update firebase with new temperature
-    await Firestore.instance.collection('Facility').document(event.fid).updateData({
-      'temperature' : tmpList_short[0].fcstValue,
-    });
+//    await Firestore.instance
+//        .collection('Facility')
+//        .document(event.fid)
+//        .updateData({
+//      'temperature': tmpList_short[0].fcstValue,
+//    });
 
     yield WeatherListSet(skyList, tmpList, humidList, skyList_short,
         tmpList_short, humidList_short);

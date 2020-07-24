@@ -62,8 +62,6 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
-    - assets/launcher_icon.png
-    - assets/launcher_icon2.png
     - assets/
   fonts:
     - family: MyFlutterApp

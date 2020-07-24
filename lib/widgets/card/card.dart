@@ -71,7 +71,7 @@ class _HomePageCardState extends State<HomePageCard> {
                       color: Color.fromRGBO(255, 255, 255, 100),
                       colorBlendMode: BlendMode.modulate,
                     )
-                  : Image.asset('assets/flutter_logo.png'),
+                  : Image.asset("assets/white.png"),
             ),
           ),
           InkWell(
