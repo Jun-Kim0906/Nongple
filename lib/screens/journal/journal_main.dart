@@ -9,6 +9,7 @@ import 'package:nongple/models/models.dart';
 import 'package:nongple/screens/journal/journal.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class JournalMain extends StatefulWidget {
   Facility facility;
@@ -27,23 +28,52 @@ class _JournalMainState extends State<JournalMain> {
   void initState() {
     super.initState();
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
-    _journalMainBloc.add(prefix0.GetJournalPictureList(fid: widget.facility.fid));
+//    _journalMainBloc
+//        .add(prefix0.GetJournalPictureList(fid: widget.facility.fid));
   }
 
   Widget _imagewidget(BuildContext context, int index, JournalMainState state) {
+//    CachedNetworkImage(
+//      imageUrl: state.pictureList[index].url,
+//      placeholder: (context, url)=>CircularProgressIndicator(),
+//    );
     return Container(
         padding: EdgeInsets.all(10.0),
         width: height * 0.143,
         height: height * 0.143,
-        child: Container(
-          height: height * 0.108,
-          width: height * 0.108,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                state.pictureList[index].url,
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+//              _createRoute(state.pictureList[index].url)
+                PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 400),
+              pageBuilder: (_, __, ___) => JournalPictureDetail(
+                url: state.pictureList[index].url,
+              ),
+              fullscreenDialog: true,
+              transitionsBuilder: (
+                BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child,
+              ) =>
+                  FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            ));
+          },
+          child: Hero(
+            tag: state.pictureList[index].url,
+            child: Container(
+              height: height * 0.108,
+              width: height * 0.108,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                        'https://cdnweb01.wikitree.co.kr/webdata/editor/202005/27/img_20200527081152_f8e2150d.jpg')),
               ),
             ),
           ),
@@ -69,7 +99,7 @@ class _JournalMainState extends State<JournalMain> {
                       children: [
                         Text(
                           '일자별 기록',
-                      style: journalBodyTitleStyle1,
+                          style: journalBodyTitleStyle1,
                         ),
                         FlatButton(
                           onPressed: () {
@@ -77,10 +107,13 @@ class _JournalMainState extends State<JournalMain> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                    BlocProvider<JournalMainBloc>.value(
-                                      value: _journalMainBloc..add(AllDateSeleted(selectedDate: Timestamp.now())),
-                                      child: JournalAll(facility: widget.facility),
-                                    )));
+                                        BlocProvider<JournalMainBloc>.value(
+                                          value: _journalMainBloc
+                                            ..add(AllDateSeleted(
+                                                selectedDate: Timestamp.now())),
+                                          child: JournalAll(
+                                              facility: widget.facility),
+                                        )));
                           },
                           child: Text(
                             '전체보기 >',
@@ -146,17 +179,28 @@ class _JournalMainState extends State<JournalMain> {
                               );
                             },
                           )
-                        : Container(),
+                        : Container(
+                            height: height * 0.3,
+                      child: Image.asset('assets/Group 6.png', fit: BoxFit.contain,),
+                          ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           '사진 기록',
-                      style: journalBodyTitleStyle1,
+                          style: journalBodyTitleStyle1,
                         ),
                         FlatButton(
                           onPressed: () {
-
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        BlocProvider<JournalMainBloc>.value(
+                                          value: _journalMainBloc,
+                                          child: JournalAllPictures(
+                                              facility: widget.facility),
+                                        )));
                           },
                           child: Text(
                             '전체보기 >',
@@ -178,7 +222,7 @@ class _JournalMainState extends State<JournalMain> {
                         itemBuilder: (BuildContext context, index) {
                           return index == 0
                               ? Row(
-                            mainAxisSize: MainAxisSize.max,
+                                  mainAxisSize: MainAxisSize.max,
                                   children: <Widget>[
                                     SizedBox(
                                       width: 30.0,
@@ -189,7 +233,9 @@ class _JournalMainState extends State<JournalMain> {
                               : _imagewidget(context, index, state);
                         },
                       )
-                    : Container(),
+                    : Container(
+                        height: height * 0.3,
+                      ),
               )),
             ],
           ),
@@ -203,9 +249,10 @@ class _JournalMainState extends State<JournalMain> {
                           BlocProvider<JournalCreateBloc>(
                             create: (BuildContext context) =>
                                 JournalCreateBloc(),
-                            child: JournalCreateScreen(facility: widget.facility),
-                          ))).then((value) =>
-                  _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid)));
+                            child:
+                                JournalCreateScreen(facility: widget.facility),
+                          ))).then((value) => _journalMainBloc
+                  .add(GetJournalPictureList(fid: widget.facility.fid)));
             },
             label: Text('오늘의 활동 기록하기'),
           ),
