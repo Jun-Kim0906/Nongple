@@ -21,7 +21,7 @@ class FacilityListSet extends HomeState{
   List<Object> get props => [facList];
 
   @override
-  String toString()=>'FacilityListSet { facList : $facList }';
+  String toString()=>'FacilityListSet { facList : ${facList} }';
 }
 
 

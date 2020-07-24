@@ -30,7 +30,8 @@ class _PickBackgroundState extends State<PickBackground> {
   String testImage =
       'https://firebasestorage.googleapis.com/v0/b/nongple2-9440e.appspot.com/o/dan-meyers-IQVFVH0ajag-unsplash.jpg?alt=media&token=17b310ec-1f38-480c-b418-daca94ebb920';
   String blank =
-      'https://firebasestorage.googleapis.com/v0/b/nongple2-9440e.appspot.com/o/white.PNG?alt=media&token=44ff38dd-2022-4954-9235-d3ea40caabac';
+      'https://firebasestorage.googleapis.com/v0/b/nongple2-9440e.appspot.com/o/white.png?alt=media&token=44ff38dd-2022-4954-9235-d3ea40caabac';
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   @override
   void initState() {
@@ -39,21 +40,25 @@ class _PickBackgroundState extends State<PickBackground> {
   }
 
   Future<String> uploadImageFile(File file) async {
-    FirebaseStorage storage = FirebaseStorage();
     String url = '';
     final StorageReference ref =
-        storage.ref().child('background_pictures').child(UserUtil.getUser().uid);
+        storage.ref().child('background_pictures/kk.png');
+//            .child(UserUtil.getUser().uid).child('${widget.facList.fid}.jpg');
+    print('test');
     final StorageUploadTask uploadTask = ref.putFile(file);
+    print(uploadTask.isComplete);
     await (await uploadTask.onComplete)
         .ref
         .getDownloadURL()
         .then((value) => url = value);
+    print(url);
     return url;
   }
 
   getImage() async {
     File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    String bgUrl = uploadImageFile(imageFile).toString();
+    print('imageFile : ${imageFile.path}');
+    String bgUrl = await uploadImageFile(imageFile);
     print('bgUrl : $bgUrl');
     print('Upload background image to firestore');
     if(imageFile != null) {
@@ -144,7 +149,7 @@ class _PickBackgroundState extends State<PickBackground> {
                                             Color.fromRGBO(255, 255, 255, 100),
                                         colorBlendMode: BlendMode.modulate,
                                       )
-                                    : Image.network(blank),
+                                    : Image.asset("assets/white.png"),
                               ),
                             ),
                             Center(
@@ -178,7 +183,7 @@ class _PickBackgroundState extends State<PickBackground> {
                           ),
                         ),
                         onPressed: () {
-//                          getImage();
+                          getImage();
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),

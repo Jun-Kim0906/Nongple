@@ -20,7 +20,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     super.initState();
     _homeBloc = BlocProvider.of<HomeBloc>(context);
     _weatherBloc = BlocProvider.of<WeatherBloc>(context);
-    _homeBloc.add(GetFacilityList());
+    // _homeBloc.add(GetFacilityList());
   }
 
   @override

@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/widgets/widgets.dart';
 
-class ListViewBuilder extends StatefulWidget {
-
+class HomeScreenListViewBuilder extends StatefulWidget {
   @override
-  _ListViewBuilderState createState() => _ListViewBuilderState();
+  _HomeScreenListViewBuilderState createState() => _HomeScreenListViewBuilderState();
 }
 
-class _ListViewBuilderState extends State<ListViewBuilder> {
+class _HomeScreenListViewBuilderState extends State<HomeScreenListViewBuilder> {
   HomeBloc _homeBloc;
+
   @override
   void initState() {
     super.initState();
@@ -22,9 +22,13 @@ class _ListViewBuilderState extends State<ListViewBuilder> {
     double height = MediaQuery.of(context).size.height;
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
       if (state is FacilityListSet) {
+        state.facList.forEach((list) {
+          print('[Home Screen ListView Builder] ${list.name} : ${list.temperature} }');
+        });
         return ListView.builder(
           itemCount: state.facList.length,
           itemBuilder: (BuildContext context, int index) {
+            print(state.facList);
             return Column(
               children: <Widget>[
                 BlocProvider.value(

@@ -37,9 +37,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       facList.add(Facility.fromSnapshot(ds));
     });
 
-    facList.forEach((list) async {
-     await getTemperature(list.fid, list.lng, list.lat);
-    });
+//    facList.forEach((list) async {
+//     await getTemperature(list.fid, list.lng, list.lat);
+//    });
+
+    await Future.wait(facList.map((doc) => getTemperature(doc.fid, doc.lng, doc.lat)));
+
+//    await Future.forEach(facList, (list) {
+//      getTemperature(list.fid, list.lng, list.lat);
+//    });
+
 
     facList.clear();
 
@@ -51,23 +58,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       facList.add(Facility.fromSnapshot(ds));
     });
 
+    facList.forEach((list) {
+      print('[homeBloc] ${list.name} get temperature : ${list.temperature} }');
+    });
+
 
     yield FacilityListSet(facList);
   }
 
-  Future<void> getTemperature(String fid, String lng, String lat) async {
+  Future<String> getTemperature(String fid, String lng, String lat) async {
     List<Weather> skyList_short = [];
     List<Weather> tmpList_short = [];
     List<Weather> humidList_short = [];
 
     String nx = lng;
     String ny = lat;
-    print('nx : $nx, ny : $ny');
+//    print('nx : $nx, ny : $ny');
 
     String bt_short;
+    String bb_short;
 
-    print('base date: ' + base_date);
-    print('hour: $hour, minute: $minute');
+//    print('base date: ' + base_date);
+//    print('hour: $hour, minute: $minute');
 //    DateTime testDateTimeNow = DateTime.parse("20200723T093000");
 //    String btTest = DateFormat('HHmm').format(testDateTimeNow);
 //    print('btTest: ' + btTest);
@@ -75,22 +87,33 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     /// short fcst info
     if (int.parse(minute) > 30) {
       bt_short = hour + '30';
+      bb_short = base_date;
     } else if (int.parse(minute) == 30) {
       bt_short = hour + '00';
+      bb_short = base_date;
     } else if (int.parse(minute) < 30) {
       int tempHour = int.parse(hour) - 1;
-      (tempHour.toString().length < 2)
-          ? bt_short = '0' + tempHour.toString() + '30'
-          : bt_short = tempHour.toString() + '30';
+      if (tempHour < 0) {
+        bt_short = '2330';
+        int tempDay = int.parse(day) - 1;
+        bb_short = year + month + tempDay.toString();
+      } else {
+        (tempHour.toString().length < 2)
+            ? bt_short = '0' + tempHour.toString() + '30'
+            : bt_short = tempHour.toString() + '30';
+        bb_short = base_date;
+      }
     } else {
       throw Exception('[if-else] Failed to load short fcst weather');
     }
-    print('bt_short : ' + bt_short);
+//    print('bt_short : ' + bt_short);
 
     http.Response shortWeatherInfo;
 
     shortWeatherInfo = await http.get(
-        '$ultraSrtFcstHeader&base_date=$base_date&base_time=$bt_short&nx=$nx&ny=$ny&');
+        '$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$nx&ny=$ny&');
+
+//    print('$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$nx&ny=$ny&');
 
     if (shortWeatherInfo.statusCode == 200) {
       json
@@ -114,6 +137,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       'temperature' : tmpList_short[0].fcstValue,
     });
 
-//    return tmpList_short[0].fcstValue;
+    return tmpList_short[0].fcstValue;
   }
 }
