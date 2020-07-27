@@ -15,7 +15,8 @@ class CreateAccountButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       child: Text(
-        'Create an Account',
+        '아직 회원이 아니신가요?',
+        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.blue[700]),
       ),
       onPressed: () {
         Navigator.of(context).push(

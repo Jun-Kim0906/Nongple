@@ -22,12 +22,14 @@ class JournalMain extends StatefulWidget {
 
 class _JournalMainState extends State<JournalMain> {
   JournalMainBloc _journalMainBloc;
+  JournalCreateBloc _journalCreateBloc;
   double height;
 
   @override
   void initState() {
     super.initState();
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
+    _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
 //    _journalMainBloc
 //        .add(prefix0.GetJournalPictureList(fid: widget.facility.fid));
   }
@@ -107,13 +109,27 @@ class _JournalMainState extends State<JournalMain> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        BlocProvider<JournalMainBloc>.value(
-                                          value: _journalMainBloc
-                                            ..add(AllDateSeleted(
-                                                selectedDate: Timestamp.now())),
+                                        MultiBlocProvider(
+                                          providers: [
+                                            BlocProvider.value(
+                                                value: _journalMainBloc
+                                                  ..add(AllDateSeleted(
+                                                      selectedDate:
+                                                          Timestamp.now()))),
+                                            BlocProvider.value(
+                                              value: _journalCreateBloc,
+                                            )
+                                          ],
                                           child: JournalAll(
                                               facility: widget.facility),
                                         )));
+//                                        BlocProvider<JournalMainBloc>.value(
+//                                          value: _journalMainBloc
+//                                            ..add(AllDateSeleted(
+//                                                selectedDate: Timestamp.now())),
+//                                          child: JournalAll(
+//                                              facility: widget.facility),
+//                                        )));
                           },
                           child: Text(
                             '전체보기 >',
@@ -142,46 +158,61 @@ class _JournalMainState extends State<JournalMain> {
                                   differentmonth = false;
                                 }
                               }
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  if (differentmonth)
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          5.0, 0.0, 0.0, 8.0),
-                                      child: Text(DateFormat('yyyy.MM').format(
-                                          state.journalList[index].date
-                                              .toDate())),
-                                    ),
-//                                Text(DateFormat('yyyy.MM').format(state.journalList[index].date.toDate())),
-                                  Row(
-                                    children: [
+                              return InkWell(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    if (differentmonth)
                                       Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                            0.0, 0.0, 8.0, 8.0),
-                                        child: DateIcon(
-                                          date: now.date,
-                                        ),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5.0, 0.0, 0.0, 8.0),
+                                        child: Text(DateFormat('yyyy.MM').format(
+                                            state.journalList[index].date
+                                                .toDate())),
                                       ),
-                                      Expanded(
-                                        child: Text(
-                                          now.content == ''
-                                              ? '입력한 내용이 없습니다.'
-                                              : now.content,
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              color: Color(0xFFB8B8B8)),
+//                                Text(DateFormat('yyyy.MM').format(state.journalList[index].date.toDate())),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              0.0, 0.0, 8.0, 8.0),
+                                          child: DateIcon(
+                                            date: now.date,
+                                          ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                        Expanded(
+                                          child: Text(
+                                            now.content == ''
+                                                ? '입력한 내용이 없습니다.'
+                                                : now.content,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                color: Color(0xFFB8B8B8)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                onTap: (){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              BlocProvider.value(
+                                                value: _journalCreateBloc,
+                                                child: JournalDetail(),
+                                              )));
+                                },
                               );
                             },
                           )
                         : Container(
                             height: height * 0.3,
-                      child: Image.asset('assets/Group 6.png', fit: BoxFit.contain,),
+                            child: Image.asset(
+                              'assets/journal_default.png',
+                              fit: BoxFit.contain,
+                            ),
                           ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -69,20 +69,17 @@ class _TabScreenState extends State<TabScreen> {
             centerTitle: true,
           ),
           body: (activeTab == AppTab.weather)
-              ? MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(
-                      value: _homeBloc,
-                    ),
-                    BlocProvider<WeatherBloc>(
-                      create: (BuildContext context) => WeatherBloc()
-                        ..add(GetWeather(widget.facList.fid, widget.facList.lat,
-                            widget.facList.lng)),
-                    )
-                  ],
+              ? BlocProvider<WeatherBloc>(
+                  create: (BuildContext context) => WeatherBloc()
+                    ..add(GetWeather(widget.facList.fid, widget.facList.lat,
+                        widget.facList.lng)),
                   child: WeatherScreen(),
                 )
-              : (activeTab == AppTab.journal) ? JournalMain(facility: widget.facList) : BlocProvider<DictionaryBloc>(
+              : (activeTab == AppTab.journal)
+                  ? BlocProvider<JournalCreateBloc>(
+                      create: (BuildContext context) => JournalCreateBloc(),
+                      child: JournalMain(facility: widget.facList))
+                  :  BlocProvider<DictionaryBloc>(
             create: (BuildContext context)=>DictionaryBloc(),
             child: DictionaryScreen(),
           ),

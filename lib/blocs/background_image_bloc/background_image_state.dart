@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -14,12 +16,12 @@ class BgState extends Equatable{
 class InitialBgUrl extends BgState{}
 
 class BgUrlSet extends BgState{
-  final String bgUrl;
+  final File imageFile;
 
-  const BgUrlSet(this.bgUrl);
+  const BgUrlSet(this.imageFile);
 
-  List<Object> get props => [bgUrl];
+  List<Object> get props => [imageFile];
 
   @override
-  String toString()=>'BgUrlSet { BgUrl : $bgUrl }';
+  String toString()=>'BgUrlSet { imageFile : $imageFile }';
 }

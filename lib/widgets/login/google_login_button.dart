@@ -6,18 +6,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class GoogleLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RaisedButton.icon(
+    return FlatButton.icon(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30.0),
       ),
-      icon: Icon(FontAwesomeIcons.google, color: Colors.white),
+      icon: Icon(FontAwesomeIcons.google, color: Colors.grey),
       onPressed: () {
         BlocProvider.of<LoginBloc>(context).add(
           LoginWithGooglePressed(),
         );
       },
-      label: Text('Sign in with Google', style: TextStyle(color: Colors.white)),
-      color: Colors.redAccent,
+      label: Text('구글 계정으로 로그인', style: TextStyle(color: Colors.grey[700])),
+      color: Colors.white,
     );
   }
 }

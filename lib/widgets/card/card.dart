@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 //import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/facility/facility.dart';
@@ -48,6 +50,8 @@ class _HomePageCardState extends State<HomePageCard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    print('[Card] ${widget.facList.name} : ${widget.facList.bgUrl} }');
+    print('[Card] ${name} : ${bgUrl} }');
     return Card(
       elevation: 4.0,
       semanticContainer: true,
@@ -61,12 +65,9 @@ class _HomePageCardState extends State<HomePageCard> {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: bgUrl.isNotEmpty
-                  ?
-//              Image.asset('assets/flutter_logo.png')
-
-              Image.network(
-                      bgUrl,
+              child: widget.facList.bgUrl.isNotEmpty
+                  ? Image(
+                      image: CachedNetworkImageProvider(widget.facList.bgUrl),
                       fit: BoxFit.cover,
                       color: Color.fromRGBO(255, 255, 255, 100),
                       colorBlendMode: BlendMode.modulate,
@@ -88,7 +89,7 @@ class _HomePageCardState extends State<HomePageCard> {
                               ),
                               BlocProvider<JournalMainBloc>(
                                 create: (context) => JournalMainBloc()
-                                  ..add(GetJournalPictureList(fid: fid)),
+                                  ..add(GetJournalPictureList(fid: widget.facList.fid)),
                               ),
                               BlocProvider.value(
                                 value: _homeBloc,
@@ -122,21 +123,21 @@ class _HomePageCardState extends State<HomePageCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                name,
+                                widget.facList.name,
                                 style: cardWidgetFacilityNameStyle,
                               ),
                               SizedBox(
                                 height: 6.0,
                               ),
                               Text(
-                                addr,
+                                widget.facList.addr,
                                 style: cardWidgetAddrStyle,
                               ),
                             ],
                           ),
                         ),
                         Text(
-                          temperature + degrees + 'C',
+                          widget.facList.temperature + degrees + 'C',
                           style: cardWidgetWeatherDataStyle,
                         ),
                       ],
@@ -162,13 +163,13 @@ class _HomePageCardState extends State<HomePageCard> {
 //                        height: height,
                             child: Card(
                               elevation: 2.0,
-                              child: (category == 1 || category == 2)
+                              child: (widget.facList.category == 1 || widget.facList.category == 2)
                                   ? Icon(
                                       CustomIcons.tractor,
                                       color: Color(0xFF2F80ED),
                                       size: 25,
                                     )
-                                  : (category == 3)
+                                  : (widget.facList.category == 3)
                                       ? Icon(
                                           CustomIcons.cow,
                                           color: Color(0xFF2F80ED),

@@ -60,6 +60,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     facList.forEach((list) {
       print('[homeBloc] ${list.name} get temperature : ${list.temperature} }');
+      print('[homeBloc] ${list.name} get bgUrl : ${list.bgUrl} }');
     });
 
 

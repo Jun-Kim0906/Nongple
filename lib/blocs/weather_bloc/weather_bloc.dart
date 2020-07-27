@@ -114,10 +114,14 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         bt = '2000';
         bb = base_date;
       } else if (int.parse(hour) <= int.parse(time)) {
-        int index = villageFcstBT.indexOf(time);
-        bt = villageFcstBT[index - 1] + '00';
-        bb = base_date;
-        print('index : $index');
+        if (bb == null) {
+          int index = villageFcstBT.indexOf(time);
+          bt = villageFcstBT[index - 1] + '00';
+          bb = base_date;
+          print('index : $index');
+        } else {
+          ; //skip
+        }
       } else if(int.parse(hour) > int.parse(time)) {
         ; // skip
       } else {

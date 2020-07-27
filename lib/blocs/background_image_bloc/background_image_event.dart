@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -10,12 +12,12 @@ abstract class BgEvent extends Equatable{
 }
 
 class UpdateBgUrl extends BgEvent{
-  final String bgUrl;
-  const UpdateBgUrl(this.bgUrl);
+  final File imageFile;
+  const UpdateBgUrl(this.imageFile);
 
   @override
-  List<Object> get props => [bgUrl];
+  List<Object> get props => [imageFile];
 
   @override
-  String toString()=>'UpdateBgUrl { bgUrl : $bgUrl }';
+  String toString()=>'UpdateBgUrl { imageFile : $imageFile }';
 }

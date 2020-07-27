@@ -12,15 +12,9 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  WeatherBloc _weatherBloc;
-  HomeBloc _homeBloc;
-
   @override
   void initState() {
     super.initState();
-    _homeBloc = BlocProvider.of<HomeBloc>(context);
-    _weatherBloc = BlocProvider.of<WeatherBloc>(context);
-    // _homeBloc.add(GetFacilityList());
   }
 
   @override

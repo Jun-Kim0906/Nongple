@@ -18,10 +18,12 @@ class SetBackgroundScreen extends StatefulWidget {
 }
 
 class _SetBackgroundScreenState extends State<SetBackgroundScreen> {
+  HomeBloc _homeBloc;
 
   @override
   void initState() {
     super.initState();
+    _homeBloc = BlocProvider.of<HomeBloc>(context);
   }
 
   @override
@@ -53,7 +55,10 @@ class _SetBackgroundScreenState extends State<SetBackgroundScreen> {
                   thickness: 1.0,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  return FacilityListForBackground(facList: state.facList[index]);
+                  return BlocProvider.value(
+                    value: _homeBloc,
+                    child: FacilityListForBackground(facList: state.facList[index]),
+                  );
                 });
           } else {
             return SplashScreen();

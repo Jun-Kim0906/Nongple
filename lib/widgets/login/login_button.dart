@@ -9,12 +9,25 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height / 10,
+      child: RaisedButton(
+        color: Color(0xFF2F80ED),
+        disabledColor: Color(0x30888888),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: _onPressed,
+        child: Text(
+          '로그인',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.white
+          ),
+        ),
       ),
-      onPressed: _onPressed,
-      child: Text('Login'),
     );
   }
 }
