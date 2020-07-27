@@ -121,11 +121,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           .decode(shortWeatherInfo.body)['response']['body']['items']['item']
           .forEach((dynamic data) {
         if (data['category'] == "REH") {
-          humidList_short.add(Weather.fromJSON(data));
+          humidList_short.add(Weather.fromJson(data));
         } else if (data['category'] == "SKY") {
-          skyList_short.add(Weather.fromJSON(data));
+          skyList_short.add(Weather.fromJson(data));
         } else if (data['category'] == "T1H") {
-          tmpList_short.add(Weather.fromJSON(data));
+          tmpList_short.add(Weather.fromJson(data));
         } else {
           ;
         }

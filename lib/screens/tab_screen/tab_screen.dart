@@ -79,7 +79,10 @@ class _TabScreenState extends State<TabScreen> {
                   ? BlocProvider<JournalCreateBloc>(
                       create: (BuildContext context) => JournalCreateBloc(),
                       child: JournalMain(facility: widget.facList))
-                  : Dictionary(),
+                  :  BlocProvider<DictionaryBloc>(
+            create: (BuildContext context)=>DictionaryBloc(),
+            child: DictionaryScreen(),
+          ),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
             onTabSelected: (tab) =>

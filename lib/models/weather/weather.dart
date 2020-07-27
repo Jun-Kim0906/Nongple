@@ -21,7 +21,7 @@ class Weather {
     @required this.ny,
   });
 
-  factory Weather.fromJSON(Map<String, dynamic> ds) {
+  factory Weather.fromJson(Map<String, dynamic> ds) {
     return Weather(
       baseDate: ds['baseDate'].toString(),
       baseTime: ds['baseTime'].toString(),
