@@ -50,6 +50,9 @@ dependencies:
   flutter_cupertino_date_picker: ^1.0.26+2
   cached_network_image: ^2.2.0+1
   image: ^2.1.12
+  http: ^0.12.2
+  xml2json: ^4.2.0
+
 
 
 
