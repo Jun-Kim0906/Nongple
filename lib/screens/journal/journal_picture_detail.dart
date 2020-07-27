@@ -1,15 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nongple/utils/utils.dart';
 
 class JournalPictureDetail extends StatelessWidget {
   String url;
+  double height;
+//  GlobalKey _globalKey = GlobalKey();
+
   JournalPictureDetail({@required this.url});
 
   @override
   Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: bodyColor,
       appBar: AppBar(
+        excludeHeaderSemantics: false,
         backgroundColor: appBarColor,
         elevation: 0.0,
         leading: IconButton(
@@ -22,11 +28,10 @@ class JournalPictureDetail extends StatelessWidget {
       ),
       body: Center(
         child: Hero(
-          tag: url,
-            child: Image.network(
-//                url,
-                'https://cdnweb01.wikitree.co.kr/webdata/editor/202005/27/img_20200527081152_f8e2150d.jpg',
-                fit: BoxFit.cover
+            tag: url,
+            child: CachedNetworkImage(
+              imageUrl: url,
+              fit: BoxFit.fitWidth,
             )),
       ),
     );

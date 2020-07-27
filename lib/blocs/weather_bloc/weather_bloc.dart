@@ -2,13 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/weather/weather.dart';
 import 'package:http/http.dart' as http;
-import 'package:nongple/screens/set_background/pick_image.dart';
 import 'package:nongple/utils/todays_date.dart';
 import 'package:nongple/utils/weather_util/api_addr.dart';
 
