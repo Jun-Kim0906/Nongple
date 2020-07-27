@@ -47,8 +47,10 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
 
   Stream<JournalCreateState> _mapAddImageFileToState(File imageFile) async* {
     List<File> _img = state.imageList;
+
     if (!_img.contains(imageFile)) {
-      _img.insert(0, imageFile);
+
+      _img.insert(0, await resizePicture(imageFile));
     }
 
     yield state.update(

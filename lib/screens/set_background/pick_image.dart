@@ -45,7 +45,7 @@ class _PickBackgroundState extends State<PickBackground> {
         storage.ref().child('background_pictures/kk.png');
 //            .child(UserUtil.getUser().uid).child('${widget.facList.fid}.jpg');
     print('test');
-    final StorageUploadTask uploadTask = ref.putFile(file);
+    final StorageUploadTask uploadTask = ref.putFile(await resizePicture(file));
     print(uploadTask.isComplete);
     await (await uploadTask.onComplete)
         .ref

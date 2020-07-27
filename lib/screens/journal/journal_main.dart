@@ -72,8 +72,8 @@ class _JournalMainState extends State<JournalMain> {
                 borderRadius: BorderRadius.circular(10.0),
                 image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: NetworkImage(
-                        'https://cdnweb01.wikitree.co.kr/webdata/editor/202005/27/img_20200527081152_f8e2150d.jpg')),
+                    image: CachedNetworkImageProvider(
+                        state.pictureList[index].url)),
               ),
             ),
           ),
