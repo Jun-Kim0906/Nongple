@@ -56,7 +56,7 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
           child:
 
           Image.network(
-              'https://cdnweb01.wikitree.co.kr/webdata/editor/202005/27/img_20200527081152_f8e2150d.jpg',
+              state.pictureList[index].url,
 
 //            state.pictureList[index].url,
             fit: BoxFit.fill,

@@ -6,6 +6,8 @@ import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/models.dart';
+import 'package:nongple/screens/journal/journal.dart';
+import 'package:nongple/screens/journal/journal_create_screen.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
 
@@ -20,36 +22,38 @@ class JournalAll extends StatefulWidget {
 
 class _JournalAllState extends State<JournalAll> {
   JournalMainBloc _journalMainBloc;
+  JournalCreateBloc _journalCreateBloc;
   double height;
 
   @override
   void initState() {
     super.initState();
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
+    _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
 //    _journalMainBloc.add(prefix0.GetJournalPictureList(fid: widget.facility.fid));
   }
 
-  Widget _imagewidget(BuildContext context, int index, JournalMainState state) {
-    return Container(
-        padding: EdgeInsets.all(10.0),
-        width: height * 0.143,
-        height: height * 0.143,
-        child: Container(
-          height: height * 0.108,
-          width: height * 0.108,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                  'https://cdnweb01.wikitree.co.kr/webdata/editor/202005/27/img_20200527081152_f8e2150d.jpg',
-
-//            state.pictureList[index].url,
-              ),
-            ),
-          ),
-        ));
-  }
+//  Widget _imagewidget(BuildContext context, int index, JournalMainState state) {
+//    return Container(
+//        padding: EdgeInsets.all(10.0),
+//        width: height * 0.143,
+//        height: height * 0.143,
+//        child: Container(
+//          height: height * 0.108,
+//          width: height * 0.108,
+//          decoration: BoxDecoration(
+//            borderRadius: BorderRadius.circular(10.0),
+//            image: DecorationImage(
+//              fit: BoxFit.cover,
+//              image: NetworkImage(
+//                  'https://cdnweb01.wikitree.co.kr/webdata/editor/202005/27/img_20200527081152_f8e2150d.jpg',
+//
+////            state.pictureList[index].url,
+//              ),
+//            ),
+//          ),
+//        ));
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,35 +132,105 @@ class _JournalAllState extends State<JournalAll> {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           Journal now = state.monthJournalList[index];
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.fromLTRB(0.0, 0.0, 8.0, 8.0),
-                                    child: DateIcon(
-                                      date: now.date,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      now.content == ''
-                                          ? '입력한 내용이 없습니다.'
-                                          : now.content,
-                                      maxLines: 2,
-                                      style:
+                          return InkWell(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0.0, 0.0, 8.0, 8.0),
+                                        child: DateIcon(
+                                          date: now.date,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          now.content == ''
+                                              ? '입력한 내용이 없습니다.'
+                                              : now.content,
+                                          maxLines: 2,
+                                          style:
                                           TextStyle(color: Color(0xFFB8B8B8)),
-                                    ),
-                                  )
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
+                            ),
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                      BlocProvider.value(
+                                        value: _journalCreateBloc,
+                                        child: JournalDetail(),
+                                      )));
+                            },
                           );
                         },
                       )
-                    : Container(),
+                    : Container(
+//                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Image.asset('assets/journal_default.png'),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.065,
+                                child: ButtonTheme(
+                                  minWidth:
+                                      MediaQuery.of(context).size.width * 0.5,
+//                                  height: ,
+                                  child: RaisedButton(
+                                    color: Color(0xFF2F80ED),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '일지 작성하러 가기',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  BlocProvider.value(
+                                                    value: _journalCreateBloc,
+                                                    child: JournalCreateScreen(
+                                                        facility:
+                                                            widget.facility),
+                                                  ))).then((value) =>
+                                          _journalMainBloc.add(
+                                              GetJournalPictureList(
+                                                  fid: widget.facility.fid)));
+                                    },
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),

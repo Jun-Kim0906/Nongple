@@ -76,7 +76,9 @@ class _TabScreenState extends State<TabScreen> {
                   child: WeatherScreen(),
                 )
               : (activeTab == AppTab.journal)
-                  ? JournalMain(facility: widget.facList)
+                  ? BlocProvider<JournalCreateBloc>(
+                      create: (BuildContext context) => JournalCreateBloc(),
+                      child: JournalMain(facility: widget.facList))
                   : Dictionary(),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,

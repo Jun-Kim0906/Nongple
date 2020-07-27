@@ -13,6 +13,6 @@ class BgBloc extends Bloc<BgEvent, BgState> {
   }
 
   Stream<BgState> _mapUpdateBgUrlToState(UpdateBgUrl event) async* {
-    yield BgUrlSet(event.bgUrl);
+    yield BgUrlSet(event.imageFile);
   }
 }

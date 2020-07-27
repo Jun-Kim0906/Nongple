@@ -24,11 +24,11 @@ class _HomeScreenListViewBuilderState extends State<HomeScreenListViewBuilder> {
       if (state is FacilityListSet) {
         state.facList.forEach((list) {
           print('[Home Screen ListView Builder] ${list.name} : ${list.temperature} }');
+          print('[Home Screen ListView Builder] ${list.name} : ${list.bgUrl} }');
         });
         return ListView.builder(
           itemCount: state.facList.length,
           itemBuilder: (BuildContext context, int index) {
-            print(state.facList);
             return Column(
               children: <Widget>[
                 BlocProvider.value(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/background_image_bloc/bloc.dart';
+import 'package:nongple/blocs/home_bloc/home.dart';
 import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/screens/set_background/pick_image.dart';
 import 'package:nongple/testPage2.dart';
@@ -18,6 +19,7 @@ class FacilityListForBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
     return ListTile(
       leading: (facList.category == 1 || facList.category == 2)
           ? Icon(CustomIcons.tractor, color: Color(0xFF2F80ED))
@@ -29,13 +31,20 @@ class FacilityListForBackground extends StatelessWidget {
       trailing: Icon(Icons.arrow_forward_ios),
       onTap: () {
         Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BlocProvider<BgBloc>(
-                    create: (BuildContext context) => BgBloc()..add(UpdateBgUrl('')),
-                    child: PickBackground(facList: facList),
-                  )),
-        );
+            context,
+            MaterialPageRoute(
+                builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(
+                          value: _homeBloc,
+                        ),
+                        BlocProvider<BgBloc>(
+                          create: (BuildContext context) =>
+                              BgBloc()..add(UpdateBgUrl(null)),
+                        )
+                      ],
+                      child: PickBackground(facList: facList),
+                    )));
       },
     );
   }

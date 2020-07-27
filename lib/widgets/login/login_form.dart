@@ -41,6 +41,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
@@ -78,19 +80,22 @@ class _LoginFormState extends State<LoginForm> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           return Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.fromLTRB(width*0.1,height*0.03,width*0.1,height*0.03),
             child: Form(
               child: ListView(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    child: Image.asset('assets/launcher_icon.png', height: 200),
+                    padding: EdgeInsets.symmetric(vertical: height*0.001),
+                    child: Image.asset('assets/launcher_icon2.png', height: 200),
                   ),
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                      icon: Icon(Icons.email),
+//                      icon: Icon(Icons.email),
                       labelText: 'Email',
+                      border: OutlineInputBorder(
+//                        borderSide: BorderSide(),
+                      ),
                     ),
                     keyboardType: TextInputType.emailAddress,
                     autovalidate: true,
@@ -99,11 +104,15 @@ class _LoginFormState extends State<LoginForm> {
                       return !state.isEmailValid ? 'Invalid Email' : null;
                     },
                   ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
                   TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
-                      icon: Icon(Icons.lock),
+//                      icon: Icon(Icons.lock),
                       labelText: 'Password',
+                      border: OutlineInputBorder(
+//                        borderSide: BorderSide(),
+                      ),
                     ),
                     obscureText: true,
                     autovalidate: true,
@@ -111,6 +120,19 @@ class _LoginFormState extends State<LoginForm> {
                     validator: (_) {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FlatButton(
+                        onPressed: (){},
+                        child: Text('아이디 찾기'),
+                      ),
+                      FlatButton(
+                        onPressed: (){},
+                        child: Text('비밀번호 찾기'),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
@@ -122,8 +144,9 @@ class _LoginFormState extends State<LoginForm> {
                               ? _onFormSubmitted
                               : null,
                         ),
-                        GoogleLoginButton(),
                         CreateAccountButton(userRepository: _userRepository),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.07,),
+                        GoogleLoginButton(),
                       ],
                     ),
                   ),
