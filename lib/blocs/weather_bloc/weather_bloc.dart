@@ -80,11 +80,11 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           .decode(shortWeatherInfo.body)['response']['body']['items']['item']
           .forEach((dynamic data) {
         if (data['category'] == "REH") {
-          humidList_short.add(Weather.fromJSON(data));
+          humidList_short.add(Weather.fromJson(data));
         } else if (data['category'] == "SKY") {
-          skyList_short.add(Weather.fromJSON(data));
+          skyList_short.add(Weather.fromJson(data));
         } else if (data['category'] == "T1H") {
-          tmpList_short.add(Weather.fromJSON(data));
+          tmpList_short.add(Weather.fromJson(data));
         } else {
           ;
         }
@@ -138,11 +138,11 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           .decode(villageWeatherInfo.body)['response']['body']['items']['item']
           .forEach((dynamic data) {
         if (data['category'] == "REH") {
-          humidList.add(Weather.fromJSON(data));
+          humidList.add(Weather.fromJson(data));
         } else if (data['category'] == "SKY") {
-          skyList.add(Weather.fromJSON(data));
+          skyList.add(Weather.fromJson(data));
         } else if (data['category'] == "T3H") {
-          tmpList.add(Weather.fromJSON(data));
+          tmpList.add(Weather.fromJson(data));
         } else {
           ;
         }
