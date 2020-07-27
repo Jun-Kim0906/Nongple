@@ -42,10 +42,10 @@ class _PickBackgroundState extends State<PickBackground> {
   Future<String> uploadImageFile(File file) async {
     String url = '';
     final StorageReference ref =
-        // storage.ref().child('background_pictures/kk.png');
-        storage.ref().child('background_pictures').child(UserUtil.getUser().uid).child('${widget.facList.fid}.jpg');
-    // print('test');
-    final StorageUploadTask uploadTask = ref.putFile(file);
+        storage.ref().child('background_pictures/kk.png');
+//            .child(UserUtil.getUser().uid).child('${widget.facList.fid}.jpg');
+    print('test');
+    final StorageUploadTask uploadTask = ref.putFile(await resizePicture(file));
     print(uploadTask.isComplete);
     await (await uploadTask.onComplete)
         .ref
