@@ -5,6 +5,7 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:nongple/blocs/add_facilitiy_bloc/bloc.dart';
 import 'package:nongple/screens/facility_create/create_screen.dart';
 import 'package:nongple/widgets/widgets.dart';
+import 'package:geocoder/geocoder.dart';
 
 class FacilityCreateScreen2 extends StatefulWidget {
   String facilityName;
@@ -83,6 +84,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
                   style: TextStyle(fontSize: 14.4, color: Colors.grey[400]),
                 ),
                 TextFormField(
+                  readOnly: true,
                   style: TextStyle(fontWeight: FontWeight.bold),
                   controller: facilityAddrController..text = state.facilityAddr,
                   maxLines: null,
@@ -99,10 +101,19 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
                       ),
                     );
                     if (model != null) {
-                      address = 'postcod1=${model.hname}, postcode2=${model.roadname}, postcodeSeq=${model.roadnameCode}';
-//                          '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''} ${model.zonecode} ';
+                      address = model.postcodeSeq;
                       _addFacilityBloc
                           .add(FacilityAddrChanged(facilityAddr: address));
+//                      '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''} ${model.zonecode} '
+                      try{
+                        var addresses = await Geocoder.local.findAddressesFromQuery('Namsong-ri, Heunghae-eup, Buk-gu, Pohang-si, Gyeongsangbuk-do, South Korea');
+                        var first = addresses.first;
+                        print("${first.featureName} : ${first.coordinates.toString()}");
+                        _addFacilityBloc
+                            .add(FacilityAddrChanged(facilityAddr: address));
+                      }catch(e){
+                        print(e);
+                      }
                     }
                   },
                 )
