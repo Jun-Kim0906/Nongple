@@ -30,6 +30,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
     return BlocBuilder<AddFacilityBloc, AddFacilityState>(
         builder: (context, state) {
       return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Theme.of(context).primaryColorLight,
           appBar: AppBar(
             backgroundColor: Colors.white,
