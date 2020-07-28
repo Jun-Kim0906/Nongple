@@ -166,8 +166,9 @@ class _JournalMainState extends State<JournalMain> {
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             5.0, 0.0, 0.0, 8.0),
-                                        child: Text(DateFormat('yyyy.MM').format(
-                                            state.journalList[index].date
+                                        child: Text(DateFormat('yyyy.MM')
+                                            .format(state
+                                                .journalList[index].date
                                                 .toDate())),
                                       ),
 //                                Text(DateFormat('yyyy.MM').format(state.journalList[index].date.toDate())),
@@ -194,14 +195,26 @@ class _JournalMainState extends State<JournalMain> {
                                     ),
                                   ],
                                 ),
-                                onTap: (){
+                                onTap: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              BlocProvider.value(
-                                                value: _journalCreateBloc,
-                                                child: JournalDetail(),
+                                              MultiBlocProvider(
+                                                providers: [
+                                                  BlocProvider.value(
+                                                    value: _journalCreateBloc,
+                                                  ),
+                                                  BlocProvider.value(
+                                                    value: _journalMainBloc,
+                                                  ),
+                                                ],
+                                                child: JournalDetail(
+                                                  jid: now.jid,
+                                                  content: now.content,
+                                                  date: now.date,
+                                                  facility: widget.facility,
+                                                ),
                                               )));
                                 },
                               );
@@ -277,11 +290,9 @@ class _JournalMainState extends State<JournalMain> {
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          BlocProvider<JournalCreateBloc>(
-                            create: (BuildContext context) =>
-                                JournalCreateBloc(),
-                            child:
-                                JournalCreateScreen(facility: widget.facility),
+                          BlocProvider.value(
+                            value: _journalCreateBloc,
+                            child: JournalCreateScreen(facility: widget.facility, isModify: false,),
                           ))).then((value) => _journalMainBloc
                   .add(GetJournalPictureList(fid: widget.facility.fid)));
             },

@@ -33,28 +33,6 @@ class _JournalAllState extends State<JournalAll> {
 //    _journalMainBloc.add(prefix0.GetJournalPictureList(fid: widget.facility.fid));
   }
 
-//  Widget _imagewidget(BuildContext context, int index, JournalMainState state) {
-//    return Container(
-//        padding: EdgeInsets.all(10.0),
-//        width: height * 0.143,
-//        height: height * 0.143,
-//        child: Container(
-//          height: height * 0.108,
-//          width: height * 0.108,
-//          decoration: BoxDecoration(
-//            borderRadius: BorderRadius.circular(10.0),
-//            image: DecorationImage(
-//              fit: BoxFit.cover,
-//              image: NetworkImage(
-//                  'https://cdnweb01.wikitree.co.kr/webdata/editor/202005/27/img_20200527081152_f8e2150d.jpg',
-//
-////            state.pictureList[index].url,
-//              ),
-//            ),
-//          ),
-//        ));
-//  }
-
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -166,10 +144,22 @@ class _JournalAllState extends State<JournalAll> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                      BlocProvider.value(
-                                        value: _journalCreateBloc,
-                                        child: JournalDetail(),
-                                      )));
+                                          MultiBlocProvider(
+                                            providers: [
+                                              BlocProvider.value(
+                                                value: _journalCreateBloc,
+                                              ),
+                                              BlocProvider.value(
+                                                value: _journalMainBloc,
+                                              ),
+                                            ],
+                                            child: JournalDetail(
+                                              jid: now.jid,
+                                              content: now.content,
+                                              date: now.date,
+                                              facility: widget.facility,
+                                                ),
+                                          )));
                             },
                           );
                         },
@@ -214,12 +204,9 @@ class _JournalAllState extends State<JournalAll> {
                                                   BlocProvider.value(
                                                     value: _journalCreateBloc,
                                                     child: JournalCreateScreen(
-                                                        facility:
-                                                            widget.facility),
-                                                  ))).then((value) =>
-                                          _journalMainBloc.add(
-                                              GetJournalPictureList(
-                                                  fid: widget.facility.fid)));
+                                                        facility: widget.facility, isModify: false,),
+                                                  ))).then((value) => _journalMainBloc
+                                          .add(GetJournalPictureList(fid: widget.facility.fid)));
                                     },
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),

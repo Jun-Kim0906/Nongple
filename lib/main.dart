@@ -45,6 +45,7 @@ class _AppState extends State<App> {
         : BlocProvider.value(
             value: _authenticationBloc,
             child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               theme: ThemeData(
                 backgroundColor: Colors.white,
                 primaryColor: Colors.black,

@@ -18,8 +18,11 @@ import 'package:nongple/models/models.dart';
 
 class JournalCreateScreen extends StatefulWidget {
   final Facility facility;
+  final Timestamp date;
+  final String content;
+  final isModify;
 
-  JournalCreateScreen({this.facility});
+  JournalCreateScreen({this.facility, this.isModify, this.date, this.content});
 
   @override
   _JournalCreateScreenState createState() => _JournalCreateScreenState();
@@ -46,206 +49,224 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
     height = MediaQuery.of(context).size.height;
     return BlocBuilder<JournalCreateBloc, JournalCreateState>(
         builder: (context, state) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              leading: IconButton(
-                color: journalGoBackArrowColor,
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              elevation: 0.0,
-              title: Text(
-                '일지작성',
-                style: TextStyle(color: Colors.black),
-              ),
-              backgroundColor: Colors.white,
-            ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            color: journalGoBackArrowColor,
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          elevation: 0.0,
+          title: (widget.isModify == true)
+              ? Text('일지수정', style: TextStyle(color: Colors.black))
+              : Text('일지작성', style: TextStyle(color: Colors.black)),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  (widget.isModify == true)
+                      ? FlatButton(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                DateFormat('yyyy년 MM월 dd일')
+                                    .format(widget.date.toDate()),
+                                style: TextStyle(
+                                    color: Color(0xFF929292), fontSize: 13.6),
+                              )
+                            ],
+                          ),
+                          onPressed: () {},
+                        )
+                      : FlatButton(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                state.isDateSeleted
+                                    ? DateFormat('yyyy년 MM월 dd일')
+                                        .format(state.selectedDate.toDate())
+                                    : '$year년 $month월 $day일',
+                                style: TextStyle(
+                                    color: Color(0xFF929292), fontSize: 13.6),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Color(0xFF929292),
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            DatePicker.showDatePicker(
+                              context,
+                              onConfirm: (date, i) {
+                                print('confirm $date');
+                                _journalCreateBloc.add(DateSeleted(
+                                    selectedDate: Timestamp.fromDate(date)));
+                              },
+                              initialDateTime: state.selectedDate.toDate(),
+                              locale: DateTimePickerLocale.ko,
+                              onClose: () => print("----- onClose -----"),
+                              onCancel: () => print('onCancel'),
+                            );
+                          },
+                        ),
+                  Card(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Container(
+                      height: height * 0.45,
+                      padding: EdgeInsets.all(18.0),
+                      child: TextFormField(
+                        controller: _contentTextEditingController,
+                        minLines: 25,
+                        maxLines: null,
+                        autocorrect: false,
+                        decoration: InputDecoration(
+                          hintText: ' 오늘 일지를 수기로 작성해 주세요.',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.025,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      FlatButton(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              state.isDateSeleted
-                                  ? DateFormat('yyyy년 MM월 dd일')
-                                  .format(state.selectedDate.toDate())
-                                  : '$year년 $month월 $day일',
-                              style: TextStyle(
-                                  color: Color(0xFF929292), fontSize: 13.6),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Color(0xFF929292),
-                            ),
-                          ],
-                        ),
-                        onPressed: () {
-                          DatePicker.showDatePicker(
-                            context,
-                            onConfirm: (date, i) {
-                              print('confirm $date');
-                              _journalCreateBloc.add(DateSeleted(
-                                  selectedDate: Timestamp.fromDate(date)));
-                            },
-                            initialDateTime: state.selectedDate.toDate(),
-                            locale: DateTimePickerLocale.ko,
-                            onClose: () => print("----- onClose -----"),
-                            onCancel: () => print('onCancel'),
-                          );
-                        },
-                      ),
-                      Card(
-                        elevation: 4.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
+                      Expanded(
                         child: Container(
-                          height: height * 0.45,
-                          padding: EdgeInsets.all(18.0),
-                          child: TextFormField(
-                            controller: _contentTextEditingController,
-                            minLines: 25,
-                            maxLines: null,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              hintText: ' 오늘 일지를 수기로 작성해 주세요.',
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
+                            height: height * 0.07,
+                            child: OutlineButton(
+                              color: Colors.white,
+                              borderSide: BorderSide(
+                                color: Color(0xFFDEDEDE),
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.photo,
+                                    color: Color(0xFF757575),
+                                    size: height * 0.03,
+                                  ),
+                                  Text(
+                                    ' 갤러리',
+                                    style: TextStyle(
+                                        fontSize: 21.6,
+                                        color: Color(0xFF757575),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
-                              focusColor: Colors.white,
+                              onPressed: () {
+                                getImage(state);
+                              },
+                            )),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: height * 0.07,
+                          padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                          child: OutlineButton(
+                            color: Colors.white,
+                            borderSide: BorderSide(
+                              color: Color(0xFFDEDEDE),
                             ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.camera_alt,
+                                  color: Color(0xFF757575),
+                                  size: height * 0.03,
+                                ),
+                                Text(
+                                  ' 사진 촬영',
+                                  style: TextStyle(
+                                      fontSize: 21.6,
+                                      color: Color(0xFF757575),
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                            onPressed: () {
+                              getCameraImage();
+                            },
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: height * 0.025,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                                padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
-                                height: height * 0.07,
-                                child: OutlineButton(
-                                  color: Colors.white,
-                                  borderSide: BorderSide(
-                                    color: Color(0xFFDEDEDE),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.photo,
-                                        color: Color(0xFF757575),
-                                        size: height * 0.03,
-                                      ),
-                                      Text(
-                                        ' 갤러리',
-                                        style: TextStyle(
-                                            fontSize: 21.6,
-                                            color: Color(0xFF757575),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    getImage(state);
-                                  },
-                                )),
-                          ),
-                          Expanded(
-                            child: Container(
-                              height: height * 0.07,
-                              padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-                              child: OutlineButton(
-                                color: Colors.white,
-                                borderSide: BorderSide(
-                                  color: Color(0xFFDEDEDE),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.camera_alt,
-                                      color: Color(0xFF757575),
-                                      size: height * 0.03,
-                                    ),
-                                    Text(
-                                      ' 사진 촬영',
-                                      style: TextStyle(
-                                          fontSize: 21.6,
-                                          color: Color(0xFF757575),
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                onPressed: () {
-                                  getCameraImage();
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: height * 0.02,
                       ),
                     ],
                   ),
-                ),
-                Flexible(
-                  child: Container(
-                    height: height * 0.143,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: state.imageList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return index == 0
-                            ? Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 30.0,
-                            ),
-                            _imagewidget(context, index, state),
-                          ],
-                        )
-                            : _imagewidget(context, index, state);
-                      },
-                    ),
+                  SizedBox(
+                    height: height * 0.02,
                   ),
+                ],
+              ),
+            ),
+            Flexible(
+              child: Container(
+                height: height * 0.143,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: ClampingScrollPhysics(),
+                  itemCount: state.imageList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return index == 0
+                        ? Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 30.0,
+                              ),
+                              _imagewidget(context, index, state),
+                            ],
+                          )
+                        : _imagewidget(context, index, state);
+                  },
                 ),
-              ],
+              ),
             ),
-            bottomNavigationBar: BottomNavigationButton(
-              title: '완료',
-              onPressed: () {
-                _journalCreateBloc.add(UploadJournal(fid: widget.facility.fid));
-                Navigator.pop(context);
-              },
-            ),
-          );
-        });
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationButton(
+          title: (widget.isModify == true) ? '수정' : '완료',
+          onPressed: () {
+            _journalCreateBloc.add(UploadJournal(fid: widget.facility.fid));
+            Navigator.pop(context);
+          },
+        ),
+      );
+    });
   }
 
   Future<File> writeToFile(ByteData data, int i) async {
