@@ -19,3 +19,29 @@ class SearchTextChanged extends DictionaryEvent{
     return 'SearchTextChanged{ searchText: $searchText }\n';
   }
 }
+
+class SearchedItemLoad extends DictionaryEvent{
+  final String wordNo;
+
+  const SearchedItemLoad({@required this.wordNo});
+
+  @override
+  String toString() => 'SearchedItemLoad { wordNo: $wordNo}';
+}
+
+class DetailContentDelete extends DictionaryEvent{
+  @override
+  String toString() {
+    return 'DetailContentDelete';
+  }
+}
+
+class TextOnSubmitted extends DictionaryEvent{
+  final String searchText;
+  const TextOnSubmitted({@required this.searchText});
+
+  @override
+  String toString() {
+    return 'TextOnSubmitted';
+  }
+}
