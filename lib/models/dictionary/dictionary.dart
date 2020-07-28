@@ -10,15 +10,22 @@ class Dictionary {
 
   factory Dictionary.fromJson(Map<String, dynamic> js) {
     return Dictionary(
-      wordName: js['wordName'],
-      wordNumber: js['wordNumber'],
+      wordName: js['wordNm'],
+      wordNumber: js['wordNo'],
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'wordName': wordName,
-      'wordNumber' : wordNumber,
-    };
+  String getName() {
+    return wordName;
   }
+
+  String getNumber() {
+    return wordNumber;
+  }
+//  Map<String, dynamic> toMap() {
+//    return {
+//      'wordNm': wordName,
+//      'wordNo' : wordNumber,
+//    };
+//  }
 }

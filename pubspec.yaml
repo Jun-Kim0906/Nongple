@@ -54,6 +54,7 @@ dependencies:
   xml2json: ^4.2.0
   flutter_swiper: ^1.1.6
   modal_bottom_sheet: ^0.2.0+1
+  geocoder: ^0.2.1
 
 
 
