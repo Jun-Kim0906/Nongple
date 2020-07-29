@@ -7,6 +7,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/facility/facility.dart';
+import 'package:nongple/models/journal/journal.dart';
 import 'package:nongple/models/picture/picture.dart';
 import 'package:nongple/screens/journal/journal_create_screen.dart';
 import 'package:nongple/utils/todays_date.dart';
@@ -14,10 +15,11 @@ import 'package:nongple/utils/todays_date.dart';
 class JournalDetail extends StatefulWidget {
   final String jid;
   final Timestamp date;
-  final String content;
+
+//  final String content;
   final Facility facility;
 
-  JournalDetail({this.jid, this.date, this.content, this.facility});
+  JournalDetail({this.jid, this.date, this.facility});
 
   @override
   _JournalDetailState createState() => _JournalDetailState();
@@ -27,6 +29,7 @@ class _JournalDetailState extends State<JournalDetail> {
   JournalCreateBloc _journalCreateBloc;
   JournalMainBloc _journalMainBloc;
   List<Picture> _image;
+  List<Journal> _journalDoc;
 
   @override
   void initState() {
@@ -55,6 +58,7 @@ class _JournalDetailState extends State<JournalDetail> {
               color: Color(0xFF828282),
             ),
             onPressed: () {
+              _journalDoc.clear();
               _image.clear();
               print('image clear status [0 for clear] : ${_image.length}');
               Navigator.pop(context);
@@ -78,6 +82,8 @@ class _JournalDetailState extends State<JournalDetail> {
         ),
         body: BlocBuilder<JournalMainBloc, JournalMainState>(
           builder: (context, state) {
+            _journalDoc = state.monthJournalList
+                .where((doc) => doc.jid == widget.jid).toList();
             _image = state.pictureList
                 .where((data) => data.jid == widget.jid)
                 .toList();
@@ -144,7 +150,7 @@ class _JournalDetailState extends State<JournalDetail> {
                               height: height * 0.06,
                             ),
                             Text(
-                              widget.content,
+                              _journalDoc[0].content,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15.0,
@@ -194,7 +200,7 @@ class _JournalDetailState extends State<JournalDetail> {
                                     facility: widget.facility,
                                     isModify: true,
                                     date: widget.date,
-                                    content: widget.content,
+                                    content: _journalDoc[0].content,
                                     jid: widget.jid,
                                   ),
                                 ))).then((value) => _journalMainBloc
@@ -212,9 +218,12 @@ class _JournalDetailState extends State<JournalDetail> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-//                    _journalMainBloc.add(DeleteAll(fid: widget.facility.fid, jid: widget.jid));
-//                    _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
-//                    _journalMainBloc.add(AllDateSeleted(selectedDate: widget.date));
+                    _journalMainBloc.add(
+                        DeleteAll(fid: widget.facility.fid, jid: widget.jid));
+                    _journalMainBloc
+                        .add(GetJournalPictureList(fid: widget.facility.fid));
+                    _journalMainBloc
+                        .add(AllDateSeleted(selectedDate: widget.date));
                     Navigator.pop(context);
                     Navigator.pop(context);
                   },

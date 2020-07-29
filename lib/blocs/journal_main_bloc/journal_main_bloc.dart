@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nongple/models/models.dart';
 import 'bloc.dart';
 import 'package:bloc/bloc.dart';
@@ -17,6 +18,8 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapAllDateSeletedToState(event.selectedDate);
     } else if (event is DeleteAll) {
       yield* _mapDeleteAllToState(event);
+    } else if (event is CheckSameDate) {
+      yield* _mapCheckSameDateToState(event.date);
     }
   }
 
@@ -65,7 +68,19 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     await Firestore.instance.collection('Journal').document(event.jid).delete();
     state.pictureList.forEach((doc) async {
       if(doc.jid == event.jid) {
+        StorageReference photoRef = await FirebaseStorage.instance.getReferenceFromUrl(doc.url);
+        await photoRef.delete();
         await await Firestore.instance.collection('Picture').document(doc.pid).delete();
+      } else {
+        ;
+      }
+    });
+  }
+
+  Stream<JournalMainState> _mapCheckSameDateToState(Timestamp date) async* {
+    state.monthJournalList.forEach((element) {
+      if(element.date == date) {
+        state.update(isSameDate: true);
       } else {
         ;
       }

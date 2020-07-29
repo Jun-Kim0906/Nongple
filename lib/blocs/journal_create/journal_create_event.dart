@@ -70,3 +70,4 @@ class UpdateJournal extends JournalCreateEvent {
   String toString() => 'UpdateJournal { fid : $fid, jid : $jid }';
 }
 
+

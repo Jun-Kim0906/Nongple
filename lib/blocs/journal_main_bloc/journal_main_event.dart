@@ -33,3 +33,12 @@ class DeleteAll extends JournalMainEvent {
   @override
   String toString() => 'DeleteAll { fid : $fid, jid : $jid }';
 }
+
+class CheckSameDate extends JournalMainEvent {
+  final Timestamp date;
+
+  const CheckSameDate({@required this.date});
+
+  @override
+  String toString() => 'CheckSameDate { date : $date }';
+}

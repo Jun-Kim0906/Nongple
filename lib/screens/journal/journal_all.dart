@@ -159,7 +159,6 @@ class _JournalAllState extends State<JournalAll> {
                                             ],
                                             child: JournalDetail(
                                               jid: now.jid,
-                                              content: now.content,
                                               date: now.date,
                                               facility: widget.facility,
                                                 ),

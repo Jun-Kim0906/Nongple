@@ -8,12 +8,14 @@ class JournalMainState {
   final List<Picture> pictureList;
   final List<Journal> monthJournalList;
   final Timestamp selectedDate;
+  final bool isSameDate;
 
   JournalMainState({
     @required this.journalList,
     @required this.pictureList,
     @required this.selectedDate,
-    @required this.monthJournalList
+    @required this.monthJournalList,
+    @required this.isSameDate,
   });
 
   factory JournalMainState.empty() {
@@ -22,6 +24,7 @@ class JournalMainState {
       pictureList: [],
       selectedDate: Timestamp.now(),
       monthJournalList: [],
+      isSameDate: false,
     );
   }
 
@@ -30,12 +33,14 @@ class JournalMainState {
     List<Picture> pictureList,
     Timestamp selectedDate,
     List<Journal> monthJournalList,
+    bool isSameDate,
   }) {
     return JournalMainState(
       journalList: journalList ?? this.journalList,
       pictureList: pictureList ?? this.pictureList,
       selectedDate: selectedDate ?? this.selectedDate,
       monthJournalList: monthJournalList ?? this.monthJournalList,
+      isSameDate: isSameDate ?? this.isSameDate,
     );
   }
 
@@ -44,12 +49,14 @@ class JournalMainState {
     List<Picture> pictureList,
     Timestamp selectedDate,
     List<Journal> monthJournalList,
+    bool isSameDate,
   }) {
     return copyWith(
       journalList: journalList,
       pictureList: pictureList,
       selectedDate: selectedDate,
       monthJournalList: monthJournalList,
+      isSameDate: isSameDate,
     );
   }
 
@@ -60,6 +67,7 @@ class JournalMainState {
     pictureList: $pictureList,
     selectedDate: $selectedDate,
     monthJournalList: $monthJournalList,
+    isSameDate: $isSameDate,
     }''';
   }
 }
