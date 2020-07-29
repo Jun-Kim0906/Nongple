@@ -3,6 +3,7 @@ import 'package:nongple/data_repository/data_repository.dart';
 import 'package:nongple/models/models.dart';
 import 'bloc.dart';
 import 'package:bloc/bloc.dart';
+import 'package:geocoder/geocoder.dart';
 
 class AddFacilityBloc extends Bloc<AddFacilityEvent, AddFacilityState> {
   @override
@@ -13,7 +14,7 @@ class AddFacilityBloc extends Bloc<AddFacilityEvent, AddFacilityState> {
     if (event is FacilityNameChanged) {
       yield* _mapFacilityNameChangedToState(event.facilityname);
     } else if (event is FacilityAddrChanged) {
-      yield* _mapFacilityAddrChangedToState(event.facilityAddr);
+      yield* _mapFacilityAddrChangedToState(event.facilityAddr, event.Addr);
     } else if (event is FacilityCategoryChanged) {
       yield* _mapFacilityCategoryChangedToState(event.facilityCategory);
     } else if (event is FacilityUpload) {
@@ -28,9 +29,12 @@ class AddFacilityBloc extends Bloc<AddFacilityEvent, AddFacilityState> {
   }
 
   Stream<AddFacilityState> _mapFacilityAddrChangedToState(
-      String facilityAddr) async* {
+      String facilityAddr, Coordinates Addr) async* {
     yield state.update(
-        isAddrValid: facilityAddr.isNotEmpty, facilityAddr: facilityAddr);
+        isAddrValid: facilityAddr.isNotEmpty,
+        facilityAddr: facilityAddr,
+        lat: Addr.latitude.toString(),
+        lng: Addr.longitude.toString());
   }
 
   Stream<AddFacilityState> _mapFacilityCategoryChangedToState(
@@ -47,6 +51,8 @@ class AddFacilityBloc extends Bloc<AddFacilityEvent, AddFacilityState> {
       category: state.facilityCategory,
       uid: (await UserRepository().getUser()).uid,
       fid: Firestore.instance.collection('Facility').document().documentID,
+          lat: state.lat,
+          lng: state.lng,
     ));
     yield state.update(
         uid: (await UserRepository().getUser()).uid,
