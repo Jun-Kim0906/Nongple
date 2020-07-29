@@ -41,7 +41,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 //     await getTemperature(list.fid, list.lng, list.lat);
 //    });
 
-    await Future.wait(facList.map((doc) => getTemperature(doc.fid, doc.lng, doc.lat)));
+    await Future.wait(facList.map((doc) => getTemperature(fid: doc.fid, lat: doc.lat, lng: doc.lng)));
 
 //    await Future.forEach(facList, (list) {
 //      getTemperature(list.fid, list.lng, list.lat);
@@ -67,14 +67,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     yield FacilityListSet(facList);
   }
 
-  Future<String> getTemperature(String fid, String lng, String lat) async {
+  Future<String> getTemperature({String fid, String lng, String lat}) async {
     List<Weather> skyList_short = [];
     List<Weather> tmpList_short = [];
     List<Weather> humidList_short = [];
 
-    String nx = lng;
-    String ny = lat;
-//    print('nx : $nx, ny : $ny');
+    String nx = lat;
+    String ny = lng;
+    print('nx : $nx, ny : $ny');
 
     String bt_short;
     String bb_short;
