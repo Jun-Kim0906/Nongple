@@ -71,8 +71,8 @@ class _TabScreenState extends State<TabScreen> {
           body: (activeTab == AppTab.weather)
               ? BlocProvider<WeatherBloc>(
                   create: (BuildContext context) => WeatherBloc()
-                    ..add(GetWeather(widget.facList.fid, widget.facList.lat,
-                        widget.facList.lng)),
+                    ..add(GetWeather(fid: widget.facList.fid, nx: widget.facList.lat,
+                        ny: widget.facList.lng)),
                   child: WeatherScreen(),
                 )
               : (activeTab == AppTab.journal)

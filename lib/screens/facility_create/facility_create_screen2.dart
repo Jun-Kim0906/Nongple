@@ -102,16 +102,17 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
                       ),
                     );
                     if (model != null) {
-                      address = model.postcodeSeq;
-                      _addFacilityBloc
-                          .add(FacilityAddrChanged(facilityAddr: address));
+                      address = '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''} ${model.zonecode}';
+//                      _addFacilityBloc
+//                          .add(FacilityAddrChanged(facilityAddr: address));
+                      print(model);
 //                      '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''} ${model.zonecode} '
                       try{
-                        var addresses = await Geocoder.local.findAddressesFromQuery('Namsong-ri, Heunghae-eup, Buk-gu, Pohang-si, Gyeongsangbuk-do, South Korea');
+                        var addresses = await Geocoder.local.findAddressesFromQuery('${model.roadAddressEnglish}');
                         var first = addresses.first;
                         print("${first.featureName} : ${first.coordinates.toString()}");
                         _addFacilityBloc
-                            .add(FacilityAddrChanged(facilityAddr: address));
+                            .add(FacilityAddrChanged(facilityAddr: address, Addr: first.coordinates));
                       }catch(e){
                         print(e);
                       }

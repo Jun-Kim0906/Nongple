@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:meta/meta.dart';
 
 abstract class AddFacilityEvent extends Equatable{
@@ -19,10 +20,11 @@ class FacilityNameChanged extends AddFacilityEvent{
 
 class FacilityAddrChanged extends AddFacilityEvent{
   final String facilityAddr;
-  const FacilityAddrChanged({@required this.facilityAddr});
+  final Coordinates Addr;
+  const FacilityAddrChanged({@required this.facilityAddr, @required this.Addr});
 
   @override
-  String toString() => 'Facility Addr Changed: $facilityAddr';
+  String toString() => 'FacilityAddrChanged{Facility Addr Changed: $facilityAddr\nCoordinate: ${Addr.toString()}';
 }
 
 class FacilityCategoryChanged extends AddFacilityEvent{

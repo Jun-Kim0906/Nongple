@@ -14,7 +14,7 @@ class GetWeather extends WeatherEvent{
   final String nx;
   final String ny;
 
-  const GetWeather(this.fid, this.nx, this.ny);
+  const GetWeather({this.fid, this.ny, this.nx});
 
   List<Object> get props => [fid, ny, nx];
 
