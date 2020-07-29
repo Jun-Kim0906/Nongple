@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         } else {
-          return SplashScreen();
+          return Container();
         }
       },
     );
