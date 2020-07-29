@@ -29,7 +29,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 2500), () {
+    Timer(Duration(seconds: 3), () {
       _authenticationBloc = AuthenticationBloc(userRepository: userRepository);
       _authenticationBloc.add(AuthenticationStarted());
       setState(() {});
@@ -40,7 +40,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return _authenticationBloc == null
         ? MaterialApp(
-            home: SplashScreen(),
+            home: SplashScreen(duration: 1,),
           )
         : BlocProvider.value(
             value: _authenticationBloc,
@@ -55,21 +55,14 @@ class _AppState extends State<App> {
               home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 // ignore: missing_return
                 builder: (context, state) {
-                  if (state is AuthenticationInitial) {
-                    return SplashScreen();
-                  } else if (state is AuthenticationFailure) {
-                    return LoginScreen(userRepository: userRepository);
-//              SplashToLogin(userRepository: _userRepository);
-                  } else if (state is AuthenticationSuccess) {
-//                    return HomeScreen(name: state.displayName);
+                  if (state is AuthenticationSuccess) {
                     return BlocProvider<HomeBloc>(
                         create: (BuildContext context) =>
-                            HomeBloc()..add(GetFacilityList()),
+                        HomeBloc()..add(GetFacilityList()),
                         child: HomeScreen(name: state.displayName));
-//                      HomeScreen(name: state.displayName);
-                  }
-                  ;
-                  return SplashScreen();
+                  } else{
+                    return LoginScreen(userRepository: userRepository);
+                  };
                 },
               ),
             ),
