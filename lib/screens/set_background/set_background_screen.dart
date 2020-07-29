@@ -61,7 +61,9 @@ class _SetBackgroundScreenState extends State<SetBackgroundScreen> {
                   );
                 });
           } else {
-            return SplashScreen();
+            return SplashScreen(
+              duration: 1,
+            );
           }
         },
       )
