@@ -38,6 +38,9 @@ class _JournalAllState extends State<JournalAll> {
     height = MediaQuery.of(context).size.height;
     return BlocBuilder<JournalMainBloc, JournalMainState>(
       builder: (context, state) {
+        state.monthJournalList.forEach((element) {
+          print('journal all content : ${element.content}');
+        });
         return Scaffold(
           backgroundColor: bodyColor,
           appBar: AppBar(
@@ -110,6 +113,7 @@ class _JournalAllState extends State<JournalAll> {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           Journal now = state.monthJournalList[index];
+                          print('journal all listview builder item content: ${now.content}');
                           return InkWell(
                             child: Container(
                               child: Column(
@@ -159,7 +163,9 @@ class _JournalAllState extends State<JournalAll> {
                                               date: now.date,
                                               facility: widget.facility,
                                                 ),
-                                          )));
+                                          ))).then((value) => _journalMainBloc
+                                ..add(GetJournalPictureList(fid: widget.facility.fid))
+                                ..add(AllDateSeleted(selectedDate: now.date)));
                             },
                           );
                         },

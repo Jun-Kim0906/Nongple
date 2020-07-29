@@ -24,3 +24,12 @@ class AllDateSeleted extends JournalMainEvent{
   @override
   String toString()=>'All Date Seleted {SelectedDate: $selectedDate}';
 }
+
+class DeleteAll extends JournalMainEvent {
+  final String fid;
+  final String jid;
+  const DeleteAll({@required this.fid, @required this.jid});
+
+  @override
+  String toString() => 'DeleteAll { fid : $fid, jid : $jid }';
+}

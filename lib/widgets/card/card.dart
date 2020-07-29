@@ -50,8 +50,8 @@ class _HomePageCardState extends State<HomePageCard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print('[Card] ${widget.facList.name} : ${widget.facList.bgUrl} }');
-    print('[Card] ${name} : ${bgUrl} }');
+//    print('[Card] ${widget.facList.name} : ${widget.facList.bgUrl} }');
+//    print('[Card] ${name} : ${bgUrl} }');
     return Card(
       elevation: 4.0,
       semanticContainer: true,

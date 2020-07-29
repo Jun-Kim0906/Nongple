@@ -20,9 +20,10 @@ class JournalCreateScreen extends StatefulWidget {
   final Facility facility;
   final Timestamp date;
   final String content;
-  final isModify;
+  final bool isModify;
+  final String jid;
 
-  JournalCreateScreen({this.facility, this.isModify, this.date, this.content});
+  JournalCreateScreen({this.facility, this.isModify, this.date, this.content, this.jid});
 
   @override
   _JournalCreateScreenState createState() => _JournalCreateScreenState();
@@ -32,12 +33,14 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
   JournalCreateBloc _journalCreateBloc;
   double height;
   TextEditingController _contentTextEditingController = TextEditingController();
+  TextEditingController _contentTextModifyingController;
   List<Asset> imageList = List<Asset>();
 
   @override
   void initState() {
     super.initState();
     _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
+    _contentTextModifyingController = TextEditingController(text: '${widget.content}');
     _contentTextEditingController.addListener(() {
       _journalCreateBloc
           .add(ContentChanged(content: _contentTextEditingController.text));
@@ -136,7 +139,7 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                       height: height * 0.45,
                       padding: EdgeInsets.all(18.0),
                       child: TextFormField(
-                        controller: _contentTextEditingController,
+                        controller: (widget.isModify == true) ? _contentTextModifyingController : _contentTextEditingController,
                         minLines: 25,
                         maxLines: null,
                         autocorrect: false,
@@ -261,7 +264,13 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
         bottomNavigationBar: BottomNavigationButton(
           title: (widget.isModify == true) ? '수정' : '완료',
           onPressed: () {
-            _journalCreateBloc.add(UploadJournal(fid: widget.facility.fid));
+            if (widget.isModify == true) {
+              _journalCreateBloc.add(ContentChanged(content: _contentTextModifyingController.text));
+              _journalCreateBloc.add(DateSeleted(selectedDate: widget.date));
+              _journalCreateBloc.add(UpdateJournal(fid: widget.facility.fid, jid: widget.jid));
+            } else {
+              _journalCreateBloc.add(UploadJournal(fid: widget.facility.fid));
+            }
             Navigator.pop(context);
           },
         ),

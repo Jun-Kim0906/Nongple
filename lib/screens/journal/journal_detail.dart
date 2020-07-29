@@ -182,20 +182,24 @@ class _JournalDetailState extends State<JournalDetail> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 BlocProvider.value(
-                                  value: _journalCreateBloc..add(DateSeleted(selectedDate: widget.date)),
+                                  value: _journalCreateBloc
+                                    ..add(
+                                        DateSeleted(selectedDate: widget.date)),
                                   child: JournalCreateScreen(
                                     facility: widget.facility,
                                     isModify: true,
                                     date: widget.date,
                                     content: widget.content,
+                                    jid: widget.jid,
                                   ),
                                 ))).then((value) => _journalMainBloc
-                        .add(GetJournalPictureList(fid: widget.facility.fid)));
+                      ..add(GetJournalPictureList(fid: widget.facility.fid))
+                      ..add(AllDateSeleted(selectedDate: widget.date)));
                   },
                 ),
                 ListTile(
@@ -207,7 +211,13 @@ class _JournalDetailState extends State<JournalDetail> {
                     '삭제하기',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  onTap: () {},
+                  onTap: () {
+//                    _journalMainBloc.add(DeleteAll(fid: widget.facility.fid, jid: widget.jid));
+//                    _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
+//                    _journalMainBloc.add(AllDateSeleted(selectedDate: widget.date));
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),

@@ -15,6 +15,8 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapGetJournalPictureListToState(event.fid);
     } else if (event is AllDateSeleted) {
       yield* _mapAllDateSeletedToState(event.selectedDate);
+    } else if (event is DeleteAll) {
+      yield* _mapDeleteAllToState(event);
     }
   }
 
@@ -57,5 +59,16 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
 //        element.date.toDate().year == selectedDate.toDate().year);
 
     yield state.update(selectedDate: selectedDate, monthJournalList: monthList);
+  }
+
+  Stream<JournalMainState> _mapDeleteAllToState(DeleteAll event) async* {
+    await Firestore.instance.collection('Journal').document(event.jid).delete();
+    state.pictureList.forEach((doc) async {
+      if(doc.jid == event.jid) {
+        await await Firestore.instance.collection('Picture').document(doc.pid).delete();
+      } else {
+        ;
+      }
+    });
   }
 }
