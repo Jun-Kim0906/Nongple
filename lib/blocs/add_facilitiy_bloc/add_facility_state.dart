@@ -5,6 +5,8 @@ class AddFacilityState {
   final bool isNameValid;
   final bool isAddrValid;
   final bool isCategoryValid;
+  final String lng;
+  final String lat;
 
   final String facilityName;
   final String facilityAddr;
@@ -20,7 +22,10 @@ class AddFacilityState {
       @required this.facilityAddr,
       @required this.facilityCategory,
       @required this.fid,
-      @required this.uid});
+      @required this.uid,
+      @required this.lat,
+      @required this.lng,
+      });
 
   factory AddFacilityState.empty() {
     return AddFacilityState(
@@ -32,6 +37,8 @@ class AddFacilityState {
       facilityCategory: 0,
       fid: '',
       uid: '',
+      lat: '37.553467',
+      lng: '126.970794'
     );
   }
 
@@ -44,6 +51,8 @@ class AddFacilityState {
     int facilityCategory,
     String fid,
     String uid,
+    String lat,
+    String lng,
   }) {
     return AddFacilityState(
       isNameValid: isNameValid ?? this.isNameValid,
@@ -54,6 +63,8 @@ class AddFacilityState {
       facilityCategory: facilityCategory ?? this.facilityCategory,
       uid: uid ?? this.uid,
       fid: fid ?? this.fid,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
     );
   }
 
@@ -66,6 +77,8 @@ class AddFacilityState {
     int facilityCategory,
     String fid,
     String uid,
+    String lat,
+    String lng,
   }) {
     return copyWith(
       isNameValid: isNameValid,
@@ -76,6 +89,8 @@ class AddFacilityState {
       facilityCategory: facilityCategory,
       uid: uid,
       fid: fid,
+      lat: lat,
+      lng: lng,
     );
   }
 
@@ -90,6 +105,8 @@ class AddFacilityState {
     facilityCategory: $facilityCategory,
     uid: $uid,
     fid: $fid,
+    lat: $lat,
+    lng: $lng,
     ''';
   }
 }

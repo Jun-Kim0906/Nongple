@@ -58,8 +58,8 @@ class Facility {
       'name': name,
       'temperature': temperature ?? '',
       'uid': uid,
-      'lat': lat ?? '127',
-      'lng': lng ?? '55',
+      'lat': lat,
+      'lng': lng,
     };
   }
 }
