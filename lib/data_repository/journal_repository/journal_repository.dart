@@ -11,4 +11,11 @@ class JournalRepository{
     DocumentReference reference = _firestore.collection('Journal').document(journal.jid);
     await reference.setData(journal.toMap());
   }
+
+  void updateJournal({
+  Journal journal,
+}) async {
+    DocumentReference reference = _firestore.collection('Journal').document(journal.jid);
+    await reference.updateData(journal.toMap());
+  }
 }

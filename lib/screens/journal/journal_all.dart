@@ -38,6 +38,9 @@ class _JournalAllState extends State<JournalAll> {
     height = MediaQuery.of(context).size.height;
     return BlocBuilder<JournalMainBloc, JournalMainState>(
       builder: (context, state) {
+        state.monthJournalList.forEach((element) {
+          print('journal all content : ${element.content}');
+        });
         return Scaffold(
           backgroundColor: bodyColor,
           appBar: AppBar(
@@ -110,6 +113,7 @@ class _JournalAllState extends State<JournalAll> {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           Journal now = state.monthJournalList[index];
+                          print('journal all listview builder item content: ${now.content}');
                           return InkWell(
                             child: Container(
                               child: Column(
@@ -155,11 +159,13 @@ class _JournalAllState extends State<JournalAll> {
                                             ],
                                             child: JournalDetail(
                                               jid: now.jid,
-                                              content: now.content,
                                               date: now.date,
+                                              content: now.content,
                                               facility: widget.facility,
                                                 ),
-                                          )));
+                                          ))).then((value) => _journalMainBloc
+                                ..add(GetJournalPictureList(fid: widget.facility.fid))
+                                ..add(AllDateSeleted(selectedDate: now.date)));
                             },
                           );
                         },
@@ -201,11 +207,18 @@ class _JournalAllState extends State<JournalAll> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (BuildContext context) =>
-                                                  BlocProvider.value(
-                                                    value: _journalCreateBloc,
-                                                    child: JournalCreateScreen(
-                                                        facility: widget.facility, isModify: false,),
-                                                  ))).then((value) => _journalMainBloc
+                                                  MultiBlocProvider(
+                                                    providers: [
+                                                      BlocProvider.value(
+                                                        value: _journalCreateBloc,
+                                                      ),
+                                                      BlocProvider.value(
+                                                        value: _journalMainBloc,
+                                                      )
+                                                    ],
+                                                    child: JournalCreateScreen(facility: widget.facility),
+                                                  )
+                                          )).then((value) => _journalMainBloc
                                           .add(GetJournalPictureList(fid: widget.facility.fid)));
                                     },
                                     shape: RoundedRectangleBorder(

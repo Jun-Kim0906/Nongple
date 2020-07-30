@@ -28,6 +28,8 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
       yield* _mapDeleteImageFileToState(event.removedFile);
     } else if(event is UploadJournal){
       yield* _mapUploadJournalToState(event.fid);
+    } else if (event is UpdateJournal) {
+      yield* _mapUpdateJournalToState(event);
     }
   }
 
@@ -66,6 +68,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
       imageList: _img,
     );
   }
+
   Stream<JournalCreateState> _mapUploadJournalToState(String fid) async* {
     Journal _journal = Journal(content: state.content,
       date: state.selectedDate,
@@ -103,6 +106,46 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
     yield state.update(
         jid: _journal.jid,
         fid: fid,
+    );
+  }
+
+  Stream<JournalCreateState> _mapUpdateJournalToState(UpdateJournal event) async* {
+    Journal _journal = Journal(content: state.content,
+        date: state.selectedDate,
+        moddttm: state.selectedDate,
+        fid: event.fid,
+        jid: event.jid);
+
+    JournalRepository().updateJournal(
+        journal: _journal
+    );
+
+    List<File> imageList=state.imageList;
+    String pid = '';
+
+    if(imageList.isNotEmpty) {
+      imageList.forEach((File file) async {
+        pid = Firestore.instance
+            .collection('Picture')
+            .document()
+            .documentID;
+        Picture _picture = Picture(
+          fid: event.fid,
+          jid: _journal.jid,
+          pid: pid,
+          url: (await uploadImageFile(file, pid)),
+          dttm: Timestamp.now(),
+        );
+
+        PictureRepository().uploadPicture(
+          picture: _picture,
+        );
+      });
+    }
+
+    yield state.update(
+      jid: _journal.jid,
+      fid: event.fid,
     );
   }
 

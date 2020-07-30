@@ -7,8 +7,10 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/facility/facility.dart';
+import 'package:nongple/models/journal/journal.dart';
 import 'package:nongple/models/picture/picture.dart';
 import 'package:nongple/screens/journal/journal_create_screen.dart';
+import 'package:nongple/screens/journal/journal_edit_screen.dart';
 import 'package:nongple/utils/todays_date.dart';
 
 class JournalDetail extends StatefulWidget {
@@ -182,20 +184,32 @@ class _JournalDetailState extends State<JournalDetail> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                BlocProvider.value(
-                                  value: _journalCreateBloc..add(DateSeleted(selectedDate: widget.date)),
-                                  child: JournalCreateScreen(
+                                MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider.value(
+                                      value: _journalCreateBloc
+                                        ..add(
+                                            DateSeleted(selectedDate: widget.date)),
+                                    ),
+                                    BlocProvider.value(
+                                      value: _journalMainBloc,
+                                    )
+                                  ],
+                                  child: JournalEditScreen(
                                     facility: widget.facility,
                                     isModify: true,
                                     date: widget.date,
                                     content: widget.content,
+                                    jid: widget.jid,
                                   ),
-                                ))).then((value) => _journalMainBloc
-                        .add(GetJournalPictureList(fid: widget.facility.fid)));
+                                )
+                        )).then((value) => _journalMainBloc
+                      ..add(GetJournalPictureList(fid: widget.facility.fid))
+                      ..add(AllDateSeleted(selectedDate: widget.date)));
                   },
                 ),
                 ListTile(
@@ -207,7 +221,16 @@ class _JournalDetailState extends State<JournalDetail> {
                     '삭제하기',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    _journalMainBloc.add(
+                        DeleteAll(fid: widget.facility.fid, jid: widget.jid));
+                    _journalMainBloc
+                        .add(GetJournalPictureList(fid: widget.facility.fid));
+                    _journalMainBloc
+                        .add(AllDateSeleted(selectedDate: widget.date));
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),

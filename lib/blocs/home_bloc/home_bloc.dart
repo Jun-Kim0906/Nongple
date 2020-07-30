@@ -7,6 +7,7 @@ import 'package:nongple/testPage2.dart';
 import 'package:nongple/data_repository/data_repository.dart';
 import 'package:nongple/utils/todays_date.dart';
 import 'package:nongple/utils/weather_util/api_addr.dart';
+import 'package:nongple/utils/weather_util/convert_grid_gps.dart';
 import 'home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,6 +77,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     String ny = lng;
     print('nx : $nx, ny : $ny');
 
+    double la = double.parse(lat);
+    double lo = double.parse(lng);
+    print('la : $la, lo : $lo');
+
+    LatXLngY point = convertGridGPS(0, la, lo);
+    int gridX = point.x;
+    int gridY = point.y;
+    print('gridX : $gridX, gridY : $gridY');
+
     String bt_short;
     String bb_short;
 
@@ -112,7 +122,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     http.Response shortWeatherInfo;
 
     shortWeatherInfo = await http.get(
-        '$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$nx&ny=$ny&');
+        '$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$gridX&ny=$gridY&');
 
 //    print('$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$nx&ny=$ny&');
 

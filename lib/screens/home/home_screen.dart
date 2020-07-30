@@ -35,10 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         if (state is FacilityListSet) {
           state.facList.forEach((list) {
-            print('[home screen] ${list.name} : ${list.temperature} }');
-            print('[home screen] ${list.name} : ${list.bgUrl} }');
+//            print('[home screen] ${list.name} : ${list.temperature} }');
+//            print('[home screen] ${list.name} : ${list.bgUrl} }');
           });
-          print('check faclist : ${state.facList}');
           return Scaffold(
             backgroundColor: bodyColor,
             appBar: AppBar(

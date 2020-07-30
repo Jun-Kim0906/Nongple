@@ -7,6 +7,7 @@ import 'package:nongple/models/weather/weather.dart';
 import 'package:http/http.dart' as http;
 import 'package:nongple/utils/todays_date.dart';
 import 'package:nongple/utils/weather_util/api_addr.dart';
+import 'package:nongple/utils/weather_util/convert_grid_gps.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   @override
@@ -33,6 +34,15 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     String nx = event.nx;
     String ny = event.ny;
     print('nx : $nx, ny : $ny');
+
+    double la = double.parse(event.nx);
+    double lo = double.parse(event.ny);
+    print('la : $la, lo : $lo');
+
+    LatXLngY point = convertGridGPS(0, la, lo);
+    int gridX = point.x;
+    int gridY = point.y;
+    print('gridX : $gridX, gridY : $gridY');
 
     String bb;
     String bb_short;
@@ -73,7 +83,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     http.Response shortWeatherInfo;
 
     shortWeatherInfo = await http.get(
-        '$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$nx&ny=$ny&');
+        '$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$gridX&ny=$gridY&');
 
     if (shortWeatherInfo.statusCode == 200) {
       json
@@ -135,7 +145,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     http.Response villageWeatherInfo;
 
     villageWeatherInfo = await http
-        .get('$villageFcstHeader&base_date=$bb&base_time=$bt&nx=$nx&ny=$ny&');
+        .get('$villageFcstHeader&base_date=$bb&base_time=$bt&nx=$gridX&ny=$gridY&');
 
     if (villageWeatherInfo.statusCode == 200) {
       json

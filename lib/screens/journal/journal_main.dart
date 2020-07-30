@@ -211,8 +211,8 @@ class _JournalMainState extends State<JournalMain> {
                                                 ],
                                                 child: JournalDetail(
                                                   jid: now.jid,
-                                                  content: now.content,
                                                   date: now.date,
+                                                  content: now.content,
                                                   facility: widget.facility,
                                                 ),
                                               )));
@@ -290,10 +290,18 @@ class _JournalMainState extends State<JournalMain> {
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          BlocProvider.value(
-                            value: _journalCreateBloc,
-                            child: JournalCreateScreen(facility: widget.facility, isModify: false,),
-                          ))).then((value) => _journalMainBloc
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: _journalCreateBloc,
+                              ),
+                              BlocProvider.value(
+                                value: _journalMainBloc,
+                              )
+                            ],
+                            child: JournalCreateScreen(facility: widget.facility),
+                          )
+                          )).then((value) => _journalMainBloc
                   .add(GetJournalPictureList(fid: widget.facility.fid)));
             },
             label: Text('오늘의 활동 기록하기'),

@@ -60,3 +60,14 @@ class UploadJournal extends JournalCreateEvent{
   @override
   String toString() =>'fid: $fid';
 }
+
+class UpdateJournal extends JournalCreateEvent {
+  final String fid;
+  final String jid;
+  const UpdateJournal({@required this.fid, @required this.jid});
+
+  @override
+  String toString() => 'UpdateJournal { fid : $fid, jid : $jid }';
+}
+
+
