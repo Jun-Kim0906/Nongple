@@ -26,14 +26,12 @@ class JournalDetail extends StatefulWidget {
 }
 
 class _JournalDetailState extends State<JournalDetail> {
-  JournalCreateBloc _journalCreateBloc;
   JournalMainBloc _journalMainBloc;
   List<Picture> _image;
 
   @override
   void initState() {
     super.initState();
-    _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
   }
 
@@ -47,125 +45,132 @@ class _JournalDetailState extends State<JournalDetail> {
     print('weekday : $weekday');
 //    print('date : $date');
 //    print('format date : $formatDate');
-    return Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Color(0xFF828282),
-            ),
-            onPressed: () {
-              _image.clear();
-              print('image clear status [0 for clear] : ${_image.length}');
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: Colors.transparent,
-//        title: Text('test1', style: TextStyle(color: Colors.black),),
-//        centerTitle: true,
-          elevation: 0,
-          actions: [
-            IconButton(
+    return BlocBuilder<JournalMainBloc, JournalMainState>(
+      builder: (context, state){
+        List<Journal> _journal = state.journalList;
+        _journal = _journal.where((doc) {
+          return doc.jid == widget.jid;
+        }).toList();
+        print(_journal[0].jid);
+        print('journal length : ${_journal.length}');
+        _image = state.pictureList
+            .where((data) => data.jid == widget.jid)
+            .toList();
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            leading: IconButton(
               icon: Icon(
-                Icons.more_vert,
+                Icons.arrow_back_ios,
                 color: Color(0xFF828282),
               ),
               onPressed: () {
-                _settingModalBottomSheet(context);
+                _image.clear();
+                print('image clear status [0 for clear] : ${_image.length}');
+                Navigator.pop(context);
               },
             ),
-          ],
-        ),
-        body: BlocBuilder<JournalMainBloc, JournalMainState>(
-          builder: (context, state) {
-            _image = state.pictureList
-                .where((data) => data.jid == widget.jid)
-                .toList();
-            return Column(
-              children: [
-                (_image.isNotEmpty)
-                    ? Container(
-                        height: height * 0.6,
+            backgroundColor: Colors.transparent,
+//        title: Text('test1', style: TextStyle(color: Colors.black),),
+//        centerTitle: true,
+            elevation: 0,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.more_vert,
+                  color: Color(0xFF828282),
+                ),
+                onPressed: () {
+                  _settingModalBottomSheet(context, _journal[0].content);
+                },
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              (_image.isNotEmpty)
+                  ? Container(
+                height: height * 0.6,
 //                        width: double.infinity,
-                        child: Swiper(
-                            layout: SwiperLayout.STACK,
-                            itemHeight: height * 0.6,
-                            itemWidth: width,
-                            loop: true,
-                            itemCount: _image.length,
-                            control: SwiperControl(
-                                color: Color(0x00000000),
-                                disableColor: Color(0x00000000)),
-                            viewportFraction: 1.0,
-                            scale: 1.0,
-                            pagination: SwiperPagination(
-                              builder: DotSwiperPaginationBuilder(
-                                activeColor: Color(0xFF2F80ED),
-                              ),
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              return Card(
-                                margin: EdgeInsets.all(0.0),
-                                semanticContainer: true,
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(15.0),
-                                    bottomRight: Radius.circular(15.0),
-                                  ),
-                                ),
-                                child: Image(
-                                  image: CachedNetworkImageProvider(
-                                      _image[index].url),
-                                  fit: BoxFit.fill,
-                                ),
-                              );
-                            }),
-                      )
-                    : Container(),
-                Flexible(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(
-                          width * 0.1, height / 11, width * 0.1, 0.0),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              formatDate.toString() + ' ' + weekday,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0,
-                                color: Color(0xFFB8B8B8),
-                              ),
-                            ),
-                            SizedBox(
-                              height: height * 0.06,
-                            ),
-                            Text(
-                              widget.content,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0,
-                                color: Color(0xFFB8B8B8),
-                              ),
-                            ),
-                          ],
+                child: Swiper(
+                    layout: SwiperLayout.STACK,
+                    itemHeight: height * 0.6,
+                    itemWidth: width,
+                    loop: true,
+                    itemCount: _image.length,
+                    control: SwiperControl(
+                        color: Color(0x00000000),
+                        disableColor: Color(0x00000000)),
+                    viewportFraction: 1.0,
+                    scale: 1.0,
+                    pagination: SwiperPagination(
+                      builder: DotSwiperPaginationBuilder(
+                        activeColor: Color(0xFF2F80ED),
+                      ),
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        margin: EdgeInsets.all(0.0),
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(15.0),
+                            bottomRight: Radius.circular(15.0),
+                          ),
                         ),
+                        child: Image(
+                          image: CachedNetworkImageProvider(
+                              _image[index].url),
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    }),
+              )
+                  : Container(),
+              Flexible(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(
+                        width * 0.1, height / 11, width * 0.1, 0.0),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            formatDate.toString() + ' ' + weekday,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25.0,
+                              color: Color(0xFFB8B8B8),
+                            ),
+                          ),
+                          SizedBox(
+                            height: height * 0.06,
+                          ),
+                          Text(
+                            _journal[0].content,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                              color: Color(0xFFB8B8B8),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                )
-              ],
-            );
-          },
-        ));
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
-  void _settingModalBottomSheet(context) {
+  void _settingModalBottomSheet(context, String content) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext c) {
@@ -190,10 +195,9 @@ class _JournalDetailState extends State<JournalDetail> {
                             builder: (BuildContext context) =>
                                 MultiBlocProvider(
                                   providers: [
-                                    BlocProvider.value(
-                                      value: _journalCreateBloc
-                                        ..add(
-                                            DateSeleted(selectedDate: widget.date)),
+                                    BlocProvider<JournalCreateBloc>(
+                                      create: (BuildContext context) => JournalCreateBloc()
+                                        ..add(DateSeleted(selectedDate: widget.date)),
                                     ),
                                     BlocProvider.value(
                                       value: _journalMainBloc,
@@ -203,7 +207,7 @@ class _JournalDetailState extends State<JournalDetail> {
                                     facility: widget.facility,
                                     isModify: true,
                                     date: widget.date,
-                                    content: widget.content,
+                                    content: content,
                                     jid: widget.jid,
                                   ),
                                 )

@@ -22,15 +22,12 @@ class JournalAll extends StatefulWidget {
 
 class _JournalAllState extends State<JournalAll> {
   JournalMainBloc _journalMainBloc;
-  JournalCreateBloc _journalCreateBloc;
   double height;
 
   @override
   void initState() {
     super.initState();
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
-    _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
-//    _journalMainBloc.add(prefix0.GetJournalPictureList(fid: widget.facility.fid));
   }
 
   @override
@@ -113,7 +110,8 @@ class _JournalAllState extends State<JournalAll> {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           Journal now = state.monthJournalList[index];
-                          print('journal all listview builder item content: ${now.content}');
+                          print(
+                              'journal all listview builder item content: ${now.content}');
                           return InkWell(
                             child: Container(
                               child: Column(
@@ -134,8 +132,8 @@ class _JournalAllState extends State<JournalAll> {
                                               ? '입력한 내용이 없습니다.'
                                               : now.content,
                                           maxLines: 2,
-                                          style:
-                                          TextStyle(color: Color(0xFFB8B8B8)),
+                                          style: TextStyle(
+                                              color: Color(0xFFB8B8B8)),
                                         ),
                                       )
                                     ],
@@ -143,28 +141,22 @@ class _JournalAllState extends State<JournalAll> {
                                 ],
                               ),
                             ),
-                            onTap: (){
+                            onTap: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          MultiBlocProvider(
-                                            providers: [
-                                              BlocProvider.value(
-                                                value: _journalCreateBloc,
-                                              ),
-                                              BlocProvider.value(
-                                                value: _journalMainBloc,
-                                              ),
-                                            ],
+                                          BlocProvider.value(
+                                            value: _journalMainBloc,
                                             child: JournalDetail(
                                               jid: now.jid,
                                               date: now.date,
                                               content: now.content,
                                               facility: widget.facility,
-                                                ),
+                                            ),
                                           ))).then((value) => _journalMainBloc
-                                ..add(GetJournalPictureList(fid: widget.facility.fid))
+                                ..add(GetJournalPictureList(
+                                    fid: widget.facility.fid))
                                 ..add(AllDateSeleted(selectedDate: now.date)));
                             },
                           );
@@ -209,17 +201,23 @@ class _JournalAllState extends State<JournalAll> {
                                               builder: (BuildContext context) =>
                                                   MultiBlocProvider(
                                                     providers: [
-                                                      BlocProvider.value(
-                                                        value: _journalCreateBloc,
+                                                      BlocProvider<
+                                                          JournalCreateBloc>(
+                                                        create: (BuildContext
+                                                                context) =>
+                                                            JournalCreateBloc(),
                                                       ),
                                                       BlocProvider.value(
                                                         value: _journalMainBloc,
                                                       )
                                                     ],
-                                                    child: JournalCreateScreen(facility: widget.facility),
-                                                  )
-                                          )).then((value) => _journalMainBloc
-                                          .add(GetJournalPictureList(fid: widget.facility.fid)));
+                                                    child: JournalCreateScreen(
+                                                        facility:
+                                                            widget.facility),
+                                                  ))).then((value) =>
+                                          _journalMainBloc.add(
+                                              GetJournalPictureList(
+                                                  fid: widget.facility.fid)));
                                     },
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),

@@ -101,18 +101,15 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                               print('confirm $date');
                               _journalMainBloc.add(CheckSameDate(
                                   date: Timestamp.fromDate(date)));
-                              if(mState.isSameDate == true) {
-                                Navigator.pop(context);
-                                showAlertDialog(context, state.selectedDate, state.content,
-                                    state.jid, widget.facility);
-                              }
                               _journalCreateBloc.add(DateSeleted(
                                   selectedDate: Timestamp.fromDate(date)));
-
+//                              showAlertDialog(context, state.selectedDate, state.content,
+//                                  state.jid, widget.facility);
                             },
                             initialDateTime: state.selectedDate.toDate(),
                             locale: DateTimePickerLocale.ko,
-                            onClose: () => print('onCancel'),
+                            onClose: () => (mState.isSameDate == true) ? showAlertDialog(context, state.selectedDate, state.content,
+                                state.jid, widget.facility) : print('onClose'),
                             onCancel: () => print('onCancel'),
                           );
                         },
