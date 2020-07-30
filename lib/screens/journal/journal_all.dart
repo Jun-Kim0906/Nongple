@@ -160,6 +160,7 @@ class _JournalAllState extends State<JournalAll> {
                                             child: JournalDetail(
                                               jid: now.jid,
                                               date: now.date,
+                                              content: now.content,
                                               facility: widget.facility,
                                                 ),
                                           ))).then((value) => _journalMainBloc
@@ -206,11 +207,18 @@ class _JournalAllState extends State<JournalAll> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (BuildContext context) =>
-                                                  BlocProvider.value(
-                                                    value: _journalCreateBloc,
-                                                    child: JournalCreateScreen(
-                                                        facility: widget.facility, isModify: false,),
-                                                  ))).then((value) => _journalMainBloc
+                                                  MultiBlocProvider(
+                                                    providers: [
+                                                      BlocProvider.value(
+                                                        value: _journalCreateBloc,
+                                                      ),
+                                                      BlocProvider.value(
+                                                        value: _journalMainBloc,
+                                                      )
+                                                    ],
+                                                    child: JournalCreateScreen(facility: widget.facility),
+                                                  )
+                                          )).then((value) => _journalMainBloc
                                           .add(GetJournalPictureList(fid: widget.facility.fid)));
                                     },
                                     shape: RoundedRectangleBorder(

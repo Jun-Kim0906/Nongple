@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
-import 'package:nongple/screens/journal/journal_edit_screen.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
 
@@ -17,30 +16,34 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nongple/models/models.dart';
 
-class JournalCreateScreen extends StatefulWidget {
+class JournalEditScreen extends StatefulWidget {
   final Facility facility;
+  final Timestamp date;
+  final String content;
+  final bool isModify;
+  final String jid;
 
-  JournalCreateScreen({this.facility});
+  JournalEditScreen(
+      {this.facility, this.isModify, this.date, this.content, this.jid});
 
   @override
-  _JournalCreateScreenState createState() => _JournalCreateScreenState();
+  _JournalEditScreenState createState() => _JournalEditScreenState();
 }
 
-class _JournalCreateScreenState extends State<JournalCreateScreen> {
+class _JournalEditScreenState extends State<JournalEditScreen> {
   JournalCreateBloc _journalCreateBloc;
   JournalMainBloc _journalMainBloc;
   double height;
-  TextEditingController _contentTextEditingController = TextEditingController();
+  TextEditingController _contentTextModifyingController;
+  List<Asset> imageList = List<Asset>();
 
   @override
   void initState() {
     super.initState();
     _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
-    _contentTextEditingController.addListener(() {
-      _journalCreateBloc
-          .add(ContentChanged(content: _contentTextEditingController.text));
-    });
+    _contentTextModifyingController =
+        TextEditingController(text: '${widget.content}');
   }
 
   @override
@@ -62,7 +65,7 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                 },
               ),
               elevation: 0.0,
-              title: Text('일지작성', style: TextStyle(color: Colors.black)),
+              title: Text('일지수정', style: TextStyle(color: Colors.black)),
               centerTitle: true,
               backgroundColor: Colors.white,
             ),
@@ -75,48 +78,22 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       FlatButton(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              state.isDateSeleted
-                                  ? DateFormat('yyyy년 MM월 dd일')
-                                      .format(state.selectedDate.toDate())
-                                  : '$year년 $month월 $day일',
-                              style: TextStyle(
-                                  color: Color(0xFF929292), fontSize: 13.6),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    DateFormat('yyyy년 MM월 dd일')
+                                        .format(widget.date.toDate()),
+                                    style: TextStyle(
+                                        color: Color(0xFF929292),
+                                        fontSize: 13.6),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {},
                             ),
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Color(0xFF929292),
-                            ),
-                          ],
-                        ),
-                        onPressed: () {
-                          DatePicker.showDatePicker(
-                            context,
-                            onConfirm: (date, i) {
-                              print('confirm $date');
-                              _journalMainBloc.add(CheckSameDate(
-                                  date: Timestamp.fromDate(date)));
-                              if(mState.isSameDate == true) {
-                                Navigator.pop(context);
-                                showAlertDialog(context, state.selectedDate, state.content,
-                                    state.jid, widget.facility);
-                              }
-                              _journalCreateBloc.add(DateSeleted(
-                                  selectedDate: Timestamp.fromDate(date)));
-
-                            },
-                            initialDateTime: state.selectedDate.toDate(),
-                            locale: DateTimePickerLocale.ko,
-                            onClose: () => print('onCancel'),
-                            onCancel: () => print('onCancel'),
-                          );
-                        },
-                      ),
                       Card(
                         elevation: 4.0,
                         shape: RoundedRectangleBorder(
@@ -126,7 +103,7 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                           height: height * 0.45,
                           padding: EdgeInsets.all(18.0),
                           child: TextFormField(
-                            controller: _contentTextEditingController,
+                            controller: _contentTextModifyingController,
                             minLines: 25,
                             maxLines: null,
                             autocorrect: false,
@@ -250,16 +227,13 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
               ],
             ),
             bottomNavigationBar: BottomNavigationButton(
-              title: '완료',
+              title: '수정',
               onPressed: () {
-                if (mState.isSameDate == true) {
-                  showAlertDialog(context, state.selectedDate, state.content,
-                      state.jid, widget.facility);
-                } else {
-                  _journalCreateBloc
-                      .add(UploadJournal(fid: widget.facility.fid));
-                  Navigator.pop(context);
-                }
+                _journalCreateBloc.add(ContentChanged(
+                    content: _contentTextModifyingController.text));
+                _journalCreateBloc.add(DateSeleted(selectedDate: widget.date));
+                _journalCreateBloc.add(UpdateJournal(fid: widget.facility.fid, jid: widget.jid));
+                Navigator.pop(context);
               },
             ),
           );
@@ -346,99 +320,5 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                 )),
           ],
         ));
-  }
-
-  showAlertDialog(BuildContext context, Timestamp date, String content,
-      String jid, Facility facility) {
-    // set up the buttons
-    Widget cancelButton = GestureDetector(
-      child: Text("아니요"),
-      onTap: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = GestureDetector(
-      child: Text(
-        "네",
-        style: TextStyle(color: Colors.blue),
-      ),
-      onTap: () {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(
-                          value: _journalCreateBloc
-                            ..add(DateSeleted(selectedDate: date)),
-                        ),
-                        BlocProvider.value(
-                          value: _journalMainBloc,
-                        ),
-                      ],
-                      child: JournalEditScreen(
-                        facility: facility,
-                        isModify: true,
-                        date: date,
-                        content: content,
-                        jid: jid,
-                      ),
-                    ))).then((value) => _journalMainBloc
-          ..add(GetJournalPictureList(fid: facility.fid))
-          ..add(AllDateSeleted(selectedDate: date)));
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      content: Container(
-        height: MediaQuery.of(context).size.height - 550,
-        width: MediaQuery.of(context).size.width - 30,
-        padding: EdgeInsets.fromLTRB(7.0, 5.0, 7.0, 5.0),
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '알림',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text('선택한 날짜에 이미 존재하는 일지가 있습니다. 수정하기로 이동하시겠습니까?'),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: continueButton,
-                ),
-                SizedBox(
-                  width: 15.0,
-                ),
-                Flexible(
-                  flex: 1,
-                  child: cancelButton,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 }

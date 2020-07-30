@@ -212,6 +212,7 @@ class _JournalMainState extends State<JournalMain> {
                                                 child: JournalDetail(
                                                   jid: now.jid,
                                                   date: now.date,
+                                                  content: now.content,
                                                   facility: widget.facility,
                                                 ),
                                               )));
@@ -298,7 +299,7 @@ class _JournalMainState extends State<JournalMain> {
                                 value: _journalMainBloc,
                               )
                             ],
-                            child: JournalCreateScreen(facility: widget.facility, isModify: false,),
+                            child: JournalCreateScreen(facility: widget.facility),
                           )
                           )).then((value) => _journalMainBloc
                   .add(GetJournalPictureList(fid: widget.facility.fid)));
