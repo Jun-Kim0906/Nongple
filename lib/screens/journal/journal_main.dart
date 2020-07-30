@@ -22,16 +22,12 @@ class JournalMain extends StatefulWidget {
 
 class _JournalMainState extends State<JournalMain> {
   JournalMainBloc _journalMainBloc;
-  JournalCreateBloc _journalCreateBloc;
   double height;
 
   @override
   void initState() {
     super.initState();
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
-    _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
-//    _journalMainBloc
-//        .add(prefix0.GetJournalPictureList(fid: widget.facility.fid));
   }
 
   Widget _imagewidget(BuildContext context, int index, JournalMainState state) {
@@ -109,27 +105,13 @@ class _JournalMainState extends State<JournalMain> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        MultiBlocProvider(
-                                          providers: [
-                                            BlocProvider.value(
-                                                value: _journalMainBloc
-                                                  ..add(AllDateSeleted(
-                                                      selectedDate:
-                                                          Timestamp.now()))),
-                                            BlocProvider.value(
-                                              value: _journalCreateBloc,
-                                            )
-                                          ],
+                                        BlocProvider.value(
+                                          value: _journalMainBloc
+                                            ..add(AllDateSeleted(
+                                                selectedDate: Timestamp.now())),
                                           child: JournalAll(
                                               facility: widget.facility),
                                         )));
-//                                        BlocProvider<JournalMainBloc>.value(
-//                                          value: _journalMainBloc
-//                                            ..add(AllDateSeleted(
-//                                                selectedDate: Timestamp.now())),
-//                                          child: JournalAll(
-//                                              facility: widget.facility),
-//                                        )));
                           },
                           child: Text(
                             '전체보기 >',
@@ -200,15 +182,8 @@ class _JournalMainState extends State<JournalMain> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              MultiBlocProvider(
-                                                providers: [
-                                                  BlocProvider.value(
-                                                    value: _journalCreateBloc,
-                                                  ),
-                                                  BlocProvider.value(
-                                                    value: _journalMainBloc,
-                                                  ),
-                                                ],
+                                              BlocProvider.value(
+                                                value: _journalMainBloc,
                                                 child: JournalDetail(
                                                   jid: now.jid,
                                                   date: now.date,
@@ -293,15 +268,15 @@ class _JournalMainState extends State<JournalMain> {
                           MultiBlocProvider(
                             providers: [
                               BlocProvider.value(
-                                value: _journalCreateBloc,
-                              ),
-                              BlocProvider.value(
                                 value: _journalMainBloc,
+                              ),
+                              BlocProvider<JournalCreateBloc>(
+                                create: (BuildContext context) => JournalCreateBloc(),
                               )
                             ],
                             child: JournalCreateScreen(facility: widget.facility),
                           )
-                          )).then((value) => _journalMainBloc
+                  )).then((value) => _journalMainBloc
                   .add(GetJournalPictureList(fid: widget.facility.fid)));
             },
             label: Text('오늘의 활동 기록하기'),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,6 +37,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
   double height;
   TextEditingController _contentTextModifyingController;
   List<Asset> imageList = List<Asset>();
+  List<Picture> existingImageList;
+  List<Picture> copyOfExistingList;
 
   @override
   void initState() {
@@ -53,6 +56,9 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
       builder: (context, mState) {
         return BlocBuilder<JournalCreateBloc, JournalCreateState>(
             builder: (context, state) {
+          existingImageList =
+              mState.pictureList.where((doc) => doc.jid == widget.jid).toList();
+          copyOfExistingList = existingImageList;
           return Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
@@ -78,22 +84,21 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       FlatButton(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    DateFormat('yyyy년 MM월 dd일')
-                                        .format(widget.date.toDate()),
-                                    style: TextStyle(
-                                        color: Color(0xFF929292),
-                                        fontSize: 13.6),
-                                  )
-                                ],
-                              ),
-                              onPressed: () {},
-                            ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              DateFormat('yyyy년 MM월 dd일')
+                                  .format(widget.date.toDate()),
+                              style: TextStyle(
+                                  color: Color(0xFF929292), fontSize: 13.6),
+                            )
+                          ],
+                        ),
+                        onPressed: () {},
+                      ),
                       Card(
                         elevation: 4.0,
                         shape: RoundedRectangleBorder(
@@ -203,27 +208,52 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                   ),
                 ),
                 Flexible(
-                  child: Container(
-                    height: height * 0.143,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: state.imageList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return index == 0
-                            ? Row(
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 30.0,
-                                  ),
-                                  _imagewidget(context, index, state),
+                    child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                          height: height * 0.143,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            physics: ClampingScrollPhysics(),
+                            itemCount: copyOfExistingList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Row(
+                                children: [
+                                  _existingImageWidget(context, index),
+                                  (index == copyOfExistingList.length - 1)
+                                      ? ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          physics: ClampingScrollPhysics(),
+                                          itemCount: state.imageList.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return index == 0
+                                                ? Row(
+                                                    children: <Widget>[
+//                                          SizedBox(
+//                                            width: 30.0,
+//                                          ),
+                                                      _imagewidget(context,
+                                                          index, state),
+                                                    ],
+                                                  )
+                                                : _imagewidget(
+                                                    context, index, state);
+                                          },
+                                        )
+                                      : Container(),
                                 ],
-                              )
-                            : _imagewidget(context, index, state);
-                      },
-                    ),
+                              );
+                            },
+                          )),
+                    ],
                   ),
-                ),
+                )),
               ],
             ),
             bottomNavigationBar: BottomNavigationButton(
@@ -232,7 +262,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                 _journalCreateBloc.add(ContentChanged(
                     content: _contentTextModifyingController.text));
                 _journalCreateBloc.add(DateSeleted(selectedDate: widget.date));
-                _journalCreateBloc.add(UpdateJournal(fid: widget.facility.fid, jid: widget.jid));
+                _journalCreateBloc.add(
+                    UpdateJournal(fid: widget.facility.fid, jid: widget.jid));
                 Navigator.pop(context);
               },
             ),
@@ -312,6 +343,43 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                   onTap: () {
                     _journalCreateBloc.add(
                         DeleteImageFile(removedFile: state.imageList[index]));
+                  },
+                  child: Icon(
+                    Icons.cancel,
+                    color: Color(0xFF6F6F6F),
+                  ),
+                )),
+          ],
+        ));
+  }
+
+  Widget _existingImageWidget(BuildContext context, int index) {
+    return Container(
+        padding: EdgeInsets.all(10.0),
+        width: height * 0.143,
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: FractionalOffset.bottomLeft,
+              child: Container(
+                height: height * 0.108,
+                width: height * 0.108,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: CachedNetworkImageProvider(
+                      copyOfExistingList[index].url,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Align(
+                alignment: FractionalOffset.topRight,
+                child: InkWell(
+                  onTap: () {
+                    copyOfExistingList.removeAt(index);
                   },
                   child: Icon(
                     Icons.cancel,
