@@ -12,7 +12,6 @@ import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/create_facility/bottom_Navigation_button.dart';
 import 'package:nongple/widgets/custom_icons/custom_icons.dart';
-import 'package:nongple/widgets/loading/Loading.dart';
 
 class PickBackground extends StatefulWidget {
   final Facility facList;
@@ -169,7 +168,7 @@ class _PickBackgroundState extends State<PickBackground> {
                 },
               ));
         } else {
-          return Loading();
+          return Container();
         }
       },
     );

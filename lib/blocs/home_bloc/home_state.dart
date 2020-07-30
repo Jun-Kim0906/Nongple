@@ -13,6 +13,8 @@ class HomeState extends Equatable{
 
 class Initial extends HomeState{}
 
+class Loading extends HomeState{}
+
 class FacilityListSet extends HomeState{
   final List<Facility> facList;
 
