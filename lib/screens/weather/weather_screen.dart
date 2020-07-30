@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/custom_icons/custom_icons.dart';
-import 'package:nongple/widgets/loading/Loading.dart';
-import 'package:intl/intl.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -157,7 +155,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
           );
         } else {
           return Center(
-            child: Loading(),
           );
 //          return Container(
 //            child: Center(

@@ -97,10 +97,6 @@ class _HomePageCardState extends State<HomePageCard> {
                             ],
                             child: TabScreen(facList: widget.facList),
                           )
-//                      BlocProvider<TabBloc>(
-//                        create: (context) => TabBloc(),
-//                        child: TabScreen(),
-//                      )
                       ));
             },
             child: Container(

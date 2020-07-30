@@ -13,5 +13,5 @@ export './setting_list/setting_list.dart';
 export './alert_dialog/alert_dialog.dart';
 export './custom_icons/custom_icons.dart';
 export './journal/date_icon.dart';
-export './loading/Loading.dart';
+export './loading/loading.dart';
 

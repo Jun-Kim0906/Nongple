@@ -1,17 +1,12 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/models/weather/weather.dart';
-import 'package:nongple/testPage2.dart';
-import 'package:nongple/data_repository/data_repository.dart';
 import 'package:nongple/utils/todays_date.dart';
 import 'package:nongple/utils/weather_util/api_addr.dart';
 import 'package:nongple/utils/weather_util/convert_grid_gps.dart';
 import 'home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:nongple/utils/utils.dart';
 
@@ -23,6 +18,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
     if (event is GetFacilityList) {
       yield* _mapGetFacilityListToState();
+    } else if(event is ListLoading){
+      yield* _mapListLoadingToState();
     }
   }
 
@@ -38,16 +35,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       facList.add(Facility.fromSnapshot(ds));
     });
 
-//    facList.forEach((list) async {
-//     await getTemperature(list.fid, list.lng, list.lat);
-//    });
-
     await Future.wait(facList.map((doc) => getTemperature(fid: doc.fid, lat: doc.lat, lng: doc.lng)));
-
-//    await Future.forEach(facList, (list) {
-//      getTemperature(list.fid, list.lng, list.lat);
-//    });
-
 
     facList.clear();
 
@@ -89,12 +77,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     String bt_short;
     String bb_short;
 
-//    print('base date: ' + base_date);
-//    print('hour: $hour, minute: $minute');
-//    DateTime testDateTimeNow = DateTime.parse("20200723T093000");
-//    String btTest = DateFormat('HHmm').format(testDateTimeNow);
-//    print('btTest: ' + btTest);
-
     /// short fcst info
     if (int.parse(minute) > 30) {
       bt_short = hour + '30';
@@ -117,14 +99,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } else {
       throw Exception('[if-else] Failed to load short fcst weather');
     }
-//    print('bt_short : ' + bt_short);
 
     http.Response shortWeatherInfo;
 
     shortWeatherInfo = await http.get(
         '$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$gridX&ny=$gridY&');
 
-//    print('$ultraSrtFcstHeader&base_date=$bb_short&base_time=$bt_short&nx=$nx&ny=$ny&');
 
     if (shortWeatherInfo.statusCode == 200) {
       json
@@ -149,5 +129,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
 
     return tmpList_short[0].fcstValue;
+  }
+
+  Stream<HomeState> _mapListLoadingToState() async*{
+    yield Loading();
   }
 }
