@@ -1,8 +1,6 @@
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:intl/intl.dart';
 import 'package:nongple/models/models.dart';
 import 'bloc.dart';
 import 'package:bloc/bloc.dart';
@@ -21,7 +19,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapDeleteAllToState(event);
     } else if (event is CheckSameDate) {
       yield* _mapCheckSameDateToState(event.date);
-    } else if (event is OnLoading){
+    } else if (event is OnLoading) {
       yield* _mapOnLoadingToState();
     } else if (event is DeleteOnlyPicture) {
       yield* _mapDeleteOnlyPictureToState(event);
@@ -110,14 +108,31 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     yield state.update(isSameDate: isSameDate);
   }
 
-  Stream<JournalMainState> _mapOnLoadingToState()async*{
+  Stream<JournalMainState> _mapOnLoadingToState() async* {
     yield state.update(isLoaded: false);
+    Stream<JournalMainState> _mapDeleteOnlyPictureToState(
+        DeleteOnlyPicture event) async* {
+      event.deleteList.forEach((element) async {
+        StorageReference photoRef =
+            await FirebaseStorage.instance.getReferenceFromUrl(element.url);
+        await photoRef.delete();
+        await await Firestore.instance
+            .collection('Picture')
+            .document(element.pid)
+            .delete();
+      });
+    }
+
+    Stream<JournalMainState> _mapLoadJournalToState() async* {
+      yield JournalMainStateLoading();
+    }
+  }
   Stream<JournalMainState> _mapDeleteOnlyPictureToState(
       DeleteOnlyPicture event) async* {
 
     event.deleteList.forEach((element) async {
       StorageReference photoRef =
-          await FirebaseStorage.instance.getReferenceFromUrl(element.url);
+      await FirebaseStorage.instance.getReferenceFromUrl(element.url);
       await photoRef.delete();
       await await Firestore.instance
           .collection('Picture')
@@ -129,4 +144,5 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
   Stream<JournalMainState> _mapLoadJournalToState() async* {
     yield JournalMainStateLoading();
   }
+
 }
