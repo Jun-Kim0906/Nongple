@@ -17,7 +17,13 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   Stream<WeatherState> mapEventToState(WeatherEvent event) async* {
     if (event is GetWeather) {
       yield* _mapGetWeatherToState(event);
+    } else if (event is WeatherLoading){
+      yield* _mapWeatherLoadingToState();
     }
+  }
+
+  Stream<WeatherState> _mapWeatherLoadingToState() async* {
+    yield WLoading();
   }
 
   Stream<WeatherState> _mapGetWeatherToState(GetWeather event) async* {

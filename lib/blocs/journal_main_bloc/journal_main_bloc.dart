@@ -21,6 +21,8 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapDeleteAllToState(event);
     } else if (event is CheckSameDate) {
       yield* _mapCheckSameDateToState(event.date);
+    } else if (event is OnLoading){
+      yield* _mapOnLoadingToState();
     }
   }
 
@@ -48,6 +50,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     yield state.update(
       journalList: journalList,
       pictureList: pictureList,
+      isLoaded: true,
     );
   }
 
@@ -99,5 +102,9 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     (dayList.length > 0) ? isSameDate = true : isSameDate = false;
     print('[journal main bloc] end of check same date');
     yield state.update(isSameDate: isSameDate);
+  }
+
+  Stream<JournalMainState> _mapOnLoadingToState()async*{
+    yield state.update(isLoaded: false);
   }
 }

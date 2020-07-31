@@ -9,6 +9,8 @@ class WeatherState {
 
 class InitializeWeatherState extends WeatherState {}
 
+class WLoading extends WeatherState{}
+
 class WeatherListSet extends WeatherState {
   final List<Weather> skyList;
   final List<Weather> tmpList;

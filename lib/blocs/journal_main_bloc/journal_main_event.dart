@@ -42,3 +42,8 @@ class CheckSameDate extends JournalMainEvent {
   @override
   String toString() => 'CheckSameDate { date : $date }';
 }
+
+class OnLoading extends JournalMainEvent{
+  @override
+  String toString() => 'OnLoading';
+}

@@ -9,6 +9,8 @@ class WeatherEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class WeatherLoading extends WeatherEvent{}
+
 class GetWeather extends WeatherEvent{
   final String fid;
   final String nx;

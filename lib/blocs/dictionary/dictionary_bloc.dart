@@ -21,12 +21,24 @@ class DictionaryBloc extends Bloc<DictionaryEvent, DictionaryState> {
       yield* _mapDetailContentDelete();
     } else if (event is TextOnSubmitted) {
       yield* _mapTextOnSubmittedToState(event.searchText);
+    } else if (event is Searching){
+      yield* _mapSearchingToState();
+    } else if (event is DetailLoading){
+      yield* _mapDetailLoadingToState();
     }
   }
 
   Stream<DictionaryState> _mapSearchTextChangedToState(
       String searchText) async* {
     yield state.update(searchText: searchText);
+  }
+
+  Stream<DictionaryState> _mapSearchingToState() async* {
+    yield state.update(searching: true);
+  }
+
+  Stream<DictionaryState> _mapDetailLoadingToState() async* {
+    yield state.update(detailLoading: true);
   }
 
   Stream<DictionaryState> _mapSearchedItemLoadToState(String wordNo) async* {
@@ -43,7 +55,7 @@ class DictionaryBloc extends Bloc<DictionaryEvent, DictionaryState> {
     } catch (e) {
       print("response error : $e");
     } finally {
-      yield state.update(detailContent: content);
+      yield state.update(detailContent: content, detailLoading: false);
     }
   }
 
@@ -90,7 +102,7 @@ class DictionaryBloc extends Bloc<DictionaryEvent, DictionaryState> {
     } catch (e) {
       print(e);
     } finally {
-      yield state.update(searchedItems: dicTempList);
+      yield state.update(searchedItems: dicTempList, searching: false);
     }
   }
 }
