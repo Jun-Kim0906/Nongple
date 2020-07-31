@@ -23,6 +23,10 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapCheckSameDateToState(event.date);
     } else if (event is OnLoading){
       yield* _mapOnLoadingToState();
+    } else if (event is DeleteOnlyPicture) {
+      yield* _mapDeleteOnlyPictureToState(event);
+    } else if (event is LoadJournal) {
+      yield* _mapLoadJournalToState();
     }
   }
 
@@ -93,10 +97,12 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     print('[journal main bloc] inside check same date');
     List<Journal> dayList = state.journalList;
     bool isSameDate;
-    dayList = dayList.where((element) =>
-        element.date.toDate().year == date.toDate().year &&
-        element.date.toDate().month == date.toDate().month &&
-        element.date.toDate().day == date.toDate().day).toList();
+    dayList = dayList
+        .where((element) =>
+            element.date.toDate().year == date.toDate().year &&
+            element.date.toDate().month == date.toDate().month &&
+            element.date.toDate().day == date.toDate().day)
+        .toList();
     print('[journal main bloc] middle of check same date');
     print('[journal main bloc] length of dayList : ${dayList.length}');
     (dayList.length > 0) ? isSameDate = true : isSameDate = false;
@@ -106,5 +112,21 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
 
   Stream<JournalMainState> _mapOnLoadingToState()async*{
     yield state.update(isLoaded: false);
+  Stream<JournalMainState> _mapDeleteOnlyPictureToState(
+      DeleteOnlyPicture event) async* {
+
+    event.deleteList.forEach((element) async {
+      StorageReference photoRef =
+          await FirebaseStorage.instance.getReferenceFromUrl(element.url);
+      await photoRef.delete();
+      await await Firestore.instance
+          .collection('Picture')
+          .document(element.pid)
+          .delete();
+    });
+  }
+
+  Stream<JournalMainState> _mapLoadJournalToState() async* {
+    yield JournalMainStateLoading();
   }
 }

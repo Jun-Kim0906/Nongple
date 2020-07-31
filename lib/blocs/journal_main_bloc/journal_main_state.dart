@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:nongple/models/models.dart';
@@ -79,3 +80,5 @@ class JournalMainState {
     }''';
   }
 }
+
+class JournalMainStateLoading extends JournalMainState{}

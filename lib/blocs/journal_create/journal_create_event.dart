@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:nongple/models/picture/picture.dart';
 
 class JournalCreateEvent extends Equatable{
   const JournalCreateEvent();
@@ -70,4 +71,19 @@ class UpdateJournal extends JournalCreateEvent {
   String toString() => 'UpdateJournal { fid : $fid, jid : $jid }';
 }
 
+class SetCopyImageList extends JournalCreateEvent {
+  final List<Picture> copyOfExistingImage;
+  const SetCopyImageList({@required this.copyOfExistingImage});
+
+  @override
+  String toString() => 'SetCopyImageList { copyOfExistingImage : $copyOfExistingImage }';
+}
+
+class DeleteCopyOfExistingImage extends JournalCreateEvent {
+  final int index;
+  const DeleteCopyOfExistingImage({@required this.index});
+
+  @override
+  String toString() => 'DeleteCopyOfExistingImage { index : $index }';
+}
 

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:nongple/models/picture/picture.dart';
 
 abstract class JournalMainEvent extends Equatable{
   const JournalMainEvent();
@@ -47,3 +48,14 @@ class OnLoading extends JournalMainEvent{
   @override
   String toString() => 'OnLoading';
 }
+
+class DeleteOnlyPicture extends JournalMainEvent {
+  final List<Picture> deleteList;
+
+  const DeleteOnlyPicture({@required this.deleteList});
+
+  @override
+  String toString() => 'DeleteOnlyPicture { deleteList : $deleteList }';
+}
+
+class LoadJournal extends JournalMainEvent {}

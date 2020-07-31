@@ -12,6 +12,7 @@ import 'package:nongple/models/picture/picture.dart';
 import 'package:nongple/screens/journal/journal_create_screen.dart';
 import 'package:nongple/screens/journal/journal_edit_screen.dart';
 import 'package:nongple/utils/todays_date.dart';
+import 'package:nongple/widgets/loading/loading.dart';
 
 class JournalDetail extends StatefulWidget {
   final String jid;
@@ -27,7 +28,6 @@ class JournalDetail extends StatefulWidget {
 
 class _JournalDetailState extends State<JournalDetail> {
   JournalMainBloc _journalMainBloc;
-  List<Picture> _image;
 
   @override
   void initState() {
@@ -42,20 +42,15 @@ class _JournalDetailState extends State<JournalDetail> {
     var date = widget.date.toDate();
     var formatDate = DateFormat('yyyy.MM.dd').format(date);
     String weekday = daysOfWeek(index: date.weekday);
-    print('weekday : $weekday');
-//    print('date : $date');
-//    print('format date : $formatDate');
     return BlocBuilder<JournalMainBloc, JournalMainState>(
-      builder: (context, state){
-        List<Journal> _journal = state.journalList;
+      builder: (context, mState) {
+        List<Journal> _journal = mState.journalList;
         _journal = _journal.where((doc) {
           return doc.jid == widget.jid;
         }).toList();
-        print(_journal[0].jid);
-        print('journal length : ${_journal.length}');
-        _image = state.pictureList
-            .where((data) => data.jid == widget.jid)
-            .toList();
+        List<Picture> _image = mState.pictureList;
+        _image = _image.where((data) => data.jid == widget.jid).toList();
+        print('[journal detail] image length : ${_image.length}');
         return Scaffold(
           extendBodyBehindAppBar: true,
           backgroundColor: Colors.white,
@@ -72,8 +67,6 @@ class _JournalDetailState extends State<JournalDetail> {
               },
             ),
             backgroundColor: Colors.transparent,
-//        title: Text('test1', style: TextStyle(color: Colors.black),),
-//        centerTitle: true,
             elevation: 0,
             actions: [
               IconButton(
@@ -82,7 +75,8 @@ class _JournalDetailState extends State<JournalDetail> {
                   color: Color(0xFF828282),
                 ),
                 onPressed: () {
-                  _settingModalBottomSheet(context, _journal[0].content);
+                  _settingModalBottomSheet(
+                      context, _journal[0].content, _image);
                 },
               ),
             ],
@@ -91,43 +85,45 @@ class _JournalDetailState extends State<JournalDetail> {
             children: [
               (_image.isNotEmpty)
                   ? Container(
-                height: height * 0.6,
+                      height: height * 0.6,
 //                        width: double.infinity,
-                child: Swiper(
-                    layout: SwiperLayout.STACK,
-                    itemHeight: height * 0.6,
-                    itemWidth: width,
-                    loop: true,
-                    itemCount: _image.length,
-                    control: SwiperControl(
-                        color: Color(0x00000000),
-                        disableColor: Color(0x00000000)),
-                    viewportFraction: 1.0,
-                    scale: 1.0,
-                    pagination: SwiperPagination(
-                      builder: DotSwiperPaginationBuilder(
-                        activeColor: Color(0xFF2F80ED),
-                      ),
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Card(
-                        margin: EdgeInsets.all(0.0),
-                        semanticContainer: true,
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(15.0),
-                            bottomRight: Radius.circular(15.0),
+                      child: Swiper(
+//                          layout: SwiperLayout.STACK,
+                          layout: SwiperLayout.DEFAULT,
+                          itemHeight: height * 0.6,
+                          itemWidth: width,
+                          loop: true,
+                          itemCount: _image.length,
+                          control: SwiperControl(
+                              color: Color(0x00000000),
+                              disableColor: Color(0x00000000)),
+                          viewportFraction: 1.0,
+                          scale: 1.0,
+                          pagination: SwiperPagination(
+                            builder: DotSwiperPaginationBuilder(
+                              activeColor: Color(0xFF2F80ED),
+                            ),
                           ),
-                        ),
-                        child: Image(
-                          image: CachedNetworkImageProvider(
-                              _image[index].url),
-                          fit: BoxFit.fill,
-                        ),
-                      );
-                    }),
-              )
+                          itemBuilder: (BuildContext context, int index) {
+                            return Card(
+                              margin: EdgeInsets.all(0.0),
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15.0),
+                                  bottomRight: Radius.circular(15.0),
+                                ),
+                              ),
+                              child: Image(
+                                image: CachedNetworkImageProvider(
+                                  _image[index].url,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            );
+                          }),
+                    )
                   : Container(),
               Flexible(
                 child: SingleChildScrollView(
@@ -170,7 +166,7 @@ class _JournalDetailState extends State<JournalDetail> {
     );
   }
 
-  void _settingModalBottomSheet(context, String content) {
+  void _settingModalBottomSheet(context, String content, List<Picture> _image) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext c) {
@@ -196,24 +192,25 @@ class _JournalDetailState extends State<JournalDetail> {
                                 MultiBlocProvider(
                                   providers: [
                                     BlocProvider<JournalCreateBloc>(
-                                      create: (BuildContext context) => JournalCreateBloc()
-                                        ..add(DateSeleted(selectedDate: widget.date)),
+                                      create: (BuildContext context) =>
+                                          JournalCreateBloc()
+                                            ..add(DateSeleted(
+                                                selectedDate: widget.date))
+                                            ..add(SetCopyImageList(
+                                                copyOfExistingImage: _image)),
                                     ),
                                     BlocProvider.value(
                                       value: _journalMainBloc,
-                                    )
+                                    ),
                                   ],
                                   child: JournalEditScreen(
                                     facility: widget.facility,
-                                    isModify: true,
                                     date: widget.date,
                                     content: content,
                                     jid: widget.jid,
                                   ),
-                                )
-                        )).then((value) => _journalMainBloc
-                      ..add(GetJournalPictureList(fid: widget.facility.fid))
-                      ..add(AllDateSeleted(selectedDate: widget.date)));
+                                ))).then((value) => _journalMainBloc
+                      ..add(GetJournalPictureList(fid: widget.facility.fid)));
                   },
                 ),
                 ListTile(
@@ -226,19 +223,92 @@ class _JournalDetailState extends State<JournalDetail> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-                    _journalMainBloc.add(
-                        DeleteAll(fid: widget.facility.fid, jid: widget.jid));
-                    _journalMainBloc
-                        .add(GetJournalPictureList(fid: widget.facility.fid));
-                    _journalMainBloc
-                        .add(AllDateSeleted(selectedDate: widget.date));
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    showAlertDialog(context, widget.date, content, widget.jid,
+                        widget.facility);
                   },
                 ),
               ],
             ),
           );
         });
+  }
+
+  showAlertDialog(BuildContext context, Timestamp date, String content,
+      String jid, Facility facility) {
+    // set up the buttons
+    Widget cancelButton = GestureDetector(
+      child: Text("아니요"),
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = GestureDetector(
+      child: Text(
+        "네",
+        style: TextStyle(color: Colors.blue),
+      ),
+      onTap: () {
+        _journalMainBloc
+            .add(DeleteAll(fid: widget.facility.fid, jid: widget.jid));
+        _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
+        _journalMainBloc.add(AllDateSeleted(selectedDate: widget.date));
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      content: Container(
+        height: MediaQuery.of(context).size.height - 550,
+        width: MediaQuery.of(context).size.width - 30,
+        padding: EdgeInsets.fromLTRB(7.0, 5.0, 7.0, 5.0),
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '알림',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text('정말로 삭제 하시겠습니까?'),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: continueButton,
+                ),
+                SizedBox(
+                  width: 15.0,
+                ),
+                Flexible(
+                  flex: 1,
+                  child: cancelButton,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

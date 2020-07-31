@@ -375,7 +375,6 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                       ],
                       child: JournalEditScreen(
                         facility: facility,
-                        isModify: true,
                         date: date,
                         content: content,
                         jid: jid,
