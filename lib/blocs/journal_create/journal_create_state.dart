@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:nongple/models/picture/picture.dart';
 
 
 class JournalCreateState {
@@ -13,6 +14,7 @@ class JournalCreateState {
   final String fid;
   final List<Asset> assetList;
   final List<File> imageList;
+  final List<Picture> copyOfExistingImage; // journal edit screen
 
   JournalCreateState({
     @required this.selectedDate,
@@ -22,6 +24,7 @@ class JournalCreateState {
     @required this.imageList,
     @required this.fid,
     @required this.jid,
+    @required this.copyOfExistingImage,
   });
 
   factory JournalCreateState.empty(){
@@ -33,6 +36,7 @@ class JournalCreateState {
       imageList: [],
       jid: '',
       fid: '',
+      copyOfExistingImage: [],
     );
   }
 
@@ -44,6 +48,7 @@ class JournalCreateState {
     String fid,
     List<Asset> assetList,
     List<File> imageList,
+    List<Picture> copyOfExistingImage,
   }) {
     return JournalCreateState(
       selectedDate: selectedDate ?? this.selectedDate,
@@ -53,6 +58,7 @@ class JournalCreateState {
       fid: fid ?? this.fid,
       assetList: assetList ?? this.assetList,
       imageList: imageList ?? this.imageList,
+      copyOfExistingImage: copyOfExistingImage ?? this.copyOfExistingImage,
     );
   }
 
@@ -64,6 +70,7 @@ class JournalCreateState {
     String jid,
     List<Asset> assetList,
     List<File> imageList,
+    List<Picture> copyOfExistingImage,
   }) {
     return copyWith(
       selectedDate: selectedDate ,
@@ -73,6 +80,7 @@ class JournalCreateState {
       fid: fid,
       assetList: assetList,
       imageList: imageList,
+      copyOfExistingImage: copyOfExistingImage,
     );
   }
 
@@ -86,6 +94,7 @@ class JournalCreateState {
     jid: $jid,
     assetList: $assetList,
     imageList: ${imageList.length},
+    copyOfExistingImage: ${copyOfExistingImage.length},
     }''';
   }
 }

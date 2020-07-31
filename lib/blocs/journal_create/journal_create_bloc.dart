@@ -30,6 +30,10 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
       yield* _mapUploadJournalToState(event.fid);
     } else if (event is UpdateJournal) {
       yield* _mapUpdateJournalToState(event);
+    } else if (event is SetCopyImageList) {
+      yield* _mapSetCopyImageListToState(event.copyOfExistingImage);
+    } else if (event is DeleteCopyOfExistingImage) {
+      yield* _mapDeleteCopyOfExistingImageToState(event.index);
     }
   }
 
@@ -147,6 +151,17 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
       jid: _journal.jid,
       fid: event.fid,
     );
+  }
+
+  Stream<JournalCreateState> _mapSetCopyImageListToState(List<Picture> copyOfExistingImage) async* {
+    yield state.update(copyOfExistingImage: copyOfExistingImage);
+  }
+
+  Stream<JournalCreateState> _mapDeleteCopyOfExistingImageToState(int index) async* {
+    List<Picture> cList = state.copyOfExistingImage;
+    cList.removeAt(index);
+
+    yield state.update(copyOfExistingImage: cList);
   }
 
   Future<String> uploadImageFile(File file, String pid) async{

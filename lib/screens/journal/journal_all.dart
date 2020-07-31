@@ -156,8 +156,7 @@ class _JournalAllState extends State<JournalAll> {
                                             ),
                                           ))).then((value) => _journalMainBloc
                                 ..add(GetJournalPictureList(
-                                    fid: widget.facility.fid))
-                                ..add(AllDateSeleted(selectedDate: now.date)));
+                                    fid: widget.facility.fid)));
                             },
                           );
                         },
