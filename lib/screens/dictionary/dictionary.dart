@@ -11,6 +11,7 @@ class DictionaryScreen extends StatefulWidget {
 
 class _DictionaryScreenState extends State<DictionaryScreen> {
   DictionaryBloc _dictionaryBloc;
+  bool searched = false;
 
   @override
   void initState() {
@@ -22,18 +23,29 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder(
         bloc: _dictionaryBloc,
-        builder: (context, state) {
+        builder: (context, DictionaryState state) {
           return Column(
             children: <Widget>[
               searchBar(),
-              Expanded(
-                child: ListView(
-                  children: <Widget>[
-                    _matchedList(context, state),
-//              _totalList(context, state)
-                  ],
-                ),
-              ),
+              state.searching
+                  ? Expanded(
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Color.fromARGB(255, 0, 61, 165)),
+                      )),
+                    )
+                  : searched==false
+                      ? Container()
+                      : state.searchedItems.length == 0
+                          ? Expanded(
+                              child: Center(
+                                child: Image.asset('assets/no_result.png'),
+                              ),
+                            )
+                          : Expanded(
+                              child: _matchedList(context, state),
+                            ),
             ],
           );
         });
@@ -70,11 +82,12 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                 ),
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.search,
-                onChanged: (value){
-                  _dictionaryBloc
-                      .add(SearchTextChanged(searchText: value));
+                onChanged: (value) {
+                  _dictionaryBloc.add(SearchTextChanged(searchText: value));
                 },
-                onSubmitted: (value){
+                onSubmitted: (value) {
+                  searched=true;
+                  _dictionaryBloc.add(Searching());
                   _dictionaryBloc.add(TextOnSubmitted(searchText: value));
                 },
               ),
@@ -99,17 +112,14 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   BlocProvider<DictionaryBloc>.value(
-                                    value: _dictionaryBloc
-                                      ..add(SearchedItemLoad(
-                                          wordNo: state.searchedItems[index]
-                                              .wordNumber)),
+                                    value: _dictionaryBloc,
                                     child: DictionaryDetailScreen(
                                       wordNo:
                                           state.searchedItems[index].wordNumber,
                                       wordNm:
                                           state.searchedItems[index].wordName,
                                     ),
-                                  ))).then((value) => _dictionaryBloc.add(DetailContentDelete()));
+                                  )));
                     },
                     child: Container(
                       alignment: Alignment.centerLeft,
@@ -122,38 +132,4 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                   ),
                 )).toList());
   }
-
-//  Widget _matchedList(BuildContext context, DictionaryState state) {
-//    return ColumnBuilder(
-//        itemBuilder: (context, index) {
-//          return Padding(
-//            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-//            child: InkWell(
-//              onTap: () {
-//                Navigator.push(
-//                    context,
-//                    MaterialPageRoute(
-//                        builder: (BuildContext context) =>
-//                        BlocProvider<DictionaryBloc>.value(
-//                          value: _dictionaryBloc,
-//                          child: DictionaryDetailPage(
-//                            wordNo:
-//                            state.matchDictionaryList[index].wordNumber,
-//                            name: state.matchDictionaryList[index].wordName,
-//                          ),
-//                        )));
-//              },
-//              child: Container(
-//                alignment: Alignment.centerLeft,
-//                child: Text(
-//                  "${state.matchDictionaryList[index].wordName}",
-//                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-//                ),
-//              ),
-//            ),
-//          );
-//        },
-//        itemCount: state.matchDictionaryList.length);
-//  }
-
 }

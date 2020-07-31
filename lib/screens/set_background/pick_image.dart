@@ -217,7 +217,7 @@ class _PickBackgroundState extends State<PickBackground> {
             .updateData({
           'bgUrl': bgUrl,
         });
-        _homeBloc.add(GetFacilityList());
+        _homeBloc.add((ListLoading()));
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
     );
