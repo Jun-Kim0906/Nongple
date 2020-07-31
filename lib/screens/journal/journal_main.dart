@@ -111,7 +111,9 @@ class _JournalMainState extends State<JournalMain> {
                                                 selectedDate: Timestamp.now())),
                                           child: JournalAll(
                                               facility: widget.facility),
-                                        )));
+                                        ))).then((value) =>
+                                _journalMainBloc.add(GetJournalPictureList(
+                                    fid: widget.facility.fid)));
                           },
                           child: Text(
                             '전체보기 >',
@@ -190,7 +192,10 @@ class _JournalMainState extends State<JournalMain> {
                                                   content: now.content,
                                                   facility: widget.facility,
                                                 ),
-                                              )));
+                                              ))).then((value) =>
+                                      _journalMainBloc
+                                        ..add(GetJournalPictureList(
+                                            fid: widget.facility.fid)));
                                 },
                               );
                             },
@@ -264,20 +269,20 @@ class _JournalMainState extends State<JournalMain> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          MultiBlocProvider(
+                      builder: (BuildContext context) => MultiBlocProvider(
                             providers: [
                               BlocProvider.value(
                                 value: _journalMainBloc,
                               ),
                               BlocProvider<JournalCreateBloc>(
-                                create: (BuildContext context) => JournalCreateBloc(),
+                                create: (BuildContext context) =>
+                                    JournalCreateBloc(),
                               )
                             ],
-                            child: JournalCreateScreen(facility: widget.facility),
-                          )
-                  )).then((value) => _journalMainBloc
-                  .add(GetJournalPictureList(fid: widget.facility.fid)));
+                            child:
+                                JournalCreateScreen(facility: widget.facility),
+                          ))).then((value) => _journalMainBloc
+                ..add(GetJournalPictureList(fid: widget.facility.fid)));
             },
             label: Text('오늘의 활동 기록하기'),
           ),

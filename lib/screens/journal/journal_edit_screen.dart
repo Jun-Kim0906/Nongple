@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,11 +22,9 @@ class JournalEditScreen extends StatefulWidget {
   final Facility facility;
   final Timestamp date;
   final String content;
-  final bool isModify;
   final String jid;
 
-  JournalEditScreen(
-      {this.facility, this.isModify, this.date, this.content, this.jid});
+  JournalEditScreen({this.facility, this.date, this.content, this.jid});
 
   @override
   _JournalEditScreenState createState() => _JournalEditScreenState();
@@ -37,8 +36,6 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
   double height;
   TextEditingController _contentTextModifyingController;
   List<Asset> imageList = List<Asset>();
-  List<Picture> existingImageList;
-  List<Picture> copyOfExistingList;
 
   @override
   void initState() {
@@ -47,6 +44,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
     _contentTextModifyingController =
         TextEditingController(text: '${widget.content}');
+    _journalCreateBloc.add(
+        ContentChanged(content: _contentTextModifyingController.text ?? ""));
   }
 
   @override
@@ -56,9 +55,6 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
       builder: (context, mState) {
         return BlocBuilder<JournalCreateBloc, JournalCreateState>(
             builder: (context, state) {
-          existingImageList =
-              mState.pictureList.where((doc) => doc.jid == widget.jid).toList();
-          copyOfExistingList = existingImageList;
           return Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
@@ -109,6 +105,11 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                           padding: EdgeInsets.all(18.0),
                           child: TextFormField(
                             controller: _contentTextModifyingController,
+                            onChanged: (value) {
+                              _journalCreateBloc.add(ContentChanged(
+                                  content:
+                                      _contentTextModifyingController.text));
+                            },
                             minLines: 25,
                             maxLines: null,
                             autocorrect: false,
@@ -210,60 +211,61 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                 Flexible(
                     child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                          height: height * 0.143,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            physics: ClampingScrollPhysics(),
-                            itemCount: copyOfExistingList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Row(
-                                children: [
-                                  _existingImageWidget(context, index),
-                                  (index == copyOfExistingList.length - 1)
-                                      ? ListView.builder(
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          physics: ClampingScrollPhysics(),
-                                          itemCount: state.imageList.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return index == 0
-                                                ? Row(
-                                                    children: <Widget>[
-//                                          SizedBox(
-//                                            width: 30.0,
-//                                          ),
-                                                      _imagewidget(context,
-                                                          index, state),
-                                                    ],
-                                                  )
-                                                : _imagewidget(
-                                                    context, index, state);
-                                          },
-                                        )
-                                      : Container(),
-                                ],
-                              );
-                            },
-                          )),
-                    ],
-                  ),
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(30.0, 0, 0, 0),
+                      width: MediaQuery.of(context).size.width,
+                      height: height * 0.143,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        dragStartBehavior: DragStartBehavior.start,
+                        scrollDirection: Axis.horizontal,
+                        physics: ClampingScrollPhysics(),
+                        itemCount: state.copyOfExistingImage.length == 0 ? 1 : state.copyOfExistingImage.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          print('ㄴㅇㄹㄴㅇㄹ copy list length : ${state.copyOfExistingImage.length}');
+                          return Row(
+                            children: [
+                              (state.copyOfExistingImage.length == 0) ? Container()
+                                : _existingImageWidget(context, index, state),
+                              (state.copyOfExistingImage.length == 0 || index == state.copyOfExistingImage.length - 1)
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    physics: ClampingScrollPhysics(),
+                                    itemCount: state.imageList.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      print('ㄴㅇㄹㄴㅇㄹ imagelist length : ${state.imageList.length}');
+                                      return index == 0
+                                          ? Row(children: <Widget>[_imagewidget(context, index, state),],)
+                                          : _imagewidget(context, index, state);
+                                    },
+                                  )
+                                : Container(),
+                            ],
+                          );
+                        },
+                      )),
                 )),
               ],
             ),
             bottomNavigationBar: BottomNavigationButton(
               title: '수정',
               onPressed: () {
-                _journalCreateBloc.add(ContentChanged(
-                    content: _contentTextModifyingController.text));
-                _journalCreateBloc.add(DateSeleted(selectedDate: widget.date));
+                List<Picture> existingImageList = mState.pictureList
+                    .where((doc) => doc.jid == widget.jid)
+                    .toList();
+                print(
+                    '[journal edit screen] copyOfExistingImage list length : ${state.copyOfExistingImage.length}');
+                List<Picture> output = existingImageList
+                    .where((element) =>
+                        !state.copyOfExistingImage.contains(element))
+                    .toList();
+                print(
+                    '[journal edit screen] output list length : ${output.length}');
+                _journalMainBloc.add(DeleteOnlyPicture(deleteList: output));
                 _journalCreateBloc.add(
                     UpdateJournal(fid: widget.facility.fid, jid: widget.jid));
+                _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
                 Navigator.pop(context);
               },
             ),
@@ -353,7 +355,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
         ));
   }
 
-  Widget _existingImageWidget(BuildContext context, int index) {
+  Widget _existingImageWidget(
+      BuildContext context, int index, JournalCreateState state) {
     return Container(
         padding: EdgeInsets.all(10.0),
         width: height * 0.143,
@@ -369,7 +372,7 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
-                      copyOfExistingList[index].url,
+                      state.copyOfExistingImage[index].url,
                     ),
                   ),
                 ),
@@ -379,7 +382,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                 alignment: FractionalOffset.topRight,
                 child: InkWell(
                   onTap: () {
-                    copyOfExistingList.removeAt(index);
+                    _journalCreateBloc
+                        .add(DeleteCopyOfExistingImage(index: index));
                   },
                   child: Icon(
                     Icons.cancel,
