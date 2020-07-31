@@ -21,6 +21,8 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapDeleteAllToState(event);
     } else if (event is CheckSameDate) {
       yield* _mapCheckSameDateToState(event.date);
+    } else if (event is OnLoading){
+      yield* _mapOnLoadingToState();
     } else if (event is DeleteOnlyPicture) {
       yield* _mapDeleteOnlyPictureToState(event);
     } else if (event is LoadJournal) {
@@ -52,6 +54,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     yield state.update(
       journalList: journalList,
       pictureList: pictureList,
+      isLoaded: true,
     );
   }
 
@@ -107,6 +110,8 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     yield state.update(isSameDate: isSameDate);
   }
 
+  Stream<JournalMainState> _mapOnLoadingToState()async*{
+    yield state.update(isLoaded: false);
   Stream<JournalMainState> _mapDeleteOnlyPictureToState(
       DeleteOnlyPicture event) async* {
 

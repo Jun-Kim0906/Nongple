@@ -26,7 +26,6 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-
     return BlocBuilder<AddFacilityBloc, AddFacilityState>(
         builder: (context, state) {
       return Scaffold(
@@ -36,7 +35,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
             backgroundColor: Colors.white,
             elevation: 0.0,
             leading: IconButton(
-              color: Colors.blue[600],
+              color: Color(0xFF2F80ED),
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.pop(context);
@@ -44,7 +43,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
             ),
           ),
           body: Padding(
-            padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+            padding: EdgeInsets.fromLTRB(width*0.05, 0.0, width*0.05, 0.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,12 +51,18 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
                 SizedBox(
                   height: height * 0.06,
                 ),
-                Text(
-                  '영농 종류를\n선택해 주세요 ' + EmojiParser().emojify('🚜'),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 33.6),
+                SizedBox(
+                  width: width*0.533,
+                  height: height*0.112,
+                  child: FittedBox(
+                    child: Text(
+                      '영농 종류를\n선택해 주세요 ' + EmojiParser().emojify('🚜'),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 33.6),
+                    ),
+                  ),
                 ),
                 SizedBox(
-                  height: height * 0.06,
+                  height: height * 0.05,
                 ),
                 Expanded(
                   child: GridView.count(
@@ -67,7 +72,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen3> {
                         return Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: SelectCategoryCard(
-                            width: width / 3,
+                            width: width*0.327,
                             selected: state.facilityCategory,
                             index: index + 1,
                             onPressed: () {

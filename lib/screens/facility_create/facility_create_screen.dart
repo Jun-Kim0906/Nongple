@@ -15,6 +15,8 @@ class FacilityCreateScreen extends StatefulWidget {
 class _FacilityCreateScreenState extends State<FacilityCreateScreen> {
   TextEditingController facilityNameController = TextEditingController();
   AddFacilityBloc _addFacilityBloc;
+  double height;
+  double width;
 
   bool get ispopulated => facilityNameController.text.isNotEmpty;
 
@@ -34,6 +36,8 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    height=MediaQuery.of(context).size.height;
+    width=MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).primaryColorLight,
@@ -41,7 +45,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         leading: IconButton(
-          color: Colors.blue[600],
+          color: Color(0xFF2F80ED),
           icon: Icon(Icons.close),
           onPressed: () {
             Navigator.pop(context);
@@ -49,24 +53,38 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+        padding: EdgeInsets.fromLTRB(width*0.05, 0.0, width*0.05, 0.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: MediaQuery.of(context).size.height / 11,
-            ),
-            Text(
-              '시설 이름을 \n입력해 주세요 ' + EmojiParser().emojify('🙂'),
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 33.6),
+              height: height / 11,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 25,
+              height: height*0.111,
+              width: width*0.544,
+              child: FittedBox(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '시설 이름을 \n입력해 주세요 ' + EmojiParser().emojify('🙂'),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
-            Text(
-              '시설 이름',
-              style: TextStyle(fontSize: 14.4, color: Colors.grey[400]),
+            SizedBox(
+              height: height*0.04,
+            ),
+            SizedBox(
+              height: height*0.0231,
+              width: width*0.131,
+              child: FittedBox(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '시설 이름',
+                  style: TextStyle(color: Colors.grey[400]),
+                ),
+              ),
             ),
             TextFormField(
               style: TextStyle(fontWeight: FontWeight.bold),

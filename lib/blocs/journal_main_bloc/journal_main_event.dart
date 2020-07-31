@@ -44,6 +44,11 @@ class CheckSameDate extends JournalMainEvent {
   String toString() => 'CheckSameDate { date : $date }';
 }
 
+class OnLoading extends JournalMainEvent{
+  @override
+  String toString() => 'OnLoading';
+}
+
 class DeleteOnlyPicture extends JournalMainEvent {
   final List<Picture> deleteList;
 

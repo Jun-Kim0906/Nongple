@@ -1,15 +1,15 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 
-class DictionaryEvent extends Equatable{
+class DictionaryEvent extends Equatable {
   const DictionaryEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class SearchTextChanged extends DictionaryEvent{
+class SearchTextChanged extends DictionaryEvent {
   final String searchText;
 
   const SearchTextChanged({@required this.searchText});
@@ -20,7 +20,7 @@ class SearchTextChanged extends DictionaryEvent{
   }
 }
 
-class SearchedItemLoad extends DictionaryEvent{
+class SearchedItemLoad extends DictionaryEvent {
   final String wordNo;
 
   const SearchedItemLoad({@required this.wordNo});
@@ -29,19 +29,30 @@ class SearchedItemLoad extends DictionaryEvent{
   String toString() => 'SearchedItemLoad { wordNo: $wordNo}';
 }
 
-class DetailContentDelete extends DictionaryEvent{
+class DetailContentDelete extends DictionaryEvent {
   @override
   String toString() {
     return 'DetailContentDelete';
   }
 }
 
-class TextOnSubmitted extends DictionaryEvent{
+class TextOnSubmitted extends DictionaryEvent {
   final String searchText;
+
   const TextOnSubmitted({@required this.searchText});
 
   @override
   String toString() {
     return 'TextOnSubmitted';
   }
+}
+
+class Searching extends DictionaryEvent {
+  @override
+  String toString() => 'Searching';
+}
+
+class DetailLoading extends DictionaryEvent {
+  @override
+  String toString()=>'DetailLoading';
 }

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
-import 'package:nongple/blocs/blocs.dart' as prefix0;
 import 'package:nongple/models/models.dart';
 import 'package:nongple/screens/journal/journal.dart';
 import 'package:nongple/utils/utils.dart';
@@ -28,13 +27,230 @@ class _JournalMainState extends State<JournalMain> {
   void initState() {
     super.initState();
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
+    _journalMainBloc.add(OnLoading());
   }
 
+  @override
+  Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    return BlocListener(
+      bloc: _journalMainBloc,
+      listener: (BuildContext context, JournalMainState state){
+        if(state.isLoaded==true){
+          LoadingDialog.dismiss(context, ()=>null);
+        }else{
+          _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
+          LoadingDialog.onLoading(context);
+        }
+      },
+      child: BlocBuilder<JournalMainBloc, JournalMainState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: bodyColor,
+            body: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '일자별 기록',
+                            style: journalBodyTitleStyle1,
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          BlocProvider.value(
+                                            value: _journalMainBloc
+                                              ..add(AllDateSeleted(
+                                                  selectedDate: Timestamp.now())),
+                                            child: JournalAll(
+                                                facility: widget.facility),
+                                          )));
+                            },
+                            child: Text(
+                              '전체보기 >',
+                              style: journalViewAllButtonStyle,
+                            ),
+                          ),
+                        ],
+                      ),
+                      state.journalList.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: state.journalList.length > 3
+                                  ? 3
+                                  : state.journalList.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                bool differentmonth = true;
+                                Journal before;
+                                Journal now = state.journalList[index];
+                                if (index != 0) {
+                                  before = state.journalList[index - 1];
+                                  if (before.date.toDate().year ==
+                                          now.date.toDate().year &&
+                                      before.date.toDate().month ==
+                                          now.date.toDate().month) {
+                                    differentmonth = false;
+                                  }
+                                }
+                                return InkWell(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      if (differentmonth)
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              5.0, 0.0, 0.0, 8.0),
+                                          child: Text(DateFormat('yyyy.MM')
+                                              .format(state
+                                                  .journalList[index].date
+                                                  .toDate())),
+                                        ),
+//                                Text(DateFormat('yyyy.MM').format(state.journalList[index].date.toDate())),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                0.0, 0.0, 8.0, 8.0),
+                                            child: DateIcon(
+                                              date: now.date,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              now.content == ''
+                                                  ? '입력한 내용이 없습니다.'
+                                                  : now.content,
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  color: Color(0xFFB8B8B8)),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                BlocProvider.value(
+                                                  value: _journalMainBloc,
+                                                  child: JournalDetail(
+                                                    jid: now.jid,
+                                                    date: now.date,
+                                                    content: now.content,
+                                                    facility: widget.facility,
+                                                  ),
+                                                )));
+                                  },
+                                );
+                              },
+                            )
+                          : Container(
+                              height: height * 0.3,
+                              child: Image.asset(
+                                'assets/journal_default.png',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '사진 기록',
+                            style: journalBodyTitleStyle1,
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          BlocProvider<JournalMainBloc>.value(
+                                            value: _journalMainBloc,
+                                            child: JournalAllPictures(
+                                                facility: widget.facility),
+                                          )));
+                            },
+                            child: Text(
+                              '전체보기 >',
+                              style: journalViewAllButtonStyle,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                    child: Container(
+                  height: height * 0.143,
+                  child: state.pictureList.isNotEmpty
+                      ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.pictureList.length,
+                          itemBuilder: (BuildContext context, index) {
+                            return index == 0
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 30.0,
+                                      ),
+                                      _imagewidget(context, index, state),
+                                    ],
+                                  )
+                                : _imagewidget(context, index, state);
+                          },
+                        )
+                      : Container(
+                          height: height * 0.3,
+                        ),
+                )),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton.extended(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: _journalMainBloc,
+                                ),
+                                BlocProvider<JournalCreateBloc>(
+                                  create: (BuildContext context) => JournalCreateBloc(),
+                                )
+                              ],
+                              child: JournalCreateScreen(facility: widget.facility),
+                            )
+                    )).then((value) => _journalMainBloc
+                    .add(GetJournalPictureList(fid: widget.facility.fid)));
+              },
+              label: Text('오늘의 활동 기록하기'),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+          );
+        },
+      ),
+    );
+  }
   Widget _imagewidget(BuildContext context, int index, JournalMainState state) {
-//    CachedNetworkImage(
-//      imageUrl: state.pictureList[index].url,
-//      placeholder: (context, url)=>CircularProgressIndicator(),
-//    );
     return Container(
         padding: EdgeInsets.all(10.0),
         width: height * 0.143,
@@ -42,24 +258,23 @@ class _JournalMainState extends State<JournalMain> {
         child: InkWell(
           onTap: () {
             Navigator.of(context).push(
-//              _createRoute(state.pictureList[index].url)
                 PageRouteBuilder(
-              transitionDuration: Duration(milliseconds: 400),
-              pageBuilder: (_, __, ___) => JournalPictureDetail(
-                url: state.pictureList[index].url,
-              ),
-              fullscreenDialog: true,
-              transitionsBuilder: (
-                BuildContext context,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-                Widget child,
-              ) =>
-                  FadeTransition(
-                opacity: animation,
-                child: child,
-              ),
-            ));
+                  transitionDuration: Duration(milliseconds: 400),
+                  pageBuilder: (_, __, ___) => JournalPictureDetail(
+                    url: state.pictureList[index].url,
+                  ),
+                  fullscreenDialog: true,
+                  transitionsBuilder: (
+                      BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child,
+                      ) =>
+                      FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      ),
+                ));
           },
           child: Hero(
             tag: state.pictureList[index].url,
@@ -76,220 +291,5 @@ class _JournalMainState extends State<JournalMain> {
             ),
           ),
         ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    return BlocBuilder<JournalMainBloc, JournalMainState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: bodyColor,
-          body: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '일자별 기록',
-                          style: journalBodyTitleStyle1,
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        BlocProvider.value(
-                                          value: _journalMainBloc
-                                            ..add(AllDateSeleted(
-                                                selectedDate: Timestamp.now())),
-                                          child: JournalAll(
-                                              facility: widget.facility),
-                                        ))).then((value) =>
-                                _journalMainBloc.add(GetJournalPictureList(
-                                    fid: widget.facility.fid)));
-                          },
-                          child: Text(
-                            '전체보기 >',
-                            style: journalViewAllButtonStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    state.journalList.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: state.journalList.length > 3
-                                ? 3
-                                : state.journalList.length,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              bool differentmonth = true;
-                              Journal before;
-                              Journal now = state.journalList[index];
-                              if (index != 0) {
-                                before = state.journalList[index - 1];
-                                if (before.date.toDate().year ==
-                                        now.date.toDate().year &&
-                                    before.date.toDate().month ==
-                                        now.date.toDate().month) {
-                                  differentmonth = false;
-                                }
-                              }
-                              return InkWell(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    if (differentmonth)
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            5.0, 0.0, 0.0, 8.0),
-                                        child: Text(DateFormat('yyyy.MM')
-                                            .format(state
-                                                .journalList[index].date
-                                                .toDate())),
-                                      ),
-//                                Text(DateFormat('yyyy.MM').format(state.journalList[index].date.toDate())),
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0.0, 0.0, 8.0, 8.0),
-                                          child: DateIcon(
-                                            date: now.date,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            now.content == ''
-                                                ? '입력한 내용이 없습니다.'
-                                                : now.content,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                color: Color(0xFFB8B8B8)),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              BlocProvider.value(
-                                                value: _journalMainBloc,
-                                                child: JournalDetail(
-                                                  jid: now.jid,
-                                                  date: now.date,
-                                                  content: now.content,
-                                                  facility: widget.facility,
-                                                ),
-                                              ))).then((value) =>
-                                      _journalMainBloc
-                                        ..add(GetJournalPictureList(
-                                            fid: widget.facility.fid)));
-                                },
-                              );
-                            },
-                          )
-                        : Container(
-                            height: height * 0.3,
-                            child: Image.asset(
-                              'assets/journal_default.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '사진 기록',
-                          style: journalBodyTitleStyle1,
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        BlocProvider<JournalMainBloc>.value(
-                                          value: _journalMainBloc,
-                                          child: JournalAllPictures(
-                                              facility: widget.facility),
-                                        )));
-                          },
-                          child: Text(
-                            '전체보기 >',
-                            style: journalViewAllButtonStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Flexible(
-                  child: Container(
-                height: height * 0.143,
-                child: state.pictureList.isNotEmpty
-                    ? ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: state.pictureList.length,
-                        itemBuilder: (BuildContext context, index) {
-                          return index == 0
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 30.0,
-                                    ),
-                                    _imagewidget(context, index, state),
-                                  ],
-                                )
-                              : _imagewidget(context, index, state);
-                        },
-                      )
-                    : Container(
-                        height: height * 0.3,
-                      ),
-              )),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton.extended(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => MultiBlocProvider(
-                            providers: [
-                              BlocProvider.value(
-                                value: _journalMainBloc,
-                              ),
-                              BlocProvider<JournalCreateBloc>(
-                                create: (BuildContext context) =>
-                                    JournalCreateBloc(),
-                              )
-                            ],
-                            child:
-                                JournalCreateScreen(facility: widget.facility),
-                          ))).then((value) => _journalMainBloc
-                ..add(GetJournalPictureList(fid: widget.facility.fid)));
-            },
-            label: Text('오늘의 활동 기록하기'),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-        );
-      },
-    );
   }
 }

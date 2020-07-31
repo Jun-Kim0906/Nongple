@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
-import 'package:nongple/main.dart';
 import 'package:nongple/models/models.dart';
 import 'package:nongple/screens/screens.dart';
 import 'package:nongple/utils/colors.dart';
@@ -28,7 +27,6 @@ class _TabScreenState extends State<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
@@ -70,17 +68,12 @@ class _TabScreenState extends State<TabScreen> {
           ),
           body: (activeTab == AppTab.weather)
               ? BlocProvider<WeatherBloc>(
-                  create: (BuildContext context) => WeatherBloc()
-                    ..add(GetWeather(
-                        fid: widget.facList.fid,
-                        nx: widget.facList.lat,
-                        ny: widget.facList.lng)),
-                  child: WeatherScreen(),
+                  create: (BuildContext context) => WeatherBloc(),
+                  child: WeatherScreen(facility: widget.facList,),
                 )
               : (activeTab == AppTab.journal)
                   ? BlocProvider<JournalMainBloc>(
-                      create: (BuildContext context) => JournalMainBloc()
-                        ..add(GetJournalPictureList(fid: widget.facList.fid)),
+                      create: (BuildContext context) => JournalMainBloc(),
                       child: JournalMain(facility: widget.facList))
                   : BlocProvider<DictionaryBloc>(
                       create: (BuildContext context) => DictionaryBloc(),
