@@ -10,12 +10,10 @@ TextStyle splashScreenTitleStyle =
 
 // home page style
 TextStyle homeMainTitle = TextStyle(
-  fontSize: 20.0,
   fontWeight: FontWeight.bold,
   color: Colors.black,
 );
 TextStyle homeSubTitle = TextStyle(
-  fontSize: 20.0,
   color: Color(0xFF828282),
 );
 
@@ -24,8 +22,8 @@ TextStyle homeSubTitle = TextStyle(
 // home page card style
 TextStyle cardWidgetFacilityNameStyle =
     TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
-TextStyle cardWidgetAddrStyle = TextStyle(fontSize: 10.0,color: Color(0xFF828282));
-TextStyle cardWidgetDetailButtonStyle = TextStyle(fontSize: 14.4, color: Color(0xFF2F80ED));
+TextStyle cardWidgetAddrStyle = TextStyle(color: Color(0xFF828282),fontWeight: FontWeight.bold);
+TextStyle cardWidgetDetailButtonStyle = TextStyle(color: Color(0xFF2F80ED));
 TextStyle cardWidgetWeatherDataStyle =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 46.8);
 TextStyle cardWidgetAddProjButton =

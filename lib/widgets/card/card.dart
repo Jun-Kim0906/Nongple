@@ -69,7 +69,7 @@ class _HomePageCardState extends State<HomePageCard> {
                   ? Image(
                       image: CachedNetworkImageProvider(widget.facList.bgUrl),
                       fit: BoxFit.cover,
-                      color: Color.fromRGBO(255, 255, 255, 100),
+                      color: Color.fromRGBO(255,255,255,0.2),
                       colorBlendMode: BlendMode.modulate,
                     )
                   : Image.asset("assets/white.png"),
@@ -118,29 +118,52 @@ class _HomePageCardState extends State<HomePageCard> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                widget.facList.name,
-                                style: cardWidgetFacilityNameStyle,
+                              SizedBox(
+                                height: height*0.01,
                               ),
                               SizedBox(
-                                height: 6.0,
+                                height: height*0.033,
+                                width: width*0.7,
+                                child: FittedBox(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    widget.facList.name,
+                                    style: cardWidgetFacilityNameStyle,
+                                  ),
+                                ),
                               ),
-                              Text(
-                                widget.facList.addr,
-                                style: cardWidgetAddrStyle,
+                              SizedBox(
+                                height: height*0.005,
+                              ),
+                              SizedBox(
+                                height: height*0.02,
+                                width: width*0.7,
+                                child: FittedBox(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    widget.facList.addr,
+                                    style: cardWidgetAddrStyle,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        Text(
-                          widget.facList.temperature + degrees + 'C',
-                          style: cardWidgetWeatherDataStyle,
+                        SizedBox(
+                          height: height*0.09,
+                          width: width*0.28,
+                          child: FittedBox(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              widget.facList.temperature + degrees + 'C',
+                              style: cardWidgetWeatherDataStyle,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Flexible(
-                    flex: 1,
+                  Expanded(
                     child: Container(
                       height: height / 5,
                       child: Row(
@@ -155,8 +178,6 @@ class _HomePageCardState extends State<HomePageCard> {
                             ),
                           ),
                           Container(
-//                        width: width,
-//                        height: height,
                             child: Card(
                               elevation: 2.0,
                               child: (widget.facList.category == 1 || widget.facList.category == 2)
