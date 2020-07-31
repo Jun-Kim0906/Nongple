@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:nongple/blocs/add_facilitiy_bloc/bloc.dart';
 import 'package:nongple/widgets/widgets.dart';
-import 'package:nongple/testPage.dart';
 
 class FacilityCreateScreen4 extends StatefulWidget {
   @override
@@ -52,9 +51,15 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen4> {
                     SizedBox(
                       height: height * 0.06,
                     ),
-                    Text(
-                      '축하합니다 ' + EmojiParser().emojify('🎉')+'\n시설 등록이 완료되었습니다.',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.8),
+                    SizedBox(
+                      height: height*0.0959,
+                      width: width*0.786,
+                      child: FittedBox(
+                        child: Text(
+                          '축하합니다 ' + EmojiParser().emojify('🎉')+'\n시설 등록이 완료되었습니다.',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.8),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: height * 0.06,

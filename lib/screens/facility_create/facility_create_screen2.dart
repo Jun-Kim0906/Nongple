@@ -23,6 +23,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
   TextEditingController facilityAddrController = TextEditingController();
   AddFacilityBloc _addFacilityBloc;
   double height;
+  double width;
   String address;
   bool enable=true;
 
@@ -35,6 +36,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return BlocBuilder<AddFacilityBloc, AddFacilityState>(
         builder: (context, state) {
       return Scaffold(
@@ -44,7 +46,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
             backgroundColor: Colors.white,
             elevation: 0.0,
             leading: IconButton(
-              color: Colors.blue[600],
+              color: Color(0xFF2F80ED),
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.pop(context);
@@ -52,7 +54,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
             ),
           ),
           body: Padding(
-            padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+            padding: EdgeInsets.fromLTRB(width*0.05, 0.0, width*0.05, 0.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,29 +62,48 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
                 SizedBox(
                   height: height * 0.06,
                 ),
-                Text.rich(TextSpan(children: <TextSpan>[
-                  TextSpan(
-                      text: widget.facilityName,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 33.6,
-                          color: Color(0xFF2F80ED))),
-                  TextSpan(
-                    text: ' 의\n위치를 설정해 주세요' + EmojiParser().emojify('📍'),
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 33.6),
-                  )
-                ])),
-                Text(
-                  '시설 근방의 날씨 정보를 제공하기 위해 사용되며\n다른 사람에게 공개되지 않습니다.',
-                  style: TextStyle(fontSize: 14.4, color: Colors.grey[400]),
+                SizedBox(
+                  height: height*0.117,
+                  width: width*0.778,
+                  child: FittedBox(
+                    alignment: Alignment.centerLeft,
+                    child: Text.rich(TextSpan(children: <TextSpan>[
+                      TextSpan(
+                          text: widget.facilityName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2F80ED))),
+                      TextSpan(
+                        text: ' 의\n위치를 설정해 주세요' + EmojiParser().emojify('📍'),
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ])),
+                  ),
                 ),
                 SizedBox(
-                  height: height * 0.06,
+                  height: height*0.047,
+                  width: width*0.667,
+                  child: FittedBox(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '시설 근방의 날씨 정보를 제공하기 위해 사용되며\n다른 사람에게 공개되지 않습니다.',
+                      style: TextStyle(color: Colors.grey[400]),
+                    ),
+                  ),
                 ),
-                Text(
-                  '시설 주소',
-                  style: TextStyle(fontSize: 14.4, color: Colors.grey[400]),
+                SizedBox(
+                  height: height * 0.0781,
+                ),
+                SizedBox(
+                  width: width*0.131,
+                  height: height*0.0233,
+                  child: FittedBox(
+                    child: Text(
+                      '시설 주소',
+                      style: TextStyle(fontSize: 14.4, color: Colors.grey[400]),
+                    ),
+                  ),
                 ),
                 TextFormField(
                   readOnly: true,
@@ -102,11 +123,8 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen2> {
                       ),
                     );
                     if (model != null) {
-                      address = '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''} ${model.zonecode}';
-//                      _addFacilityBloc
-//                          .add(FacilityAddrChanged(facilityAddr: address));
+                      address = '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''}';
                       print(model);
-//                      '${model.address} ${model.buildingName}${model.apartment == 'Y' ? '아파트' : ''} ${model.zonecode} '
                       try{
                         var addresses = await Geocoder.local.findAddressesFromQuery('${model.roadAddressEnglish}');
                         var first = addresses.first;

@@ -51,22 +51,33 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 0.0,
           ),
           body: Padding(
-            padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0),
+            padding: EdgeInsets.fromLTRB(width*0.05, 0.0, width*0.05, 0),
             child: Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '$name 님\n오늘도 풍성한 하루 되세요',
-                    style: homeMainTitle,
+                  SizedBox(
+                    height: height*0.08,
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: Text(
+                        '$name 님\n오늘도 풍성한 하루 되세요',
+                        style: homeMainTitle,
+                      ),
+                    )
                   ),
                   SizedBox(
                     height: height * 0.009,
                   ),
-                  Text(
-                    '$year년 $month월 $day일 $weekday',
+                  SizedBox(
+                    height: height*0.027,
+                    child: FittedBox(
+                      child: Text(
+                        '$year년 $month월 $day일 $weekday',
 //                style: Theme.of(context).textTheme.headline2,
-                    style: homeSubTitle,
+                        style: homeSubTitle,
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: height * 0.018,
@@ -125,19 +136,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Container(
-                                                        height: height*0.02,
-                                                        width: width*0.4,
+                                                        height: height*0.03,
+                                                        width: width*0.5,
                                                         decoration: BoxDecoration(
                                                             color: Color(0xFFBDBDBD),
                                                           borderRadius: BorderRadius.circular(20.0)
                                                         ),
                                                       ),
                                                       SizedBox(
-                                                        height: 6.0,
+                                                        height: height*0.01,
                                                       ),
                                                       Container(
                                                         height: height*0.015,
-                                                        width: width*0.4,
+                                                        width: width*0.35,
                                                         decoration: BoxDecoration(
                                                             color: Color(0x80BDBDBD),
                                                             borderRadius: BorderRadius.circular(20.0)
@@ -146,9 +157,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ],
                                                   ),
                                                 ),
-                                                Text(
-                                                  '//${degrees}C',
-                                                  style: cardWidgetWeatherDataStyle,
+                                                Container(
+                                                  height: height*0.08,
+                                                  width: width*0.18,
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFFBDBDBD),
+                                                      borderRadius: BorderRadius.circular(20.0)
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -156,17 +171,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Flexible(
                                             flex: 1,
                                             child: Container(
-                                              height: height / 5,
+                                              height: height *0.1,
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Chip(
                                                     backgroundColor: Colors.white,
                                                     elevation: 1.0,
-                                                    label: Text(
-                                                      ' 자세히보기 ',
-                                                      style: cardWidgetDetailButtonStyle,
-                                                    ),
+                                                    label: SizedBox(
+                                                      height: height*0.027,
+                                                      width: width*0.28,
+                                                      child: FittedBox(
+                                                        child: Text(
+                                                          ' 자세히보기 ',
+                                                          style: cardWidgetDetailButtonStyle,
+                                                        ),
+                                                      ),
+                                                    )
                                                   ),
                                                   Container(
                                                     child: Card(
