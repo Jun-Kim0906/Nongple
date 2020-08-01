@@ -1,8 +1,6 @@
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:intl/intl.dart';
 import 'package:nongple/models/models.dart';
 import 'bloc.dart';
 import 'package:bloc/bloc.dart';
@@ -64,16 +62,8 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
 
     monthList = monthList
         .where((element) =>
-    element.date
-        .toDate()
-        .month == selectedDate
-        .toDate()
-        .month &&
-        element.date
-            .toDate()
-            .year == selectedDate
-            .toDate()
-            .year)
+            element.date.toDate().month == selectedDate.toDate().month &&
+            element.date.toDate().year == selectedDate.toDate().year)
         .toList();
 //    monthList.forEach((element) =>
 //    element.date.toDate().month == selectedDate.toDate().month &&
@@ -87,7 +77,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     state.pictureList.forEach((doc) async {
       if (doc.jid == event.jid) {
         StorageReference photoRef =
-        await FirebaseStorage.instance.getReferenceFromUrl(doc.url);
+            await FirebaseStorage.instance.getReferenceFromUrl(doc.url);
         await photoRef.delete();
         await await Firestore.instance
             .collection('Picture')
@@ -107,21 +97,9 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     bool isSameDate;
     dayList = dayList
         .where((element) =>
-    element.date
-        .toDate()
-        .year == date
-        .toDate()
-        .year &&
-        element.date
-            .toDate()
-            .month == date
-            .toDate()
-            .month &&
-        element.date
-            .toDate()
-            .day == date
-            .toDate()
-            .day)
+            element.date.toDate().year == date.toDate().year &&
+            element.date.toDate().month == date.toDate().month &&
+            element.date.toDate().day == date.toDate().day)
         .toList();
     print('[journal main bloc] middle of check same date');
     print('[journal main bloc] length of dayList : ${dayList.length}');
@@ -136,7 +114,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
         DeleteOnlyPicture event) async* {
       event.deleteList.forEach((element) async {
         StorageReference photoRef =
-        await FirebaseStorage.instance.getReferenceFromUrl(element.url);
+            await FirebaseStorage.instance.getReferenceFromUrl(element.url);
         await photoRef.delete();
         await await Firestore.instance
             .collection('Picture')
@@ -149,3 +127,22 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield JournalMainStateLoading();
     }
   }
+  Stream<JournalMainState> _mapDeleteOnlyPictureToState(
+      DeleteOnlyPicture event) async* {
+
+    event.deleteList.forEach((element) async {
+      StorageReference photoRef =
+      await FirebaseStorage.instance.getReferenceFromUrl(element.url);
+      await photoRef.delete();
+      await await Firestore.instance
+          .collection('Picture')
+          .document(element.pid)
+          .delete();
+    });
+  }
+
+  Stream<JournalMainState> _mapLoadJournalToState() async* {
+    yield JournalMainStateLoading();
+  }
+
+}
