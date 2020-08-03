@@ -38,7 +38,6 @@ class _TabScreenState extends State<TabScreen> {
               color: journalGoBackArrowColor,
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
-//                _homeBloc.add(GetFacilityList());
                 Navigator.pop(context);
               },
             ),
@@ -69,12 +68,16 @@ class _TabScreenState extends State<TabScreen> {
           body: (activeTab == AppTab.weather)
               ? BlocProvider<WeatherBloc>(
                   create: (BuildContext context) => WeatherBloc(),
-                  child: WeatherScreen(facility: widget.facList,),
+                  child: WeatherScreen(
+                    facility: widget.facList,
+                  ),
                 )
               : (activeTab == AppTab.journal)
                   ? BlocProvider<JournalMainBloc>(
-                      create: (BuildContext context) => JournalMainBloc(),
-                      child: JournalMain(facility: widget.facList))
+                      create: (BuildContext context) => JournalMainBloc()
+                        ..add(
+                            PassFacilityItemToJournal(facility: widget.facList)),
+                      child: JournalMain())
                   : BlocProvider<DictionaryBloc>(
                       create: (BuildContext context) => DictionaryBloc(),
                       child: DictionaryScreen(),

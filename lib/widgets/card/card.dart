@@ -87,15 +87,16 @@ class _HomePageCardState extends State<HomePageCard> {
                               BlocProvider<TabBloc>(
                                 create: (context) => TabBloc(),
                               ),
-                              BlocProvider<JournalMainBloc>(
-                                create: (context) => JournalMainBloc()
-                                  ..add(GetJournalPictureList(fid: widget.facList.fid)),
-                              ),
-                              BlocProvider.value(
-                                value: _homeBloc,
-                              )
+//                              BlocProvider<JournalMainBloc>(
+//                                create: (context) => JournalMainBloc()
+//                                ..add(PassFacilityItemToJournal(facility: widget.facList))
+//                                  ..add(GetJournalPictureList(fid: widget.facList.fid)),
+//                              ),
+//                              BlocProvider.value(
+//                                value: _homeBloc,
+//                              )
                             ],
-                            child: TabScreen(facList: widget.facList),
+                            child: TabScreen(facList: widget.facList,),
                           )
                       ));
             },

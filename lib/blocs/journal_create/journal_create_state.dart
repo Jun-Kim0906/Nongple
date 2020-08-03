@@ -86,8 +86,8 @@ class JournalCreateState {
 
   @override
   String toString() {
-    return '''JournalMainState{
-    selectedDate: $selectedDate,
+    return '''JournalCreateState{
+    selectedDate: ${selectedDate.toDate()},
     isDateSeleted: $isDateSeleted,
     content: $content,
     fid: $fid,

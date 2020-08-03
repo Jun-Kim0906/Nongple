@@ -73,7 +73,11 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       if (tempHour < 0) {
         bt_short = '2330';
         int tempDay = int.parse(day) - 1;
-        bb_short = year + month + tempDay.toString();
+        if(tempDay < 10) {
+          bb_short = year + month + '0' + tempDay.toString();
+        } else {
+          bb_short = year + month + tempDay.toString();
+        }
       } else {
         (tempHour.toString().length < 2)
             ? bt_short = '0' + tempHour.toString() + '30'
@@ -121,11 +125,19 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       if (int.parse(hour) >= 00 && int.parse(hour) < 02) {
         bt = '2000';
         int tempDay = int.parse(day) - 1;
-        bb = year + month + tempDay.toString();
+        if(tempDay < 10) {
+          bb = year + month + '0' + tempDay.toString();
+        } else {
+          bb = year + month + tempDay.toString();
+        }
       } else if (int.parse(hour) >= 02 && int.parse(hour) <= 05) {
         bt = '2300';
         int tempDay = int.parse(day) - 1;
-        bb = year + month + tempDay.toString();
+        if(tempDay < 10) {
+          bb = year + month + '0' + tempDay.toString();
+        } else {
+          bb = year + month + tempDay.toString();
+        }
       } else if (int.parse(hour) > 23 && int.parse(hour) < 24) {
         bt = '2000';
         bb = base_date;

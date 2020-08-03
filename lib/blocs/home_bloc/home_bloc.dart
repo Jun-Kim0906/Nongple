@@ -81,24 +81,34 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (int.parse(minute) > 30) {
       bt_short = hour + '30';
       bb_short = base_date;
+      print('1');
     } else if (int.parse(minute) == 30) {
       bt_short = hour + '00';
       bb_short = base_date;
+      print('2');
     } else if (int.parse(minute) < 30) {
       int tempHour = int.parse(hour) - 1;
       if (tempHour < 0) {
         bt_short = '2330';
         int tempDay = int.parse(day) - 1;
-        bb_short = year + month + tempDay.toString();
+        if(tempDay < 10) {
+          bb_short = year + month + '0' + tempDay.toString();
+        } else {
+          bb_short = year + month + tempDay.toString();
+        }
+        print('3');
       } else {
         (tempHour.toString().length < 2)
             ? bt_short = '0' + tempHour.toString() + '30'
             : bt_short = tempHour.toString() + '30';
         bb_short = base_date;
+        print('4');
       }
     } else {
       throw Exception('[if-else] Failed to load short fcst weather');
     }
+
+    print('[HomeBloc] bt_short : $bt_short, bb_short : $bb_short' );
 
     http.Response shortWeatherInfo;
 

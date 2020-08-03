@@ -39,6 +39,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
 
   Stream<JournalCreateState> _mapDateSeletedToState(
       Timestamp selectedDate) async* {
+    print('[journal create bloc] selected date : ${selectedDate.toDate()}');
     yield state.update(isDateSeleted: true, selectedDate: selectedDate);
   }
 
@@ -146,7 +147,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
         );
       });
     }
-
+    print('여기서 업데이트됨');
     yield state.update(
       jid: _journal.jid,
       fid: event.fid,
