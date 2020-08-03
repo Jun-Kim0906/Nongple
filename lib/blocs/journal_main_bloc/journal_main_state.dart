@@ -11,6 +11,13 @@ class JournalMainState {
   final Timestamp selectedDate;
   final bool isSameDate;
   final bool isLoaded;
+  final Facility facility;
+  final String detailPageJid;
+  final Timestamp detailPageDate;
+  final String detailPageContent;
+  final Timestamp pickedDate;
+  final bool dialogState;
+  final bool mainDialog;
 
   JournalMainState({
     @required this.journalList,
@@ -19,6 +26,13 @@ class JournalMainState {
     @required this.monthJournalList,
     @required this.isSameDate,
     @required this.isLoaded,
+    @required this.facility,
+    @required this.detailPageJid,
+    @required this.detailPageDate,
+    @required this.detailPageContent,
+    @required this.pickedDate,
+    @required this.dialogState,
+    @required this.mainDialog,
   });
 
   factory JournalMainState.empty() {
@@ -29,6 +43,13 @@ class JournalMainState {
       monthJournalList: [],
       isSameDate: false,
       isLoaded: false,
+      facility: Facility(addr: "", category: 0, name: ""),
+      detailPageJid: '',
+      detailPageDate: Timestamp.now(),
+      detailPageContent: '',
+      pickedDate: Timestamp.now(),
+      dialogState: false,
+        mainDialog: true,
     );
   }
 
@@ -39,6 +60,13 @@ class JournalMainState {
     List<Journal> monthJournalList,
     bool isSameDate,
     bool isLoaded,
+    Facility facility,
+    String detailPageJid,
+    Timestamp detailPageDate,
+    String detailPageContent,
+    Timestamp pickedDate,
+    bool dialogState,
+    bool mainDialog,
   }) {
     return JournalMainState(
       journalList: journalList ?? this.journalList,
@@ -47,6 +75,13 @@ class JournalMainState {
       monthJournalList: monthJournalList ?? this.monthJournalList,
       isSameDate: isSameDate ?? this.isSameDate,
       isLoaded: isLoaded ?? this.isLoaded,
+      facility: facility ?? this.facility,
+      detailPageJid: detailPageJid ?? this.detailPageJid,
+      detailPageDate: detailPageDate ?? this.detailPageDate,
+      detailPageContent: detailPageContent ?? this.detailPageContent,
+      pickedDate: pickedDate ?? this.pickedDate,
+      dialogState: dialogState ?? this.dialogState,
+        mainDialog: mainDialog ?? this.mainDialog,
     );
   }
 
@@ -57,6 +92,13 @@ class JournalMainState {
     List<Journal> monthJournalList,
     bool isSameDate,
     bool isLoaded,
+    Facility facility,
+    String detailPageJid,
+    Timestamp detailPageDate,
+    String detailPageContent,
+    Timestamp pickedDate,
+    bool dialogState,
+    bool mainDialog,
   }) {
     return copyWith(
       journalList: journalList,
@@ -65,18 +107,32 @@ class JournalMainState {
       monthJournalList: monthJournalList,
       isSameDate: isSameDate,
       isLoaded: isLoaded,
+      facility: facility,
+      detailPageJid: detailPageJid,
+      detailPageDate: detailPageDate,
+      detailPageContent: detailPageContent,
+      pickedDate: pickedDate,
+      dialogState: dialogState,
+        mainDialog: mainDialog,
     );
   }
 
   @override
   String toString() {
     return '''JournalMainState{
-    journalList: $journalList,
-    pictureList: $pictureList,
-    selectedDate: $selectedDate,
+    journalList: ${journalList.length},
+    pictureList: ${pictureList.length},
+    selectedDate: ${selectedDate.toDate()},
     monthJournalList: $monthJournalList,
     isSameDate: $isSameDate,
     isLoaded: $isLoaded,
+    facility: ${facility.fid},
+    detailPageJid: $detailPageJid,
+    detailPageDate: ${detailPageDate.toDate()},
+    detailPageContent: $detailPageContent,
+    pickedDate: ${pickedDate.toDate()},
+    dialogState: $dialogState,
+    mainDialog: $mainDialog,
     }''';
   }
 }

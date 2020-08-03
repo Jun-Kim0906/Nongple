@@ -57,10 +57,6 @@ dependencies:
   geocoder: ^0.2.1
   animated_text_kit: ^2.2.0
 
-
-
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

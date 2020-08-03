@@ -11,9 +11,9 @@ import 'package:nongple/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class JournalMain extends StatefulWidget {
-  Facility facility;
-
-  JournalMain({this.facility});
+//  Facility facility;
+//
+//  JournalMain({this.facility});
 
   @override
   _JournalMainState createState() => _JournalMainState();
@@ -35,11 +35,13 @@ class _JournalMainState extends State<JournalMain> {
     height = MediaQuery.of(context).size.height;
     return BlocListener(
       bloc: _journalMainBloc,
-      listener: (BuildContext context, JournalMainState state){
-        if(state.isLoaded==true){
-          LoadingDialog.dismiss(context, ()=>null);
-        }else{
-          _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
+      listener: (BuildContext context, JournalMainState state) {
+        if (state.isLoaded == true && state.mainDialog==true) {
+          print('ㅁㄴㅇㄻㄴㅇㄹㄴㅇㄹ');
+          LoadingDialog.dismiss(context, () => null);
+        } else if(state.isLoaded ==false && state.mainDialog==true){
+          print('[journal main screen] get journal picture list is called');
+          _journalMainBloc.add(GetJournalPictureList(fid: state.facility.fid));
           LoadingDialog.onLoading(context);
         }
       },
@@ -70,9 +72,9 @@ class _JournalMainState extends State<JournalMain> {
                                           BlocProvider.value(
                                             value: _journalMainBloc
                                               ..add(AllDateSeleted(
-                                                  selectedDate: Timestamp.now())),
-                                            child: JournalAll(
-                                                facility: widget.facility),
+                                                  selectedDate:
+                                                      Timestamp.now())),
+                                            child: JournalAll(),
                                           )));
                             },
                             child: Text(
@@ -104,7 +106,8 @@ class _JournalMainState extends State<JournalMain> {
                                 }
                                 return InkWell(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       if (differentmonth)
                                         Padding(
@@ -140,19 +143,24 @@ class _JournalMainState extends State<JournalMain> {
                                     ],
                                   ),
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
+                                    if (state.isLoaded == true) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
                                             builder: (BuildContext context) =>
                                                 BlocProvider.value(
-                                                  value: _journalMainBloc,
-                                                  child: JournalDetail(
+                                              value: _journalMainBloc
+                                                ..add(PassJournalDetailArgs(
                                                     jid: now.jid,
                                                     date: now.date,
-                                                    content: now.content,
-                                                    facility: widget.facility,
-                                                  ),
-                                                )));
+                                                    content: now.content)),
+                                              child: JournalDetail(),
+                                            ),
+                                          ));
+                                    } else {
+                                      throw Exception(
+                                          '[journal main screen] page is not loaded');
+                                    }
                                   },
                                 );
                               },
@@ -179,8 +187,7 @@ class _JournalMainState extends State<JournalMain> {
                                       builder: (BuildContext context) =>
                                           BlocProvider<JournalMainBloc>.value(
                                             value: _journalMainBloc,
-                                            child: JournalAllPictures(
-                                                facility: widget.facility),
+                                            child: JournalAllPictures(),
                                           )));
                             },
                             child: Text(
@@ -226,20 +233,18 @@ class _JournalMainState extends State<JournalMain> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            MultiBlocProvider(
+                        builder: (BuildContext context) => MultiBlocProvider(
                               providers: [
                                 BlocProvider.value(
                                   value: _journalMainBloc,
                                 ),
                                 BlocProvider<JournalCreateBloc>(
-                                  create: (BuildContext context) => JournalCreateBloc(),
+                                  create: (BuildContext context) =>
+                                      JournalCreateBloc(),
                                 )
                               ],
-                              child: JournalCreateScreen(facility: widget.facility),
-                            )
-                    )).then((value) => _journalMainBloc
-                    .add(GetJournalPictureList(fid: widget.facility.fid)));
+                              child: JournalCreateScreen(),
+                            )));
               },
               label: Text('오늘의 활동 기록하기'),
             ),
@@ -250,6 +255,7 @@ class _JournalMainState extends State<JournalMain> {
       ),
     );
   }
+
   Widget _imagewidget(BuildContext context, int index, JournalMainState state) {
     return Container(
         padding: EdgeInsets.all(10.0),
@@ -257,27 +263,27 @@ class _JournalMainState extends State<JournalMain> {
         height: height * 0.143,
         child: InkWell(
           onTap: () {
-            Navigator.of(context).push(
-                PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 400),
-                  pageBuilder: (_, __, ___) => JournalPictureDetail(
-                    url: state.pictureList[index].url,
-                  ),
-                  fullscreenDialog: true,
-                  transitionsBuilder: (
-                      BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secondaryAnimation,
-                      Widget child,
-                      ) =>
-                      FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      ),
-                ));
+            Navigator.of(context).push(PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 400),
+              pageBuilder: (_, __, ___) => JournalPictureDetail(
+                url: state.pictureList[index].url,
+                ismain: true,
+              ),
+              fullscreenDialog: true,
+              transitionsBuilder: (
+                BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child,
+              ) =>
+                  FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            ));
           },
           child: Hero(
-            tag: state.pictureList[index].url,
+            tag: '${state.pictureList[index].url}+main',
             child: Container(
               height: height * 0.108,
               width: height * 0.108,

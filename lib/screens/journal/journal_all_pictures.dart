@@ -7,9 +7,9 @@ import 'package:nongple/screens/journal/journal.dart';
 import 'package:nongple/utils/utils.dart';
 
 class JournalAllPictures extends StatefulWidget {
-  Facility facility;
-
-  JournalAllPictures({@required this.facility});
+//  Facility facility;
+//
+//  JournalAllPictures({@required this.facility});
 
   @override
   _JournalAllPicturesState createState() => _JournalAllPicturesState();
@@ -34,9 +34,10 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
           Navigator.of(context).push(
 //              _createRoute(state.pictureList[index].url)
               PageRouteBuilder(
-            transitionDuration: Duration(milliseconds: 400),
+            transitionDuration: Duration(seconds: 5),
             pageBuilder: (_, __, ___) => JournalPictureDetail(
               url: state.pictureList[index].url,
+              ismain: false,
             ),
             fullscreenDialog: true,
             transitionsBuilder: (
@@ -52,7 +53,7 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
           ));
         },
         child: Hero(
-          tag: state.pictureList[index].url,
+          tag: '${state.pictureList[index].url}+all',
           child:
 
           Image.network(
@@ -108,7 +109,7 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
                   style: tabAppBarTitleStyle,
                 ),
                 Text(
-                  widget.facility.name,
+                  state.facility.name,
                   style: tabAppBarSubtitleStyle,
                 ),
               ],

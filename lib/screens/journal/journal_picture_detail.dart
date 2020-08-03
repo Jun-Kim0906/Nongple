@@ -4,10 +4,10 @@ import 'package:nongple/utils/utils.dart';
 
 class JournalPictureDetail extends StatelessWidget {
   String url;
+  bool ismain;
   double height;
-//  GlobalKey _globalKey = GlobalKey();
 
-  JournalPictureDetail({@required this.url});
+  JournalPictureDetail({@required this.url, @required this.ismain});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class JournalPictureDetail extends StatelessWidget {
       ),
       body: Center(
         child: Hero(
-            tag: url,
+            tag: ismain?'$url+main':'$url+all',
             child: CachedNetworkImage(
               imageUrl: url,
               fit: BoxFit.fitWidth,

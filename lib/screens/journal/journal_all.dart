@@ -12,9 +12,9 @@ import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
 
 class JournalAll extends StatefulWidget {
-  Facility facility;
-
-  JournalAll({@required this.facility});
+//  Facility facility;
+//
+//  JournalAll({@required this.facility});
 
   @override
   _JournalAllState createState() => _JournalAllState();
@@ -35,9 +35,6 @@ class _JournalAllState extends State<JournalAll> {
     height = MediaQuery.of(context).size.height;
     return BlocBuilder<JournalMainBloc, JournalMainState>(
       builder: (context, state) {
-        state.monthJournalList.forEach((element) {
-          print('journal all content : ${element.content}');
-        });
         return Scaffold(
           backgroundColor: bodyColor,
           appBar: AppBar(
@@ -57,7 +54,7 @@ class _JournalAllState extends State<JournalAll> {
                   style: tabAppBarTitleStyle,
                 ),
                 Text(
-                  widget.facility.name,
+                  state.facility.name,
                   style: tabAppBarSubtitleStyle,
                 ),
               ],
@@ -147,16 +144,13 @@ class _JournalAllState extends State<JournalAll> {
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           BlocProvider.value(
-                                            value: _journalMainBloc,
-                                            child: JournalDetail(
-                                              jid: now.jid,
-                                              date: now.date,
-                                              content: now.content,
-                                              facility: widget.facility,
-                                            ),
-                                          ))).then((value) => _journalMainBloc
-                                ..add(GetJournalPictureList(
-                                    fid: widget.facility.fid)));
+                                            value: _journalMainBloc
+                                              ..add(PassJournalDetailArgs(
+                                                  jid: now.jid,
+                                                  date: now.date,
+                                                  content: now.content)),
+                                            child: JournalDetail(),
+                                          )));
                             },
                           );
                         },
@@ -210,13 +204,9 @@ class _JournalAllState extends State<JournalAll> {
                                                         value: _journalMainBloc,
                                                       )
                                                     ],
-                                                    child: JournalCreateScreen(
-                                                        facility:
-                                                            widget.facility),
-                                                  ))).then((value) =>
-                                          _journalMainBloc.add(
-                                              GetJournalPictureList(
-                                                  fid: widget.facility.fid)));
+                                                    child:
+                                                        JournalCreateScreen(),
+                                                  )));
                                     },
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),

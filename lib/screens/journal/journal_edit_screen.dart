@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,12 +20,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nongple/models/models.dart';
 
 class JournalEditScreen extends StatefulWidget {
-  final Facility facility;
-  final Timestamp date;
+//  final Facility facility;
+//  final Timestamp date;
   final String content;
-  final String jid;
 
-  JournalEditScreen({this.facility, this.date, this.content, this.jid});
+//  final String jid;
+//
+//  JournalEditScreen({this.facility, this.date, this.content, this.jid});
+  JournalEditScreen({this.content});
 
   @override
   _JournalEditScreenState createState() => _JournalEditScreenState();
@@ -42,6 +45,7 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
     super.initState();
     _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
+    _journalMainBloc.add(HideDialog());
     _contentTextModifyingController =
         TextEditingController(text: '${widget.content}');
     _journalCreateBloc.add(
@@ -55,222 +59,241 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
       builder: (context, mState) {
         return BlocBuilder<JournalCreateBloc, JournalCreateState>(
             builder: (context, state) {
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              leading: IconButton(
-                color: journalGoBackArrowColor,
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              elevation: 0.0,
-              title: Text('일지수정', style: TextStyle(color: Colors.black)),
-              centerTitle: true,
-              backgroundColor: Colors.white,
-            ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              DateFormat('yyyy년 MM월 dd일')
-                                  .format(widget.date.toDate()),
-                              style: TextStyle(
-                                  color: Color(0xFF929292), fontSize: 13.6),
-                            )
-                          ],
-                        ),
-                        onPressed: () {},
-                      ),
-                      Card(
-                        elevation: 4.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Container(
-                          height: height * 0.45,
-                          padding: EdgeInsets.all(18.0),
-                          child: TextFormField(
-                            controller: _contentTextModifyingController,
-                            onChanged: (value) {
-                              _journalCreateBloc.add(ContentChanged(
-                                  content:
-                                      _contentTextModifyingController.text));
-                            },
-                            minLines: 25,
-                            maxLines: null,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              hintText: ' 오늘 일지를 수기로 작성해 주세요.',
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              focusColor: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: height * 0.025,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  leading: IconButton(
+                    color: journalGoBackArrowColor,
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  elevation: 0.0,
+                  title: Text('일지수정', style: TextStyle(color: Colors.black)),
+                  centerTitle: true,
+                  backgroundColor: Colors.white,
+                ),
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Expanded(
-                            child: Container(
-                                padding:
-                                    EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
-                                height: height * 0.07,
-                                child: OutlineButton(
-                                  color: Colors.white,
-                                  borderSide: BorderSide(
-                                    color: Color(0xFFDEDEDE),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.photo,
-                                        color: Color(0xFF757575),
-                                        size: height * 0.03,
-                                      ),
-                                      Text(
-                                        ' 갤러리',
-                                        style: TextStyle(
-                                            fontSize: 21.6,
-                                            color: Color(0xFF757575),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    getImage(state);
-                                  },
-                                )),
+                          FlatButton(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  DateFormat('yyyy년 MM월 dd일')
+                                      .format(mState.detailPageDate.toDate()),
+                                  style: TextStyle(
+                                      color: Color(0xFF929292), fontSize: 13.6),
+                                )
+                              ],
+                            ),
+                            onPressed: () {},
                           ),
-                          Expanded(
+                          Card(
+                            elevation: 4.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
                             child: Container(
-                              height: height * 0.07,
-                              padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-                              child: OutlineButton(
-                                color: Colors.white,
-                                borderSide: BorderSide(
-                                  color: Color(0xFFDEDEDE),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.camera_alt,
-                                      color: Color(0xFF757575),
-                                      size: height * 0.03,
-                                    ),
-                                    Text(
-                                      ' 사진 촬영',
-                                      style: TextStyle(
-                                          fontSize: 21.6,
-                                          color: Color(0xFF757575),
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                onPressed: () {
-                                  getCameraImage();
+                              height: height * 0.45,
+                              padding: EdgeInsets.all(18.0),
+                              child: TextFormField(
+                                controller: _contentTextModifyingController,
+                                onChanged: (value) {
+                                  _journalCreateBloc
+                                      .add(ContentChanged(content: value));
                                 },
+                                minLines: 25,
+                                maxLines: null,
+                                autocorrect: false,
+                                decoration: InputDecoration(
+                                  hintText: ' 오늘 일지를 수기로 작성해 주세요.',
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                  focusColor: Colors.white,
+                                ),
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            height: height * 0.025,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: Container(
+                                    padding:
+                                    EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
+                                    height: height * 0.07,
+                                    child: OutlineButton(
+                                      color: Colors.white,
+                                      borderSide: BorderSide(
+                                        color: Color(0xFFDEDEDE),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5.0)),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.photo,
+                                            color: Color(0xFF757575),
+                                            size: height * 0.03,
+                                          ),
+                                          Text(
+                                            ' 갤러리',
+                                            style: TextStyle(
+                                                fontSize: 21.6,
+                                                color: Color(0xFF757575),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      onPressed: () {
+                                        getImage(state);
+                                      },
+                                    )),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  height: height * 0.07,
+                                  padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                                  child: OutlineButton(
+                                    color: Colors.white,
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFDEDEDE),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0)),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.camera_alt,
+                                          color: Color(0xFF757575),
+                                          size: height * 0.03,
+                                        ),
+                                        Text(
+                                          ' 사진 촬영',
+                                          style: TextStyle(
+                                              fontSize: 21.6,
+                                              color: Color(0xFF757575),
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      getCameraImage();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: height * 0.02,
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: height * 0.02,
-                      ),
-                    ],
-                  ),
+                    ),
+                    Flexible(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Container(
+                              padding: EdgeInsets.fromLTRB(30.0, 0, 0, 0),
+                              width: MediaQuery.of(context).size.width,
+                              height: height * 0.143,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                dragStartBehavior: DragStartBehavior.start,
+                                scrollDirection: Axis.horizontal,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: state.copyOfExistingImage.length == 0
+                                    ? 1
+                                    : state.copyOfExistingImage.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  print(
+                                      'ㄴㅇㄹㄴㅇㄹ copy list length : ${state.copyOfExistingImage.length}');
+                                  return Row(
+                                    children: [
+                                      (state.copyOfExistingImage.length == 0)
+                                          ? Container()
+                                          : _existingImageWidget(context, index, state),
+                                      (state.copyOfExistingImage.length == 0 ||
+                                          index ==
+                                              state.copyOfExistingImage.length - 1)
+                                          ? ListView.builder(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        physics: ClampingScrollPhysics(),
+                                        itemCount: state.imageList.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          print(
+                                              'ㄴㅇㄹㄴㅇㄹ imagelist length : ${state.imageList.length}');
+                                          return index == 0
+                                              ? Row(
+                                            children: <Widget>[
+                                              _imagewidget(
+                                                  context, index, state),
+                                            ],
+                                          )
+                                              : _imagewidget(
+                                              context, index, state);
+                                        },
+                                      )
+                                          : Container(),
+                                    ],
+                                  );
+                                },
+                              )),
+                        )),
+                  ],
                 ),
-                Flexible(
-                    child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(30.0, 0, 0, 0),
-                      width: MediaQuery.of(context).size.width,
-                      height: height * 0.143,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        dragStartBehavior: DragStartBehavior.start,
-                        scrollDirection: Axis.horizontal,
-                        physics: ClampingScrollPhysics(),
-                        itemCount: state.copyOfExistingImage.length == 0 ? 1 : state.copyOfExistingImage.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          print('ㄴㅇㄹㄴㅇㄹ copy list length : ${state.copyOfExistingImage.length}');
-                          return Row(
-                            children: [
-                              (state.copyOfExistingImage.length == 0) ? Container()
-                                : _existingImageWidget(context, index, state),
-                              (state.copyOfExistingImage.length == 0 || index == state.copyOfExistingImage.length - 1)
-                                ? ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    physics: ClampingScrollPhysics(),
-                                    itemCount: state.imageList.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      print('ㄴㅇㄹㄴㅇㄹ imagelist length : ${state.imageList.length}');
-                                      return index == 0
-                                          ? Row(children: <Widget>[_imagewidget(context, index, state),],)
-                                          : _imagewidget(context, index, state);
-                                    },
-                                  )
-                                : Container(),
-                            ],
-                          );
-                        },
-                      )),
-                )),
-              ],
-            ),
-            bottomNavigationBar: BottomNavigationButton(
-              title: '수정',
-              onPressed: () {
-                List<Picture> existingImageList = mState.pictureList
-                    .where((doc) => doc.jid == widget.jid)
-                    .toList();
-                print(
-                    '[journal edit screen] copyOfExistingImage list length : ${state.copyOfExistingImage.length}');
-                List<Picture> output = existingImageList
-                    .where((element) =>
-                        !state.copyOfExistingImage.contains(element))
-                    .toList();
-                print(
-                    '[journal edit screen] output list length : ${output.length}');
-                _journalMainBloc.add(DeleteOnlyPicture(deleteList: output));
-                _journalCreateBloc.add(
-                    UpdateJournal(fid: widget.facility.fid, jid: widget.jid));
-                _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
+                bottomNavigationBar: BottomNavigationButton(
+                  title: '수정',
+                  onPressed: () {
+                    List<Picture> existingImageList = mState.pictureList
+                        .where((doc) => doc.jid == mState.detailPageJid)
+                        .toList();
+                    print(
+                        '[journal edit screen] copyOfExistingImage list length : ${state.copyOfExistingImage.length}');
+                    List<Picture> output = existingImageList
+                        .where((element) =>
+                    !state.copyOfExistingImage.contains(element))
+                        .toList();
+                    print(
+                        '[journal edit screen] output list length : ${output.length}');
+                    _journalMainBloc.add(DeleteOnlyPicture(deleteList: output));
+                    _journalCreateBloc.add(UpdateJournal(
+                        fid: mState.facility.fid, jid: mState.detailPageJid));
+                    _journalMainBloc.add(PassJournalDetailArgs(
+                        jid: mState.detailPageJid,
+                        date: mState.detailPageDate,
+                        content: state.content));
+                    Timer(Duration(seconds: 3),(){});
+                    _journalMainBloc.add(OnLoading());
+
                 Navigator.pop(context);
-              },
-            ),
-          );
-        });
+                  },
+                ),
+              );
+            });
       },
     );
   }

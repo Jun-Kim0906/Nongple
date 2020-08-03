@@ -35,6 +35,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
         ny: widget.facility.lng));
           LoadingDialog.onLoading(context);
         }else{
+          print('ㄴㅇㄻㄴㅇㄻㄴㅇㄻㄴ');
           LoadingDialog.dismiss(context, ()=>null);
         }
       },

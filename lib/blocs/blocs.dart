@@ -10,3 +10,4 @@ export 'weather_bloc/weather.dart';
 export 'journal_create/bloc.dart';
 export 'background_image_bloc/bloc.dart';
 export 'dictionary/bloc.dart';
+export 'journal_detail_bloc/journal_detail.dart';

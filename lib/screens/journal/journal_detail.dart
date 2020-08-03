@@ -1,26 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
-import 'package:nongple/models/facility/facility.dart';
-import 'package:nongple/models/journal/journal.dart';
 import 'package:nongple/models/picture/picture.dart';
-import 'package:nongple/screens/journal/journal_create_screen.dart';
 import 'package:nongple/screens/journal/journal_edit_screen.dart';
 import 'package:nongple/utils/todays_date.dart';
-import 'package:nongple/widgets/loading/loading.dart';
+import 'package:nongple/widgets/widgets.dart';
 
 class JournalDetail extends StatefulWidget {
-  final String jid;
-  final Timestamp date;
-  final String content;
-  final Facility facility;
-
-  JournalDetail({this.jid, this.date, this.content, this.facility});
 
   @override
   _JournalDetailState createState() => _JournalDetailState();
@@ -39,18 +29,15 @@ class _JournalDetailState extends State<JournalDetail> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    var date = widget.date.toDate();
-    var formatDate = DateFormat('yyyy.MM.dd').format(date);
-    String weekday = daysOfWeek(index: date.weekday);
     return BlocBuilder<JournalMainBloc, JournalMainState>(
-      builder: (context, mState) {
-        List<Journal> _journal = mState.journalList;
-        _journal = _journal.where((doc) {
-          return doc.jid == widget.jid;
-        }).toList();
-        List<Picture> _image = mState.pictureList;
-        _image = _image.where((data) => data.jid == widget.jid).toList();
-        print('[journal detail] image length : ${_image.length}');
+      builder: (context, state) {
+        var date = state.detailPageDate.toDate();
+        var formatDate = DateFormat('yyyy.MM.dd').format(date);
+        String weekday = daysOfWeek(index: date.weekday);
+        List<Picture> _image = state.pictureList;
+        _image =
+            _image.where((data) => data.jid == state.detailPageJid).toList();
+        print('[journal detail] image length : ${state.pictureList.length}');
         return Scaffold(
           extendBodyBehindAppBar: true,
           backgroundColor: Colors.white,
@@ -62,7 +49,6 @@ class _JournalDetailState extends State<JournalDetail> {
               ),
               onPressed: () {
                 _image.clear();
-                print('image clear status [0 for clear] : ${_image.length}');
                 Navigator.pop(context);
               },
             ),
@@ -75,8 +61,7 @@ class _JournalDetailState extends State<JournalDetail> {
                   color: Color(0xFF828282),
                 ),
                 onPressed: () {
-                  _settingModalBottomSheet(
-                      context, _journal[0].content, _image);
+                  _settingModalBottomSheet(context, state, _image);
                 },
               ),
             ],
@@ -88,8 +73,8 @@ class _JournalDetailState extends State<JournalDetail> {
                       height: height * 0.6,
 //                        width: double.infinity,
                       child: Swiper(
-//                          layout: SwiperLayout.STACK,
-                          layout: SwiperLayout.DEFAULT,
+                          layout: SwiperLayout.STACK,
+//                    layout: SwiperLayout.DEFAULT,
                           itemHeight: height * 0.6,
                           itemWidth: width,
                           loop: true,
@@ -146,7 +131,7 @@ class _JournalDetailState extends State<JournalDetail> {
                             height: height * 0.06,
                           ),
                           Text(
-                            _journal[0].content,
+                            state.detailPageContent,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15.0,
@@ -166,7 +151,8 @@ class _JournalDetailState extends State<JournalDetail> {
     );
   }
 
-  void _settingModalBottomSheet(context, String content, List<Picture> _image) {
+  void _settingModalBottomSheet(
+      context, JournalMainState state, List<Picture> _image) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext c) {
@@ -195,7 +181,8 @@ class _JournalDetailState extends State<JournalDetail> {
                                       create: (BuildContext context) =>
                                           JournalCreateBloc()
                                             ..add(DateSeleted(
-                                                selectedDate: widget.date))
+                                                selectedDate:
+                                                    state.detailPageDate))
                                             ..add(SetCopyImageList(
                                                 copyOfExistingImage: _image)),
                                     ),
@@ -204,13 +191,9 @@ class _JournalDetailState extends State<JournalDetail> {
                                     ),
                                   ],
                                   child: JournalEditScreen(
-                                    facility: widget.facility,
-                                    date: widget.date,
-                                    content: content,
-                                    jid: widget.jid,
+                                    content: state.detailPageContent,
                                   ),
-                                ))).then((value) => _journalMainBloc
-                      ..add(GetJournalPictureList(fid: widget.facility.fid)));
+                                )));
                   },
                 ),
                 ListTile(
@@ -223,8 +206,7 @@ class _JournalDetailState extends State<JournalDetail> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-                    showAlertDialog(context, widget.date, content, widget.jid,
-                        widget.facility);
+                    showAlertDialog(context, state);
                   },
                 ),
               ],
@@ -233,13 +215,12 @@ class _JournalDetailState extends State<JournalDetail> {
         });
   }
 
-  showAlertDialog(BuildContext context, Timestamp date, String content,
-      String jid, Facility facility) {
+  showAlertDialog(BuildContext context, JournalMainState state) {
     // set up the buttons
     Widget cancelButton = GestureDetector(
       child: Text("아니요"),
       onTap: () {
-        Navigator.pop(context);
+//        Navigator.pop(context);
         Navigator.pop(context);
       },
     );
@@ -250,12 +231,14 @@ class _JournalDetailState extends State<JournalDetail> {
       ),
       onTap: () {
         _journalMainBloc
-            .add(DeleteAll(fid: widget.facility.fid, jid: widget.jid));
-        _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
-        _journalMainBloc.add(AllDateSeleted(selectedDate: widget.date));
+            .add(DeleteAll(fid: state.facility.fid, jid: state.detailPageJid));
+        _journalMainBloc.add(GetJournalPictureList(fid: state.facility.fid));
+        _journalMainBloc
+            .add(AllDateSeleted(selectedDate: state.detailPageDate));
+        _journalMainBloc.add(OnLoading());
         Navigator.pop(context);
         Navigator.pop(context);
-        Navigator.pop(context);
+//        Navigator.pop(context);
       },
     );
 

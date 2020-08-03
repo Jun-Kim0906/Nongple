@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nongple/models/models.dart';
@@ -25,6 +24,16 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapDeleteOnlyPictureToState(event);
     } else if (event is LoadJournal) {
       yield* _mapLoadJournalToState();
+    } else if (event is PassFacilityItemToJournal) {
+      yield* _mapPassFacilityItemToJournalToState(event.facility);
+    } else if (event is PassJournalDetailArgs) {
+      yield* _mapPassJournalDetailArgsToState(event);
+    } else if (event is ShowDialog) {
+      yield* _mapShowDialogToState();
+    } else if (event is HideDialog) {
+      yield* _mapHideDialogToState();
+    } else if (event is SetAsContentLoaded) {
+      yield* _mapSetAsContentLoadedToState();
     }
   }
 
@@ -69,7 +78,11 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
 //    element.date.toDate().month == selectedDate.toDate().month &&
 //        element.date.toDate().year == selectedDate.toDate().year);
 
-    yield state.update(selectedDate: selectedDate, monthJournalList: monthList);
+    yield state.update(
+        selectedDate: selectedDate,
+        monthJournalList: monthList,
+      mainDialog: false,
+    );
   }
 
   Stream<JournalMainState> _mapDeleteAllToState(DeleteAll event) async* {
@@ -91,8 +104,8 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
 
   Stream<JournalMainState> _mapCheckSameDateToState(Timestamp date) async* {
     state.update(isSameDate: false);
-    print('[journal main bloc] reset isSameDate to ${state.isSameDate}');
-    print('[journal main bloc] inside check same date');
+    bool showDialog;
+    bool isLoaded;
     List<Journal> dayList = state.journalList;
     bool isSameDate;
     dayList = dayList
@@ -101,38 +114,20 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
             element.date.toDate().month == date.toDate().month &&
             element.date.toDate().day == date.toDate().day)
         .toList();
-    print('[journal main bloc] middle of check same date');
-    print('[journal main bloc] length of dayList : ${dayList.length}');
     (dayList.length > 0) ? isSameDate = true : isSameDate = false;
-    print('[journal main bloc] end of check same date');
-    yield state.update(isSameDate: isSameDate);
+    (isSameDate == true) ? showDialog = true : showDialog = false;
+    yield state.update(isSameDate: isSameDate, pickedDate: date, dialogState: showDialog);
   }
 
   Stream<JournalMainState> _mapOnLoadingToState() async* {
-    yield state.update(isLoaded: false);
-    Stream<JournalMainState> _mapDeleteOnlyPictureToState(
-        DeleteOnlyPicture event) async* {
-      event.deleteList.forEach((element) async {
-        StorageReference photoRef =
-            await FirebaseStorage.instance.getReferenceFromUrl(element.url);
-        await photoRef.delete();
-        await await Firestore.instance
-            .collection('Picture')
-            .document(element.pid)
-            .delete();
-      });
-    }
-
-    Stream<JournalMainState> _mapLoadJournalToState() async* {
-      yield JournalMainStateLoading();
-    }
+    yield state.update(isLoaded: false, mainDialog: true);
   }
+
   Stream<JournalMainState> _mapDeleteOnlyPictureToState(
       DeleteOnlyPicture event) async* {
-
     event.deleteList.forEach((element) async {
       StorageReference photoRef =
-      await FirebaseStorage.instance.getReferenceFromUrl(element.url);
+          await FirebaseStorage.instance.getReferenceFromUrl(element.url);
       await photoRef.delete();
       await await Firestore.instance
           .collection('Picture')
@@ -145,4 +140,31 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     yield JournalMainStateLoading();
   }
 
+  Stream<JournalMainState> _mapPassFacilityItemToJournalToState(
+      Facility item) async* {
+    yield state.update(facility: item);
+  }
+
+  Stream<JournalMainState> _mapPassJournalDetailArgsToState(
+      PassJournalDetailArgs event) async* {
+    print('[journal main bloc] jid : ${event.jid}');
+    print('[journal main bloc] date : ${event.date.toDate()}');
+    print('[journal main bloc] content : ${event.content}');
+    yield state.update(
+      detailPageJid: event.jid,
+      detailPageDate: event.date,
+      detailPageContent: event.content,
+      mainDialog: false,
+    );
+  }
+
+  Stream<JournalMainState> _mapShowDialogToState() async* {
+    yield state.update(dialogState: true, isLoaded: true);
+  }
+  Stream<JournalMainState> _mapHideDialogToState() async* {
+    yield state.update(dialogState: false, isLoaded: true);
+  }
+  Stream<JournalMainState> _mapSetAsContentLoadedToState() async* {
+    yield state.update(isLoaded: true);
+  }
 }
