@@ -34,6 +34,10 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
       yield* _mapSetCopyImageListToState(event.copyOfExistingImage);
     } else if (event is DeleteCopyOfExistingImage) {
       yield* _mapDeleteCopyOfExistingImageToState(event.index);
+    } else if (event is ModifyPressed){
+      yield* _mapModifyPressedToState();
+    } else if(event is Test){
+      yield* _mapTestToState();
     }
   }
 
@@ -45,6 +49,10 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
 
   Stream<JournalCreateState> _mapContentChangedToState(String content) async* {
     yield state.update(content: content);
+  }
+
+  Stream<JournalCreateState> _mapModifyPressedToState() async* {
+    yield state.update(modifyPressed: true, createPressed: true);
   }
 
   Stream<JournalCreateState> _mapImageSeletedToState(
@@ -81,7 +89,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
       fid: fid,
       jid: Firestore.instance.collection('Journal').document().documentID,);
 
-    JournalRepository().uploadJournal(
+    await JournalRepository().uploadJournal(
         journal: _journal
     );
 
@@ -89,7 +97,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
     String pid = '';
 
     if(imageList.isNotEmpty) {
-      imageList.forEach((File file) async {
+      await Future.forEach(imageList, (File file)async{
         pid = Firestore.instance
             .collection('Picture')
             .document()
@@ -102,7 +110,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
           dttm: Timestamp.now(),
         );
 
-        PictureRepository().uploadPicture(
+        await PictureRepository().uploadPicture(
           picture: _picture,
         );
       });
@@ -111,6 +119,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
     yield state.update(
         jid: _journal.jid,
         fid: fid,
+      isUploaded: true,
     );
   }
 
@@ -121,7 +130,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
         fid: event.fid,
         jid: event.jid);
 
-    JournalRepository().updateJournal(
+    await JournalRepository().updateJournal(
         journal: _journal
     );
 
@@ -129,7 +138,7 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
     String pid = '';
 
     if(imageList.isNotEmpty) {
-      imageList.forEach((File file) async {
+      await Future.forEach(imageList, (File file)async{
         pid = Firestore.instance
             .collection('Picture')
             .document()
@@ -142,15 +151,18 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
           dttm: Timestamp.now(),
         );
 
-        PictureRepository().uploadPicture(
+        await PictureRepository().uploadPicture(
           picture: _picture,
         );
       });
     }
+    
+
     print('여기서 업데이트됨');
     yield state.update(
       jid: _journal.jid,
       fid: event.fid,
+      isUploaded: true,
     );
   }
 
@@ -175,5 +187,9 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
     await (await uploadTask.onComplete).ref.getDownloadURL().then((value) => url = value);
 
     return url;
+  }
+
+  Stream<JournalCreateState> _mapTestToState() async*{
+    yield state.update(createPressed: false);
   }
 }

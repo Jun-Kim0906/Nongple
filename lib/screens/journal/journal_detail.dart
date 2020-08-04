@@ -8,7 +8,7 @@ import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/picture/picture.dart';
 import 'package:nongple/screens/journal/journal_edit_screen.dart';
 import 'package:nongple/utils/todays_date.dart';
-import 'package:nongple/widgets/widgets.dart';
+
 
 class JournalDetail extends StatefulWidget {
 
@@ -156,61 +156,62 @@ class _JournalDetailState extends State<JournalDetail> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext c) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.3,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(
-                    Icons.create,
-                    color: Colors.black,
-                  ),
-                  title: Text(
-                    '수정하기',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                MultiBlocProvider(
-                                  providers: [
-                                    BlocProvider<JournalCreateBloc>(
-                                      create: (BuildContext context) =>
-                                          JournalCreateBloc()
-                                            ..add(DateSeleted(
-                                                selectedDate:
-                                                    state.detailPageDate))
-                                            ..add(SetCopyImageList(
-                                                copyOfExistingImage: _image)),
+          return Wrap(
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(
+                      Icons.create,
+                      color: Colors.black,
+                    ),
+                    title: Text(
+                      '수정하기',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider<JournalCreateBloc>(
+                                        create: (BuildContext context) =>
+                                            JournalCreateBloc()
+                                              ..add(DateSeleted(
+                                                  selectedDate:
+                                                      state.detailPageDate))
+                                              ..add(SetCopyImageList(
+                                                  copyOfExistingImage: _image)),
+                                      ),
+                                      BlocProvider.value(
+                                        value: _journalMainBloc,
+                                      ),
+                                    ],
+                                    child: JournalEditScreen(
+                                      content: state.detailPageContent,
                                     ),
-                                    BlocProvider.value(
-                                      value: _journalMainBloc,
-                                    ),
-                                  ],
-                                  child: JournalEditScreen(
-                                    content: state.detailPageContent,
-                                  ),
-                                )));
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.delete,
-                    color: Colors.black,
+                                  )));
+                    },
                   ),
-                  title: Text(
-                    '삭제하기',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ListTile(
+                    leading: Icon(
+                      Icons.delete,
+                      color: Colors.black,
+                    ),
+                    title: Text(
+                      '삭제하기',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      showAlertDialog(context, state);
+                    },
                   ),
-                  onTap: () {
-                    showAlertDialog(context, state);
-                  },
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           );
         });
   }

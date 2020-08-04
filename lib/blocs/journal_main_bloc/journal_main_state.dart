@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:nongple/models/models.dart';
 
@@ -18,6 +16,8 @@ class JournalMainState {
   final Timestamp pickedDate;
   final bool dialogState;
   final bool mainDialog;
+  final bool dateConfirmed;
+  final bool datePickerState;
 
   JournalMainState({
     @required this.journalList,
@@ -33,6 +33,8 @@ class JournalMainState {
     @required this.pickedDate,
     @required this.dialogState,
     @required this.mainDialog,
+    @required this.dateConfirmed,
+    @required this.datePickerState,
   });
 
   factory JournalMainState.empty() {
@@ -49,7 +51,9 @@ class JournalMainState {
       detailPageContent: '',
       pickedDate: Timestamp.now(),
       dialogState: false,
-        mainDialog: true,
+      mainDialog: true,
+      dateConfirmed: false,
+      datePickerState: true,
     );
   }
 
@@ -67,6 +71,8 @@ class JournalMainState {
     Timestamp pickedDate,
     bool dialogState,
     bool mainDialog,
+    bool dateConfirmed,
+    bool datePickerState,
   }) {
     return JournalMainState(
       journalList: journalList ?? this.journalList,
@@ -81,7 +87,9 @@ class JournalMainState {
       detailPageContent: detailPageContent ?? this.detailPageContent,
       pickedDate: pickedDate ?? this.pickedDate,
       dialogState: dialogState ?? this.dialogState,
-        mainDialog: mainDialog ?? this.mainDialog,
+      mainDialog: mainDialog ?? this.mainDialog,
+      datePickerState: datePickerState ?? this.datePickerState,
+      dateConfirmed: dateConfirmed ?? this.dateConfirmed,
     );
   }
 
@@ -99,6 +107,8 @@ class JournalMainState {
     Timestamp pickedDate,
     bool dialogState,
     bool mainDialog,
+    bool dateConfirmed,
+    bool datePickerState,
   }) {
     return copyWith(
       journalList: journalList,
@@ -113,7 +123,9 @@ class JournalMainState {
       detailPageContent: detailPageContent,
       pickedDate: pickedDate,
       dialogState: dialogState,
-        mainDialog: mainDialog,
+      mainDialog: mainDialog,
+      dateConfirmed: dateConfirmed,
+      datePickerState: datePickerState,
     );
   }
 
@@ -133,8 +145,10 @@ class JournalMainState {
     pickedDate: ${pickedDate.toDate()},
     dialogState: $dialogState,
     mainDialog: $mainDialog,
+    dateConfirmed: $dateConfirmed,
+    datePickerState: $datePickerState,
     }''';
   }
 }
 
-class JournalMainStateLoading extends JournalMainState{}
+class JournalMainStateLoading extends JournalMainState {}
