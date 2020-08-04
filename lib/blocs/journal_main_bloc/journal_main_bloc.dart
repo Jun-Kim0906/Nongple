@@ -28,12 +28,14 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapPassFacilityItemToJournalToState(event.facility);
     } else if (event is PassJournalDetailArgs) {
       yield* _mapPassJournalDetailArgsToState(event);
-    } else if (event is ShowDialog) {
-      yield* _mapShowDialogToState();
-    } else if (event is HideDialog) {
-      yield* _mapHideDialogToState();
-    } else if (event is SetAsContentLoaded) {
-      yield* _mapSetAsContentLoadedToState();
+    }else if (event is MainDialogToFalse) {
+      yield* _mapMainDialogToFalseToState();
+    } else if(event is InitState){
+      yield* _mapInitStateToState();
+    } else if(event is PopDialog){
+      yield* _mapPopDialogToState();
+    } else if(event is MoveToEdit){
+      yield* _mapMoveToEditToState();
     }
   }
 
@@ -44,6 +46,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
         .collection('Journal')
         .where('fid', isEqualTo: fid)
         .getDocuments();
+
     jqs.documents.forEach((ds) {
       journalList.add(Journal.fromSnapshot(ds));
     });
@@ -57,6 +60,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       pictureList.add(Picture.fromSnapshot(ds));
     });
     pictureList.sort((a, b) => b.dttm.compareTo(a.dttm));
+    print('${pictureList.length}');
 
     yield state.update(
       journalList: journalList,
@@ -103,9 +107,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
   }
 
   Stream<JournalMainState> _mapCheckSameDateToState(Timestamp date) async* {
-    state.update(isSameDate: false);
     bool showDialog;
-    bool isLoaded;
     List<Journal> dayList = state.journalList;
     bool isSameDate;
     dayList = dayList
@@ -116,7 +118,7 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
         .toList();
     (dayList.length > 0) ? isSameDate = true : isSameDate = false;
     (isSameDate == true) ? showDialog = true : showDialog = false;
-    yield state.update(isSameDate: isSameDate, pickedDate: date, dialogState: showDialog);
+    yield state.update(isSameDate: isSameDate, pickedDate: date, dialogState: showDialog, dateConfirmed: !isSameDate, datePickerState: false);
   }
 
   Stream<JournalMainState> _mapOnLoadingToState() async* {
@@ -158,13 +160,20 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     );
   }
 
-  Stream<JournalMainState> _mapShowDialogToState() async* {
-    yield state.update(dialogState: true, isLoaded: true);
+  Stream<JournalMainState> _mapMainDialogToFalseToState() async* {
+    yield state.update(mainDialog: false);
   }
-  Stream<JournalMainState> _mapHideDialogToState() async* {
-    yield state.update(dialogState: false, isLoaded: true);
+
+  Stream<JournalMainState> _mapInitStateToState() async* {
+    yield state.update(dateConfirmed: false, dialogState: false, datePickerState: true);
   }
-  Stream<JournalMainState> _mapSetAsContentLoadedToState() async* {
-    yield state.update(isLoaded: true);
+
+  Stream<JournalMainState> _mapPopDialogToState() async* {
+    yield state.update(dialogState: false, datePickerState: true);
   }
+
+  Stream<JournalMainState> _mapMoveToEditToState() async* {
+    yield state.update(dialogState: false, datePickerState: false, dateConfirmed: false);
+  }
+
 }

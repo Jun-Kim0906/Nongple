@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:nongple/models/journal/journal.dart';
 import 'package:nongple/models/picture/picture.dart';
 
 class JournalCreateEvent extends Equatable{
@@ -87,3 +88,6 @@ class DeleteCopyOfExistingImage extends JournalCreateEvent {
   String toString() => 'DeleteCopyOfExistingImage { index : $index }';
 }
 
+class ModifyPressed extends JournalCreateEvent{}
+
+class Test extends JournalCreateEvent{}

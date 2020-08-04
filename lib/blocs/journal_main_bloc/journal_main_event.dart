@@ -89,9 +89,10 @@ class PassJournalDetailArgs extends JournalMainEvent {
   String toString() =>
       'PassJournalDetailArgs { jid : $jid, date : $date, content : $content}';
 }
+class MainDialogToFalse extends JournalMainEvent{}
 
-class ShowDialog extends JournalMainEvent {}
+class InitState extends JournalMainEvent{}
 
-class HideDialog extends JournalMainEvent {}
+class PopDialog extends JournalMainEvent{}
 
-class SetAsContentLoaded extends JournalMainEvent {}
+class MoveToEdit extends JournalMainEvent{}

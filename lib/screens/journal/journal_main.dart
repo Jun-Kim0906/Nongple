@@ -11,9 +11,6 @@ import 'package:nongple/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class JournalMain extends StatefulWidget {
-//  Facility facility;
-//
-//  JournalMain({this.facility});
 
   @override
   _JournalMainState createState() => _JournalMainState();
@@ -37,8 +34,10 @@ class _JournalMainState extends State<JournalMain> {
       bloc: _journalMainBloc,
       listener: (BuildContext context, JournalMainState state) {
         if (state.isLoaded == true && state.mainDialog==true) {
-          print('ㅁㄴㅇㄻㄴㅇㄹㄴㅇㄹ');
-          LoadingDialog.dismiss(context, () => null);
+          print('로딩창 팝되는거 한번만 되야함');
+          LoadingDialog.dismiss(context, (){
+            _journalMainBloc.add(MainDialogToFalse());
+          });
         } else if(state.isLoaded ==false && state.mainDialog==true){
           print('[journal main screen] get journal picture list is called');
           _journalMainBloc.add(GetJournalPictureList(fid: state.facility.fid));
