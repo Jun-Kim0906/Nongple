@@ -32,10 +32,6 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
     _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
     _journalMainBloc.add(InitState());
-    _contentTextEditingController.addListener(() {
-      _journalCreateBloc
-          .add(ContentChanged(content: _contentTextEditingController.text));
-    });
   }
 
   @override
@@ -46,16 +42,17 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
         BlocListener(
           bloc: _journalCreateBloc,
           listener: (BuildContext context, JournalCreateState state){
+            print("후우 , : ${state.createPressed} : ${state.isUploaded}");
             if(state.createPressed==true && state.isUploaded ==false){
               print('createPressed');
               LoadingDialog.onLoading(context);
             }else if(state.createPressed==true && state.isUploaded ==true){
-              _journalCreateBloc.add(Test());
+//              _journalCreateBloc.add(Test());
               print('loading dismiss');
               LoadingDialog.dismiss(context, (){
+                Navigator.pop(context);
               });
-              _journalMainBloc.add(OnLoading());
-              Navigator.pop(context);
+//
             }
           },
         ),
@@ -144,6 +141,10 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                             padding: EdgeInsets.all(18.0),
                             child: TextFormField(
                               controller: _contentTextEditingController,
+                              onChanged: (value){
+                                _journalCreateBloc
+                                    .add(ContentChanged(content: value));
+                              },
                               minLines: 25,
                               maxLines: null,
                               autocorrect: false,
@@ -276,10 +277,9 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                     showAlertDialog(context, mState);
                   } else {
                     _journalCreateBloc.add(ModifyPressed());
-//                    _journalMainBloc
-//                        .add(AllDateSeleted(selectedDate: state.selectedDate));
                     _journalCreateBloc
                         .add(UploadJournal(fid: mState.facility.fid));
+
                   }
                 },
               ),

@@ -243,7 +243,7 @@ class _JournalMainState extends State<JournalMain> {
                                 )
                               ],
                               child: JournalCreateScreen(),
-                            )));
+                            ))).then((value){_journalMainBloc.add(OnLoading());});
               },
               label: Text('오늘의 활동 기록하기'),
             ),
