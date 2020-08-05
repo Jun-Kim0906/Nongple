@@ -5,14 +5,14 @@ class JournalRepository{
   Firestore _firestore = Firestore.instance;
   DocumentReference reference;
 
-  void uploadJournal({
+  Future<void> uploadJournal({
     Journal journal,
   }) async {
     DocumentReference reference = _firestore.collection('Journal').document(journal.jid);
     await reference.setData(journal.toMap());
   }
 
-  void updateJournal({
+  Future<void> updateJournal({
   Journal journal,
 }) async {
     DocumentReference reference = _firestore.collection('Journal').document(journal.jid);

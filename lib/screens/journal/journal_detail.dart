@@ -29,125 +29,135 @@ class _JournalDetailState extends State<JournalDetail> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return BlocBuilder<JournalMainBloc, JournalMainState>(
-      builder: (context, state) {
-        var date = state.detailPageDate.toDate();
-        var formatDate = DateFormat('yyyy.MM.dd').format(date);
-        String weekday = daysOfWeek(index: date.weekday);
+    return BlocListener(
+      bloc: _journalMainBloc,
+      listener: (context, state) {
+        if (state.modifyState == true) {
+          print('[journal detail page] modified image length : ${state.detailPageImage.length}');
+        } else {
+          print('[journal detail page] set modify state event now thrown');
+        }
+      },
+      child: BlocBuilder<JournalMainBloc, JournalMainState>(
+        builder: (context, state) {
+          var date = state.detailPageDate.toDate();
+          var formatDate = DateFormat('yyyy.MM.dd').format(date);
+          String weekday = daysOfWeek(index: date.weekday);
         List<Picture> _image = state.pictureList;
-        _image =
-            _image.where((data) => data.jid == state.detailPageJid).toList();
-        print('[journal detail] image length : ${state.pictureList.length}');
-        return Scaffold(
-          extendBodyBehindAppBar: true,
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Color(0xFF828282),
-              ),
-              onPressed: () {
-                _image.clear();
-                Navigator.pop(context);
-              },
-            ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              IconButton(
+        _image = _image.where((data) => data.jid == state.detailPageJid).toList();
+        print('[journal detail page] image length : ${_image.length}');
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              leading: IconButton(
                 icon: Icon(
-                  Icons.more_vert,
+                  Icons.arrow_back_ios,
                   color: Color(0xFF828282),
                 ),
                 onPressed: () {
-                  _settingModalBottomSheet(context, state, _image);
+                  _journalMainBloc.add(OnLoading());
+//                _image.clear();
+                  Navigator.pop(context);
                 },
               ),
-            ],
-          ),
-          body: Column(
-            children: [
-              (_image.isNotEmpty)
-                  ? Container(
-                      height: height * 0.6,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: Color(0xFF828282),
+                  ),
+                  onPressed: () {
+                    _settingModalBottomSheet(context, state, _image);
+                  },
+                ),
+              ],
+            ),
+            body: Column(
+              children: [
+                (_image.isNotEmpty)
+                    ? Container(
+                  height: height * 0.6,
 //                        width: double.infinity,
-                      child: Swiper(
-                          layout: SwiperLayout.STACK,
+                  child: Swiper(
+                      layout: SwiperLayout.STACK,
 //                    layout: SwiperLayout.DEFAULT,
-                          itemHeight: height * 0.6,
-                          itemWidth: width,
-                          loop: true,
-                          itemCount: _image.length,
-                          control: SwiperControl(
-                              color: Color(0x00000000),
-                              disableColor: Color(0x00000000)),
-                          viewportFraction: 1.0,
-                          scale: 1.0,
-                          pagination: SwiperPagination(
-                            builder: DotSwiperPaginationBuilder(
-                              activeColor: Color(0xFF2F80ED),
+                      itemHeight: height * 0.6,
+                      itemWidth: width,
+                      loop: true,
+                      itemCount: _image.length,
+                      control: SwiperControl(
+                          color: Color(0x00000000),
+                          disableColor: Color(0x00000000)),
+                      viewportFraction: 1.0,
+                      scale: 1.0,
+                      pagination: SwiperPagination(
+                        builder: DotSwiperPaginationBuilder(
+                          activeColor: Color(0xFF2F80ED),
+                        ),
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          margin: EdgeInsets.all(0.0),
+                          semanticContainer: true,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15.0),
+                              bottomRight: Radius.circular(15.0),
                             ),
                           ),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Card(
-                              margin: EdgeInsets.all(0.0),
-                              semanticContainer: true,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15.0),
-                                  bottomRight: Radius.circular(15.0),
-                                ),
+                          child: Image(
+                            image: CachedNetworkImageProvider(
+                              _image[index].url,
+                            ),
+                            fit: BoxFit.fill,
+                          ),
+                        );
+                      }),
+                )
+                    : Container(),
+                Flexible(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(
+                          width * 0.1, height / 11, width * 0.1, 0.0),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              formatDate.toString() + ' ' + weekday,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25.0,
+                                color: Color(0xFFB8B8B8),
                               ),
-                              child: Image(
-                                image: CachedNetworkImageProvider(
-                                  _image[index].url,
-                                ),
-                                fit: BoxFit.fill,
+                            ),
+                            SizedBox(
+                              height: height * 0.06,
+                            ),
+                            Text(
+                              state.detailPageContent,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
+                                color: Color(0xFFB8B8B8),
                               ),
-                            );
-                          }),
-                    )
-                  : Container(),
-              Flexible(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(
-                        width * 0.1, height / 11, width * 0.1, 0.0),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            formatDate.toString() + ' ' + weekday,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25.0,
-                              color: Color(0xFFB8B8B8),
                             ),
-                          ),
-                          SizedBox(
-                            height: height * 0.06,
-                          ),
-                          Text(
-                            state.detailPageContent,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.0,
-                              color: Color(0xFFB8B8B8),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
-            ],
-          ),
-        );
-      },
+                )
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

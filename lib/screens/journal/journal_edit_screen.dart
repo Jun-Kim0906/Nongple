@@ -20,13 +20,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nongple/models/models.dart';
 
 class JournalEditScreen extends StatefulWidget {
-//  final Facility facility;
-//  final Timestamp date;
   final String content;
 
-//  final String jid;
-//
-//  JournalEditScreen({this.facility, this.date, this.content, this.jid});
   JournalEditScreen({this.content});
 
   @override
@@ -45,7 +40,7 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
     super.initState();
     _journalCreateBloc = BlocProvider.of<JournalCreateBloc>(context);
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
-    _journalMainBloc.add(HideDialog());
+//    _journalMainBloc.add(HideDialog());
     _contentTextModifyingController =
         TextEditingController(text: '${widget.content}');
     _journalCreateBloc.add(
@@ -67,6 +62,7 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                     color: journalGoBackArrowColor,
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
+                      _journalMainBloc.add(OnLoading());
                       Navigator.pop(context);
                     },
                   ),
@@ -227,8 +223,7 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                                     ? 1
                                     : state.copyOfExistingImage.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  print(
-                                      'ㄴㅇㄹㄴㅇㄹ copy list length : ${state.copyOfExistingImage.length}');
+//                                  print('[journal edit screen] copy list length : ${state.copyOfExistingImage.length}');
                                   return Row(
                                     children: [
                                       (state.copyOfExistingImage.length == 0)
@@ -244,8 +239,7 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                                         itemCount: state.imageList.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                          print(
-                                              'ㄴㅇㄹㄴㅇㄹ imagelist length : ${state.imageList.length}');
+//                                          print('[journal edit screen] imagelist length : ${state.imageList.length}');
                                           return index == 0
                                               ? Row(
                                             children: <Widget>[
@@ -271,25 +265,30 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                     List<Picture> existingImageList = mState.pictureList
                         .where((doc) => doc.jid == mState.detailPageJid)
                         .toList();
-                    print(
-                        '[journal edit screen] copyOfExistingImage list length : ${state.copyOfExistingImage.length}');
+//                    print('[journal edit screen] copyOfExistingImage list length : ${state.copyOfExistingImage.length}');
                     List<Picture> output = existingImageList
                         .where((element) =>
                     !state.copyOfExistingImage.contains(element))
                         .toList();
-                    print(
-                        '[journal edit screen] output list length : ${output.length}');
+//                    print('[journal edit screen] output list length : ${output.length}');
                     _journalMainBloc.add(DeleteOnlyPicture(deleteList: output));
                     _journalCreateBloc.add(UpdateJournal(
                         fid: mState.facility.fid, jid: mState.detailPageJid));
+                    _journalMainBloc.add(GetJournalPictureList(fid: mState.facility.fid));
+                    List<Picture> newList = mState.pictureList
+                        .where((doc) => doc.jid == mState.detailPageJid)
+                        .toList();
+                    if(newList.length == 0) {
+                      throw Exception('[journal edit screen] new image list is empty');
+                    }
                     _journalMainBloc.add(PassJournalDetailArgs(
                         jid: mState.detailPageJid,
                         date: mState.detailPageDate,
-                        content: state.content));
-                    Timer(Duration(seconds: 3),(){});
+                        content: state.content,
+                      image: newList,
+                    ));
                     _journalMainBloc.add(OnLoading());
-
-                Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                 ),
               );

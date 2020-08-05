@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nongple/models/models.dart';
@@ -34,6 +36,10 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       yield* _mapHideDialogToState();
     } else if (event is SetAsContentLoaded) {
       yield* _mapSetAsContentLoadedToState();
+    } else if (event is EndLoading) {
+      yield* _mapEndLoadingToState();
+    } else if (event is SetModifyState) {
+      yield* _mapSetModifyStateToState();
     }
   }
 
@@ -57,6 +63,9 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
       pictureList.add(Picture.fromSnapshot(ds));
     });
     pictureList.sort((a, b) => b.dttm.compareTo(a.dttm));
+
+    print('[journal main bloc] Get new journal list : ${journalList.length}');
+    print('[journal main bloc] Get new picture list : ${pictureList.length}');
 
     yield state.update(
       journalList: journalList,
@@ -150,10 +159,12 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     print('[journal main bloc] jid : ${event.jid}');
     print('[journal main bloc] date : ${event.date.toDate()}');
     print('[journal main bloc] content : ${event.content}');
+    print('[journal main bloc] image : ${event.image.length}');
     yield state.update(
       detailPageJid: event.jid,
       detailPageDate: event.date,
       detailPageContent: event.content,
+      detailPageImage: event.image,
       mainDialog: false,
     );
   }
@@ -166,5 +177,11 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
   }
   Stream<JournalMainState> _mapSetAsContentLoadedToState() async* {
     yield state.update(isLoaded: true);
+  }
+  Stream<JournalMainState> _mapEndLoadingToState() async* {
+    yield state.update(isLoaded: true, mainDialog: true);
+  }
+  Stream<JournalMainState> _mapSetModifyStateToState() async* {
+    yield state.update(modifyState: true, mainDialog: false);
   }
 }

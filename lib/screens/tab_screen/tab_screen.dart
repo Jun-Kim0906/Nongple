@@ -77,7 +77,7 @@ class _TabScreenState extends State<TabScreen> {
                       create: (BuildContext context) => JournalMainBloc()
                         ..add(
                             PassFacilityItemToJournal(facility: widget.facList)),
-                      child: JournalMain())
+                      child: JournalMain(facility: widget.facList,))
                   : BlocProvider<DictionaryBloc>(
                       create: (BuildContext context) => DictionaryBloc(),
                       child: DictionaryScreen(),
