@@ -27,7 +27,7 @@ class ContentChanged extends JournalCreateEvent{
   const ContentChanged({@required this.content});
 
   @override
-  String toString() =>'content: $content';
+  String toString() =>'ContentChanged {content: $content}';
 }
 
 class ImageSeleted extends JournalCreateEvent{
@@ -60,7 +60,7 @@ class UploadJournal extends JournalCreateEvent{
   const UploadJournal({@required this.fid});
 
   @override
-  String toString() =>'fid: $fid';
+  String toString() =>'UploadJournal {fid: $fid}';
 }
 
 class UpdateJournal extends JournalCreateEvent {

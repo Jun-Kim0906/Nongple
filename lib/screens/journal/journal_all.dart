@@ -104,7 +104,6 @@ class _JournalAllState extends State<JournalAll> {
                     ? ListView.builder(
                         itemCount: state.monthJournalList.length,
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
                           Journal now = state.monthJournalList[index];
                           print(
@@ -206,7 +205,7 @@ class _JournalAllState extends State<JournalAll> {
                                                     ],
                                                     child:
                                                         JournalCreateScreen(),
-                                                  )));
+                                                  ))).then((value){_journalMainBloc.add(OnLoading());_journalMainBloc.add(AllDateSeleted(selectedDate: state.selectedDate));});
                                     },
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10.0),

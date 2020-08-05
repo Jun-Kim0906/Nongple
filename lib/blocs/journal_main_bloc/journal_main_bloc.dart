@@ -85,7 +85,6 @@ class JournalMainBloc extends Bloc<JournalMainEvent, JournalMainState> {
     yield state.update(
         selectedDate: selectedDate,
         monthJournalList: monthList,
-      mainDialog: false,
     );
   }
 
