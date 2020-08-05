@@ -32,11 +32,11 @@ class _JournalDetailState extends State<JournalDetail> {
     return BlocListener(
       bloc: _journalMainBloc,
       listener: (context, state) {
-        if (state.modifyState == true) {
-          print('[journal detail page] modified image length : ${state.detailPageImage.length}');
-        } else {
-          print('[journal detail page] set modify state event now thrown');
-        }
+//        if (state.modifyState == true) {
+//          print('[journal detail page] modified image length : ${state.detailPageImage.length}');
+//        } else {
+//          print('[journal detail page] set modify state event now thrown');
+//        }
       },
       child: BlocBuilder<JournalMainBloc, JournalMainState>(
         builder: (context, state) {
@@ -56,6 +56,7 @@ class _JournalDetailState extends State<JournalDetail> {
                   color: Color(0xFF828282),
                 ),
                 onPressed: () {
+                  _journalMainBloc.add(AllDateSeleted(selectedDate: state.detailPageDate));
                   _journalMainBloc.add(OnLoading());
 //                _image.clear();
                   Navigator.pop(context);

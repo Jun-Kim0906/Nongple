@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,6 +13,7 @@ import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/create_facility/bottom_Navigation_button.dart';
 import 'package:nongple/widgets/custom_icons/custom_icons.dart';
+import 'package:random_string/random_string.dart';
 
 class PickBackground extends StatefulWidget {
   final Facility facList;
@@ -175,9 +177,10 @@ class _PickBackgroundState extends State<PickBackground> {
   }
 
   Future<String> uploadImageFile(File file) async {
+    String picName = randomAlphaNumeric(20);
     String url = '';
-    final StorageReference ref = storage.ref().child('background_pictures/${file.toString()}');
-//            .child(UserUtil.getUser().uid).child('${widget.facList.fid}.jpg');
+    final StorageReference ref = storage.ref().child('background_image').child(UserUtil.getUser().uid).child('${picName}.jpg');
+//        .child('background_pictures/${file.toString()}');
     final StorageUploadTask uploadTask = ref.putFile(await resizePicture(file));
     await (await uploadTask.onComplete)
         .ref
