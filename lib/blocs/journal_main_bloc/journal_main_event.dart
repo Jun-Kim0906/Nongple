@@ -78,26 +78,21 @@ class PassJournalDetailArgs extends JournalMainEvent {
   final String jid;
   final Timestamp date;
   final String content;
-  final List<Picture> image;
 
   const PassJournalDetailArgs({
     @required this.jid,
     @required this.date,
-    @required this.content,
-    @required this.image,
+    @required this.content
   });
 
   @override
   String toString() =>
-      'PassJournalDetailArgs { jid : $jid, date : $date, content : $content, image : ${image.length}';
+      'PassJournalDetailArgs { jid : $jid, date : $date, content : $content}';
 }
+class MainDialogToFalse extends JournalMainEvent{}
 
-class ShowDialog extends JournalMainEvent {}
+class InitState extends JournalMainEvent{}
 
-class HideDialog extends JournalMainEvent {}
+class PopDialog extends JournalMainEvent{}
 
-class SetAsContentLoaded extends JournalMainEvent {}
-
-class EndLoading extends JournalMainEvent {}
-
-class SetModifyState extends JournalMainEvent {}
+class MoveToEdit extends JournalMainEvent{}

@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:nongple/models/models.dart';
 
@@ -15,11 +13,11 @@ class JournalMainState {
   final String detailPageJid;
   final Timestamp detailPageDate;
   final String detailPageContent;
-  final List<Picture> detailPageImage;
   final Timestamp pickedDate;
   final bool dialogState;
   final bool mainDialog;
-  final bool modifyState;
+  final bool dateConfirmed;
+  final bool datePickerState;
 
   JournalMainState({
     @required this.journalList,
@@ -32,11 +30,11 @@ class JournalMainState {
     @required this.detailPageJid,
     @required this.detailPageDate,
     @required this.detailPageContent,
-    @required this.detailPageImage,
     @required this.pickedDate,
     @required this.dialogState,
     @required this.mainDialog,
-    @required this.modifyState,
+    @required this.dateConfirmed,
+    @required this.datePickerState,
   });
 
   factory JournalMainState.empty() {
@@ -51,11 +49,11 @@ class JournalMainState {
       detailPageJid: '',
       detailPageDate: Timestamp.now(),
       detailPageContent: '',
-      detailPageImage: [],
       pickedDate: Timestamp.now(),
       dialogState: false,
       mainDialog: true,
-      modifyState: false,
+      dateConfirmed: false,
+      datePickerState: true,
     );
   }
 
@@ -70,11 +68,11 @@ class JournalMainState {
     String detailPageJid,
     Timestamp detailPageDate,
     String detailPageContent,
-    List<Picture> detailPageImage,
     Timestamp pickedDate,
     bool dialogState,
     bool mainDialog,
-    bool modifyState,
+    bool dateConfirmed,
+    bool datePickerState,
   }) {
     return JournalMainState(
       journalList: journalList ?? this.journalList,
@@ -87,11 +85,11 @@ class JournalMainState {
       detailPageJid: detailPageJid ?? this.detailPageJid,
       detailPageDate: detailPageDate ?? this.detailPageDate,
       detailPageContent: detailPageContent ?? this.detailPageContent,
-      detailPageImage: detailPageImage ?? this.detailPageImage,
       pickedDate: pickedDate ?? this.pickedDate,
       dialogState: dialogState ?? this.dialogState,
       mainDialog: mainDialog ?? this.mainDialog,
-      modifyState: modifyState ?? this.modifyState,
+      datePickerState: datePickerState ?? this.datePickerState,
+      dateConfirmed: dateConfirmed ?? this.dateConfirmed,
     );
   }
 
@@ -106,11 +104,11 @@ class JournalMainState {
     String detailPageJid,
     Timestamp detailPageDate,
     String detailPageContent,
-    List<Picture> detailPageImage,
     Timestamp pickedDate,
     bool dialogState,
     bool mainDialog,
-    bool modifyState,
+    bool dateConfirmed,
+    bool datePickerState,
   }) {
     return copyWith(
       journalList: journalList,
@@ -123,11 +121,11 @@ class JournalMainState {
       detailPageJid: detailPageJid,
       detailPageDate: detailPageDate,
       detailPageContent: detailPageContent,
-      detailPageImage: detailPageImage,
       pickedDate: pickedDate,
       dialogState: dialogState,
       mainDialog: mainDialog,
-      modifyState: modifyState,
+      dateConfirmed: dateConfirmed,
+      datePickerState: datePickerState,
     );
   }
 
@@ -144,11 +142,11 @@ class JournalMainState {
     detailPageJid: $detailPageJid,
     detailPageDate: ${detailPageDate.toDate()},
     detailPageContent: $detailPageContent,
-    detailPageImage: ${detailPageImage.length},
     pickedDate: ${pickedDate.toDate()},
     dialogState: $dialogState,
     mainDialog: $mainDialog,
-    modifyState: $modifyState,
+    dateConfirmed: $dateConfirmed,
+    datePickerState: $datePickerState,
     }''';
   }
 }

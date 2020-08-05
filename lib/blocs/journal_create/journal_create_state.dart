@@ -5,16 +5,18 @@ import 'package:meta/meta.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nongple/models/picture/picture.dart';
 
-
 class JournalCreateState {
   final Timestamp selectedDate;
   final bool isDateSeleted;
+  final bool isUploaded;
   final String content;
   final String jid;
   final String fid;
   final List<Asset> assetList;
   final List<File> imageList;
   final List<Picture> copyOfExistingImage; // journal edit screen
+  final bool modifyPressed;
+  final bool createPressed;
 
   JournalCreateState({
     @required this.selectedDate,
@@ -25,9 +27,12 @@ class JournalCreateState {
     @required this.fid,
     @required this.jid,
     @required this.copyOfExistingImage,
+    @required this.isUploaded,
+    @required this.modifyPressed,
+    @required this.createPressed,
   });
 
-  factory JournalCreateState.empty(){
+  factory JournalCreateState.empty() {
     return JournalCreateState(
       selectedDate: Timestamp.now(),
       isDateSeleted: false,
@@ -37,6 +42,9 @@ class JournalCreateState {
       jid: '',
       fid: '',
       copyOfExistingImage: [],
+      isUploaded: false,
+      modifyPressed: false,
+      createPressed: false,
     );
   }
 
@@ -49,6 +57,9 @@ class JournalCreateState {
     List<Asset> assetList,
     List<File> imageList,
     List<Picture> copyOfExistingImage,
+    bool isUploaded,
+    bool modifyPressed,
+    bool createPressed,
   }) {
     return JournalCreateState(
       selectedDate: selectedDate ?? this.selectedDate,
@@ -59,6 +70,9 @@ class JournalCreateState {
       assetList: assetList ?? this.assetList,
       imageList: imageList ?? this.imageList,
       copyOfExistingImage: copyOfExistingImage ?? this.copyOfExistingImage,
+      isUploaded: isUploaded ?? this.isUploaded,
+      modifyPressed: modifyPressed ?? this.modifyPressed,
+      createPressed: createPressed ?? this.createPressed,
     );
   }
 
@@ -71,9 +85,12 @@ class JournalCreateState {
     List<Asset> assetList,
     List<File> imageList,
     List<Picture> copyOfExistingImage,
+    bool isUploaded,
+    bool modifyPressed,
+    bool createPressed,
   }) {
     return copyWith(
-      selectedDate: selectedDate ,
+      selectedDate: selectedDate,
       isDateSeleted: isDateSeleted,
       content: content,
       jid: jid,
@@ -81,6 +98,9 @@ class JournalCreateState {
       assetList: assetList,
       imageList: imageList,
       copyOfExistingImage: copyOfExistingImage,
+      isUploaded: isUploaded,
+      modifyPressed: modifyPressed,
+      createPressed: createPressed,
     );
   }
 
@@ -95,6 +115,8 @@ class JournalCreateState {
     assetList: $assetList,
     imageList: ${imageList.length},
     copyOfExistingImage: ${copyOfExistingImage.length},
+    isUploaded: $isUploaded,
+    createPressed: $createPressed,
     }''';
   }
 }

@@ -5,7 +5,7 @@ class PictureRepository{
   Firestore _firestore = Firestore.instance;
   DocumentReference reference;
 
-  void uploadPicture({
+  Future<void> uploadPicture({
     Picture picture,
   }) async {
     DocumentReference reference = _firestore.collection('Picture').document(picture.pid);

@@ -11,9 +11,6 @@ import 'package:nongple/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class JournalMain extends StatefulWidget {
-  final Facility facility;
-
-const JournalMain({this.facility});
 
   @override
   _JournalMainState createState() => _JournalMainState();
@@ -37,14 +34,14 @@ class _JournalMainState extends State<JournalMain> {
       bloc: _journalMainBloc,
       listener: (BuildContext context, JournalMainState state) {
         if (state.isLoaded == true && state.mainDialog==true) {
-          print('[journal main screen] content is loaded');
-          LoadingDialog.dismiss(context, () => null);
+          print('로딩창 팝되는거 한번만 되야함');
+          LoadingDialog.dismiss(context, (){
+            _journalMainBloc.add(MainDialogToFalse());
+          });
         } else if(state.isLoaded ==false && state.mainDialog==true){
           print('[journal main screen] get journal picture list is called');
-          _journalMainBloc.add(GetJournalPictureList(fid: widget.facility.fid));
+          _journalMainBloc.add(GetJournalPictureList(fid: state.facility.fid));
           LoadingDialog.onLoading(context);
-        } else {
-          print('[journal main screen] unrelated listener state');
         }
       },
       child: BlocBuilder<JournalMainBloc, JournalMainState>(
@@ -145,24 +142,24 @@ class _JournalMainState extends State<JournalMain> {
                                     ],
                                   ),
                                   onTap: () {
-                                    List<Picture> _image = state.pictureList;
-                                    _image = _image.where((data) => data.jid == now.jid).toList();
-                                    print('[journal main screen] image length : ${_image.length}');
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              BlocProvider.value(
-                                                value: _journalMainBloc
-                                                  ..add(PassJournalDetailArgs(
-                                                      jid: now.jid,
-                                                      date: now.date,
-                                                      content: now.content,
-                                                    image: _image,
-                                                  )),
-                                                child: JournalDetail(),
-                                              ),
-                                        ));
+                                    if (state.isLoaded == true) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                BlocProvider.value(
+                                              value: _journalMainBloc
+                                                ..add(PassJournalDetailArgs(
+                                                    jid: now.jid,
+                                                    date: now.date,
+                                                    content: now.content)),
+                                              child: JournalDetail(),
+                                            ),
+                                          ));
+                                    } else {
+                                      throw Exception(
+                                          '[journal main screen] page is not loaded');
+                                    }
                                   },
                                 );
                               },
