@@ -56,6 +56,9 @@ dependencies:
   modal_bottom_sheet: ^0.2.0+1
   geocoder: ^0.2.1
   animated_text_kit: ^2.2.0
+  webfeed: ^0.4.2
+  url_launcher: ^5.2.5
+  random_string: ^2.1.0
 
 dev_dependencies:
   flutter_test:

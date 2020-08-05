@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/home_bloc/home.dart';
+import 'package:nongple/blocs/rss_main_bloc/rss_main.dart';
+import 'package:nongple/screens/rss_screen/rss_add_facility.dart';
+import 'package:nongple/screens/rss_screen/rss_main_screen.dart';
 import 'package:nongple/screens/screens.dart';
 
 class ChipButton extends StatelessWidget {
@@ -26,6 +29,15 @@ class ChipButton extends StatelessWidget {
             ),
             onPressed: () {
               print("RSS");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>
+                      BlocProvider<RssMainBloc>(
+                        create: (context) => RssMainBloc(),
+                        child: RssMainScreen(),
+                      )
+                  ),
+              );
             }),
         SizedBox(
           width: 20.0,
