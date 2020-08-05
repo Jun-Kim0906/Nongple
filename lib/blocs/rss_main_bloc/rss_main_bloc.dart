@@ -40,6 +40,7 @@ class RssMainBloc extends Bloc<RssMainEvent, RssMainState> {
       print('item[0] title : ${channel.items[0].title}');
       print('item[0] description : ${channel.items[0].description}');
       print('item[0] link : ${channel.items[0].link}');
+      print('finish');
       return channel;
     });
 
