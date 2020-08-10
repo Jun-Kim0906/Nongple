@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationButton extends StatelessWidget {
@@ -11,14 +12,22 @@ class BottomNavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 64.0,
+      width: width,
+      height: height * 0.08,
       child: RaisedButton(
         color: Color(0xFF2F80ED),
-        child: Text(
-          _title ?? '다음',
-          style: TextStyle(color: Colors.white, fontSize: 21.6),
+        child: SizedBox(
+          height: height * 0.04,
+          child: FittedBox(
+            fit: BoxFit.fitHeight,
+            child: Text(
+              _title ?? '다음',
+              style: TextStyle(color: Colors.white, fontSize: 21.6),
+            ),
+          ),
         ),
         onPressed: _onPressed,
       ),

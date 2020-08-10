@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/screens/screens.dart';
@@ -8,7 +9,7 @@ class ButtonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height/5,
+      height: MediaQuery.of(context).size.height * 0.22,
       child: Card(
         elevation: 4.0,
         shape: RoundedRectangleBorder(
@@ -29,17 +30,36 @@ class ButtonCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.add_circle_outline,
-                    color: Color.fromRGBO(0, 0, 0, 0.54),
-                    size: 45.0,
+                  Flexible(
+                    flex: 2,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: Icon(
+                          Icons.add_circle_outline,
+                          color: Color.fromRGBO(0, 0, 0, 0.54),
+                          size: 45.0,
+                        ),
+                      ),
+                    ),
                   ),
-                  SizedBox(
-                    height: 10.0,
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.01,
+                    ),
                   ),
-                  Text(
-                    '농사 프로젝트 추가하기',
-                    style: cardWidgetAddProjButton,
+                  Flexible(
+                    flex: 1,
+                    child: AutoSizeText(
+                      '농사 프로젝트 추가하기',
+                      style: cardWidgetAddProjButton,
+                      minFontSize: 6,
+                      stepGranularity: 2,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),

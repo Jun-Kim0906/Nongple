@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,6 +42,8 @@ class _PickBackgroundState extends State<PickBackground> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return BlocBuilder<BgBloc, BgState>(
       builder: (context, state) {
         if (state is BgUrlSet) {
@@ -56,50 +59,55 @@ class _PickBackgroundState extends State<PickBackground> {
                     Navigator.pop(context);
                   },
                 ),
-                title: Text(
-                  '배경화면 관리',
-                  style: TextStyle(color: Colors.black),
+                title: SizedBox(
+                  height: height * 0.04,
+                  child: AutoSizeText(
+                    '배경화면 관리',
+                    style: settingAppBarStyle,
+                  ),
                 ),
                 centerTitle: true,
               ),
               body: Padding(
-                padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),
+                padding: EdgeInsets.fromLTRB(width*0.05, height*0.03, width*0.05, 0),
                 child: Column(children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: (widget.facList.category == 1 ||
-                                widget.facList.category == 2)
-                            ? Icon(CustomIcons.tractor,
-                                color: Color(0xFF2F80ED))
-                            : (widget.facList.category == 3)
-                                ? Icon(CustomIcons.cow,
-                                    color: Color(0xFF2F80ED))
-                                : Icon(CustomIcons.plant,
-                                    color: Color(0xFF2F80ED)),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: SizedBox(
-                          width: 10.0,
+                  ListTile(
+                    contentPadding: EdgeInsets.all(0.0),
+                    leading: SizedBox(
+                      height: height * 0.06,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: Card(
+                          shape: CircleBorder(side: BorderSide(color: Colors.grey[200])),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: (widget.facList.category == 1 || widget.facList.category == 2)
+                                ? Icon(CustomIcons.tractor, color: Color(0xFF2F80ED), size: 30,)
+                                : (widget.facList.category == 3)
+                                ? Icon(CustomIcons.cow, color: Color(0xFF2F80ED), size: 30,)
+                                : Icon(CustomIcons.plant, color: Color(0xFF2F80ED), size: 30,),
+                          ),
                         ),
                       ),
-                      Flexible(
-                        flex: 3,
-                        child: Text(widget.facList.name,
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                    ),
+                    title: SizedBox(
+                      height: height * 0.04,
+                      width: width * 0.644,
+                      child: AutoSizeText(
+                        widget.facList.name,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
+                        maxLines: 1,
                       ),
-                    ],
+                    ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height / 5,
+                    height: height / 6,
                   ),
                   Flexible(
                     flex: 1,
                     child: Container(
-                      height: MediaQuery.of(context).size.height / 5,
-                      width: MediaQuery.of(context).size.width / 1,
+                      height: height / 5,
+                      width: width / 1,
                       child: Card(
                         elevation: 3.0,
                         color: Colors.white,
@@ -125,7 +133,7 @@ class _PickBackgroundState extends State<PickBackground> {
                             Center(
                               child: Text(
                                 'Background',
-                                style: TextStyle(fontSize: 20, color: Colors.blue[700]),
+                                style: TextStyle(fontSize: 20, color: Color(0xFF2F80ED)),
                               ),
                             ),
                           ],
@@ -135,29 +143,43 @@ class _PickBackgroundState extends State<PickBackground> {
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height / 15,
+                    height: height / 15,
                   ),
                   Flexible(
                     flex: 1,
                     child: Container(
-                      width: MediaQuery.of(context).size.width / 2.5,
+                      width: width / 2.3,
                       child: OutlineButton(
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(10.0, 7.0, 10.0, 7.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(Icons.collections, color: Colors.blue[700],),
-                              Text('사진 선택하기', style: TextStyle(color: Colors.blue[700]),),
-                            ],
+                          padding: EdgeInsets.fromLTRB(width*0.01, height*0.01, width*0.01, height*0.01),
+                          child: SizedBox(
+                            height: height * 0.04,
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(Icons.collections, color: Color(0xFF2F80ED),),
+                                  SizedBox(width: width*0.03,),
+                                  AutoSizeText(
+                                    '사진 선택하기',
+                                    style: TextStyle(
+                                        color: Color(0xFF2F80ED),
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                         onPressed: () {
                           getImage();
                         },
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
+                        borderSide: BorderSide(color: Color(0xFF2F80ED)),
                       ),
                     ),
                   ),
@@ -200,18 +222,17 @@ class _PickBackgroundState extends State<PickBackground> {
   }
 
   showAlertDialog(BuildContext context, BgUrlSet state) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     // set up the buttons
     Widget cancelButton = GestureDetector(
-      child: Text("아니요"),
+      child: AutoSizeText("아니요",maxLines: 1,),
       onTap: () {
         Navigator.pop(context);
       },
     );
     Widget continueButton = GestureDetector(
-      child: Text(
-        "네",
-        style: TextStyle(color: Colors.blue),
-      ),
+      child: AutoSizeText("네", style: TextStyle(color: Colors.blue), maxLines: 1,),
       onTap: () async {
         String bgUrl = await uploadImageFile(state.imageFile);
         await Firestore.instance
@@ -227,42 +248,55 @@ class _PickBackgroundState extends State<PickBackground> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
+
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
       content: Container(
-        height: MediaQuery.of(context).size.height - 550,
-        width: MediaQuery.of(context).size.width - 30,
-        padding: EdgeInsets.fromLTRB(7.0, 5.0, 7.0, 5.0),
+        height: height * 0.2,
+        width: width,
+//        padding: EdgeInsets.fromLTRB(7.0, 5.0, 7.0, 5.0),
         color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '배경화면 저장',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text('정말로 이 배경화면으로 저장하시겠습니까?'),
+            SizedBox(
+              height: height * 0.04,
+              child: AutoSizeText(
+                '배경화면 저장',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                maxLines: 1,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: continueButton,
-                ),
-                SizedBox(
-                  width: 15.0,
-                ),
-                Flexible(
-                  flex: 1,
-                  child: cancelButton,
-                ),
-              ],
+            SizedBox(
+              height: height * 0.04,
+            ),
+            SizedBox(
+              height: height * 0.03,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text('정말로 이 배경화면으로 저장 하시겠습니까?'),
+              ),
+            ),
+            SizedBox(
+              height: height * 0.04,
+            ),
+            SizedBox(
+              height: height * 0.03,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: continueButton,
+                  ),
+                  SizedBox(width: width * 0.09,),
+                  Flexible(
+                    flex: 1,
+                    child: cancelButton,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

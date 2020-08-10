@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
@@ -29,10 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return BlocListener(
         bloc: _homeBloc,
@@ -57,21 +55,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: height*0.08,
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Text(
-                        '$name 님\n오늘도 풍성한 하루 되세요',
-                        style: homeMainTitle,
-                      ),
+                    height: height*0.09,
+                    width: width,
+                    child: AutoSizeText(
+                      '$name 님\n오늘도 풍성한 하루 되세요',
+                      style: homeMainTitle,
+                      maxLines: 2,
                     )
                   ),
                   SizedBox(
                     height: height * 0.009,
                   ),
                   SizedBox(
-                    height: height*0.027,
+                    height: height*0.03,
                     child: FittedBox(
+                      fit: BoxFit.fitHeight,
                       child: Text(
                         '$year년 $month월 $day일 $weekday',
 //                style: Theme.of(context).textTheme.headline2,

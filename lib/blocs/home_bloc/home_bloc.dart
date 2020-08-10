@@ -47,12 +47,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       facList.add(Facility.fromSnapshot(ds));
     });
 
-    facList.forEach((list) {
-      print('[homeBloc] ${list.name} get temperature : ${list.temperature} }');
-      print('[homeBloc] ${list.name} get bgUrl : ${list.bgUrl} }');
-    });
-
-
     yield FacilityListSet(facList);
   }
 

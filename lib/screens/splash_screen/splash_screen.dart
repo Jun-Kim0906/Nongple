@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.Dart';
 import 'package:nongple/utils/utils.dart';
@@ -21,7 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('두번 나올껄');
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -30,23 +32,34 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Flexible(
               flex: 1,
-              child: Image.asset('assets/launcher_icon2.png'),
+              child: SizedBox(
+                height: height * 0.263,
+                width: width * 0.538,
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                      child: Image.asset('assets/launcher_icon2.png')
+                  ),
+              ),
             ),
             Flexible(
               flex: 1,
               child: SizedBox(
-                width: 250.0,
-                child: TextLiquidFill(
-                 text: '농플',
-                  waveColor: Colors.blueAccent,
-                  loadDuration: Duration(seconds: widget.duration),
-                  waveDuration: Duration(seconds: widget.duration),
-                  boxBackgroundColor: Colors.white,
-                  textStyle: TextStyle(
-                    fontSize: 80.0,
-                    fontWeight: FontWeight.bold,
+                height: height * 0.277,
+                width: width * 0.702,
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: TextLiquidFill(
+                   text: '농플',
+                    waveColor: Colors.blueAccent,
+                    loadDuration: Duration(seconds: widget.duration),
+                    waveDuration: Duration(seconds: widget.duration),
+                    boxBackgroundColor: Colors.white,
+                    textStyle: TextStyle(
+                      fontSize: 80.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    boxHeight: 300.0,
                   ),
-                  boxHeight: 300.0,
                 ),
               ),
             )

@@ -30,13 +30,13 @@ class ChipButton extends StatelessWidget {
             onPressed: () {
               print("RSS");
               Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>
-                      BlocProvider<RssMainBloc>(
-                        create: (context) => RssMainBloc(),
-                        child: RssMainScreen(),
-                      )
-                  ),
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    BlocProvider<RssMainBloc>(
+                      create: (context) => RssMainBloc(),
+                      child: RssMainScreen(),
+                    )
+                ),
               );
             }),
         SizedBox(

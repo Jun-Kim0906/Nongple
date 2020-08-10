@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/data_repository/user_repository/user_repository.dart';
 import 'package:nongple/blocs/login/bloc.dart';
 import 'package:nongple/blocs/authentication_bloc/bloc.dart';
@@ -84,15 +85,23 @@ class _LoginFormState extends State<LoginForm> {
             child: Form(
               child: ListView(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: height*0.001),
-                    child: Image.asset('assets/launcher_icon2.png', height: 200),
+                  SizedBox(
+                    height: height * 0.289,
+                    width: width * 0.294,
+                    child: FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: height*0.001),
+                        child: Image.asset('assets/launcher_icon2.png', height: 200),
+                      ),
+                    ),
                   ),
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
 //                      icon: Icon(Icons.email),
-                      labelText: 'Email',
+//                        labelText: 'Email',
+                    hintText: 'Email',
                       border: OutlineInputBorder(
 //                        borderSide: BorderSide(),
                       ),
@@ -109,7 +118,7 @@ class _LoginFormState extends State<LoginForm> {
                     controller: _passwordController,
                     decoration: InputDecoration(
 //                      icon: Icon(Icons.lock),
-                      labelText: 'Password',
+                      hintText: 'Password',
                       border: OutlineInputBorder(
 //                        borderSide: BorderSide(),
                       ),
@@ -121,32 +130,83 @@ class _LoginFormState extends State<LoginForm> {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },
                   ),
+                  SizedBox(
+                    height: height * 0.023,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      FlatButton(
-                        onPressed: (){},
-                        child: Text('아이디 찾기'),
-                      ),
-                      FlatButton(
-                        onPressed: (){},
-                        child: Text('비밀번호 찾기'),
+                      SizedBox(
+                        height: height * 0.036,
+                        width: width * 0.386,
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              FlatButton(
+                                onPressed: (){},
+                                child: Text('아이디 찾기'),
+                              ),
+                              FlatButton(
+                                onPressed: (){},
+                                child: Text('비밀번호 찾기'),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20),
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        LoginButton(
-                          onPressed: isLoginButtonEnabled(state)
-                              ? _onFormSubmitted
-                              : null,
+                        SizedBox(
+                          height: height * 0.07,
+                          width: width * 0.772,
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: LoginButton(
+                              onPressed: isLoginButtonEnabled(state)
+                                  ? _onFormSubmitted
+                                  : null,
+                            ),
+                          ),
                         ),
-                        CreateAccountButton(userRepository: _userRepository),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.07,),
-                        GoogleLoginButton(),
+                        SizedBox(
+                          height: height * 0.023,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: height * 0.036,
+                              width: width * 0.386,
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                  child: CreateAccountButton(userRepository: _userRepository)
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: height * 0.089,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: height * 0.043,
+                              width: width * 0.386,
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                  child: GoogleLoginButton()
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
