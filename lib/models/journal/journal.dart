@@ -7,12 +7,6 @@ class Journal {
   Timestamp date;
   Timestamp moddttm;
 
-//  String get fid=> _fid;
-//  String get jid=> _jid;
-//  String get content=>_content;
-//  Timestamp get date=> _date;
-//  Timestamp get moddttm=> _moddttm;
-
   Journal({this.fid, this.content, this.date, this.jid, this.moddttm});
 
   factory Journal.fromSnapshot(DocumentSnapshot snapshot) {

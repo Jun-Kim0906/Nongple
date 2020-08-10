@@ -34,7 +34,7 @@ class _HomeScreenListViewBuilderState extends State<HomeScreenListViewBuilder> {
                 BlocProvider.value(
                   value: _homeBloc,
                   child: HomePageCard(
-                    facList: state.facList[index],
+                    facility: state.facList[index],
                   ),
                 ),
                 SizedBox(

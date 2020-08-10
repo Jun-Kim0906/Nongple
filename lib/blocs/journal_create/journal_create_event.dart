@@ -14,9 +14,9 @@ class JournalCreateEvent extends Equatable{
   List<Object> get props => [];
 }
 
-class DateSeleted extends JournalCreateEvent{
+class DateSelected extends JournalCreateEvent{
   final Timestamp selectedDate;
-  const DateSeleted({@required this.selectedDate});
+  const DateSelected({@required this.selectedDate});
 
   @override
   String toString()=>'SelectedDate: $selectedDate';
@@ -29,6 +29,7 @@ class ContentChanged extends JournalCreateEvent{
   @override
   String toString() =>'ContentChanged {content: $content}';
 }
+
 
 class ImageSeleted extends JournalCreateEvent{
   final List<Asset> assetList;
@@ -55,39 +56,57 @@ class DeleteImageFile extends JournalCreateEvent{
   String toString() => 'DeleteImageFile: $removedFile';
 }
 
+class CheckSameDate extends JournalCreateEvent {
+  final Timestamp date;
+
+  const CheckSameDate({this.date});
+
+  @override
+  String toString() => 'CheckSameDate { date : $date }';
+}
+
+class CompletePressed extends JournalCreateEvent{}
+
+class PopCheckSameDateDialog extends JournalCreateEvent{}
+
+class MoveToEdit extends JournalCreateEvent{}
+
+class PassFid extends JournalCreateEvent{
+  final String fid;
+  const PassFid({@required this.fid});
+
+  @override
+  String toString() {
+    return 'PassFid{fid: $fid}';
+  }
+}
+
 class UploadJournal extends JournalCreateEvent{
   final String fid;
   const UploadJournal({@required this.fid});
 
   @override
-  String toString() =>'UploadJournal {fid: $fid}';
+  String toString() {
+    return 'UploadJournal{fid: $fid}';
+  }
 }
 
-class UpdateJournal extends JournalCreateEvent {
-  final String fid;
-  final String jid;
-  const UpdateJournal({@required this.fid, @required this.jid});
+///Edit Screen
+class EditPageLoad extends JournalCreateEvent{}
 
-  @override
-  String toString() => 'UpdateJournal { fid : $fid, jid : $jid }';
+class EditPageLoaded extends JournalCreateEvent{}
+
+class LoadExistJournal extends JournalCreateEvent{}
+
+class PassExistJournalPictures extends JournalCreateEvent{
+  final Journal journal;
+  final List<Picture> pictureList;
+  const PassExistJournalPictures({@required this.journal,@required this.pictureList});
 }
 
-class SetCopyImageList extends JournalCreateEvent {
-  final List<Picture> copyOfExistingImage;
-  const SetCopyImageList({@required this.copyOfExistingImage});
-
-  @override
-  String toString() => 'SetCopyImageList { copyOfExistingImage : $copyOfExistingImage }';
-}
-
-class DeleteCopyOfExistingImage extends JournalCreateEvent {
+class DeleteExistPicture extends JournalCreateEvent{
   final int index;
-  const DeleteCopyOfExistingImage({@required this.index});
-
-  @override
-  String toString() => 'DeleteCopyOfExistingImage { index : $index }';
+  const DeleteExistPicture({@required this.index});
 }
 
-class ModifyPressed extends JournalCreateEvent{}
-
-class Test extends JournalCreateEvent{}
+class UpdateJournal extends JournalCreateEvent{}
