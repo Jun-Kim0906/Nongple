@@ -186,14 +186,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     print(
         '////////////////////// Finished Getting Weather API ///////////////////////////////////');
 
-    /// update firebase with new temperature
-//    await Firestore.instance
-//        .collection('Facility')
-//        .document(event.fid)
-//        .updateData({
-//      'temperature': tmpList_short[0].fcstValue,
-//    });
-
     yield WeatherListSet(skyList, tmpList, humidList, skyList_short,
         tmpList_short, humidList_short);
   }

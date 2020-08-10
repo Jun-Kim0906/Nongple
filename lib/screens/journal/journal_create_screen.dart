@@ -95,7 +95,13 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                   },
                 ),
                 elevation: 0.0,
-                title: Text('일지작성', style: TextStyle(color: Colors.black)),
+                title: SizedBox(
+                  height: height * 0.04,
+                  child: FittedBox(
+                    fit: BoxFit.fitHeight,
+                      child: Text('일지작성', style: TextStyle(color: Colors.black))
+                  ),
+                ),
                 centerTitle: true,
                 backgroundColor: Colors.white,
               ),

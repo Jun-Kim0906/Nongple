@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 /// throughout all pages
 const bodyColor = Colors.white; // color white
 const appBarColor = Colors.white; // color white
+const goBackArrow = Color(0xFF9E9E9E); // color grey
 
 
 /// colors for journal page
@@ -13,10 +14,9 @@ const journalIconColor3 = Color(0xFFEB5757); // color red
 
 
 /// colors for weather page
-const weatherGoBackArrowColor = Color(0xFF9E9E9E); // color grey
-
-/// colors for dictionary page
-const dictionaryGoBackArrowColor = Color(0xFF9E9E9E); // color grey
+const sun = Color(0xFFF3CC3F); // yellow
+const cloud = Color(0xFFADADAD); // grey
+const rain = Color(0xFF53C3E7); // sky blue
 
 
 /// facility page

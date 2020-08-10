@@ -22,7 +22,8 @@ class WeatherListSet extends WeatherState {
   const WeatherListSet(this.skyList, this.tmpList, this.humidList,
       this.skyList_short, this.tmpList_short, this.humidList_short);
 
-  List<Object> get props => [
+  List<Object> get props =>
+      [
         skyList,
         tmpList,
         humidList,
@@ -32,6 +33,14 @@ class WeatherListSet extends WeatherState {
       ];
 
   @override
-  String toString() =>
-      'WeatherListSet { skyList : $skyList, tmpList : $tmpList, humidList : $humidList, skyList_short : $skyList_short, tmpList_short : $tmpList_short, humidList_short : $humidList_short}';
+  String toString() {
+    return '''WeatherListSet { 
+    skyList : ${skyList.length}, 
+    tmpList : ${tmpList.length}, 
+    humidList : ${humidList.length}, 
+    skyList_short : ${skyList_short.length}, 
+    tmpList_short : ${tmpList_short.length}, 
+    humidList_short : ${humidList_short.length},
+    }''';
+  }
 }

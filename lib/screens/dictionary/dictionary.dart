@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
@@ -52,19 +53,21 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
   }
 
   Widget searchBar() {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30),
       child: Row(
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(left: 20),
-            width: 65,
-            child: Text(
+            child: AutoSizeText(
               '용어',
               style: TextStyle(
                   color: Color(0xFF2F80ED),
                   fontWeight: FontWeight.w600,
-                  fontSize: 21),
+                  fontSize: 18),
+              maxLines: 1,
             ),
           ),
           SizedBox(
@@ -123,10 +126,11 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                     },
                     child: Container(
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: AutoSizeText(
                         "${state.searchedItems[index].wordName}",
                         style: TextStyle(
-                            fontSize: 21, fontWeight: FontWeight.bold),
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                        maxLines: 1,
                       ),
                     ),
                   ),

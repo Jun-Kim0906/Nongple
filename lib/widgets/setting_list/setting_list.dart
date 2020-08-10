@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,19 +6,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/screens/screens.dart';
 import 'package:nongple/testPage2.dart';
+import 'package:nongple/utils/style.dart';
 import 'package:nongple/widgets/widgets.dart';
 
 class SettingTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return ListView(
       children: [
         ListTile(
-            leading: Icon(Icons.collections),
-            title:
-                Text('배경화면 관리', style: TextStyle(fontWeight: FontWeight.bold)),
-            trailing: Icon(Icons.arrow_forward_ios),
+            leading: Icon(Icons.collections, color: Color(0xFF757575)),
+            title: SizedBox(
+              height: height * 0.04,
+              width: width * 0.644,
+              child: AutoSizeText(
+                '배경화면 관리',
+                style: settingListStyle,
+                maxLines: 1,
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              color: Color(0xFF757575),
+            ),
             onTap: () {
               Navigator.push(
                   context,
@@ -30,27 +44,66 @@ class SettingTiles extends StatelessWidget {
                       ));
             }),
         ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text(
-            '로그아웃',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          leading: Icon(
+            Icons.exit_to_app,
+            color: Color(0xFF757575),
           ),
-          trailing: Icon(Icons.arrow_forward_ios),
+          title: SizedBox(
+              height: height * 0.04,
+              width: width * 0.644,
+              child: AutoSizeText(
+                  '로그아웃',
+                  style: settingListStyle,
+                maxLines: 1,
+              )
+          ),
+          trailing: Icon(
+            Icons.arrow_forward_ios,
+            color: Color(0xFF757575),
+          ),
           onTap: () {
             showAlertDialog(context);
           },
         ),
         ListTile(
-          leading: Icon(Icons.error_outline),
-          title: Text('버전 정보', style: TextStyle(fontWeight: FontWeight.bold)),
-          trailing: Icon(Icons.arrow_forward_ios),
+          leading: Icon(
+            Icons.error_outline,
+            color: Color(0xFF757575),
+          ),
+          title: SizedBox(
+              height: height * 0.04,
+              width: width * 0.644,
+              child: AutoSizeText(
+                  '버전 정보',
+                  style: settingListStyle,
+                maxLines: 1,
+              )
+          ),
+          trailing: Icon(
+            Icons.arrow_forward_ios,
+            color: Color(0xFF757575),
+          ),
           onTap: () {
             showAboutDialog(
-                context: context,
+              context: context,
               applicationVersion: '1.0.0',
-              applicationIcon: Image.asset('assets/launcher_icon.png'),
-              applicationLegalese: '개발자 : \nOat Kim / Grain Park\n(Prod. may2nd)',
-              children: [],
+              applicationIcon: SizedBox(
+                height: height * 0.2,
+                width: width * 0.3,
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Image.asset('assets/launcher_icon.png'),
+                ),
+              ),
+//              applicationLegalese: '개발자 : \nOat Kim / Grain Park\n(Prod. may2nd)',
+              children: [
+                SizedBox(
+                    height: height * 0.1,
+                    width: width,
+                    child: AutoSizeText(
+                      '개발자 : \nOat Kim / Grain Park\n(Prod. may2nd)',
+                    )),
+              ],
             );
           },
         ),

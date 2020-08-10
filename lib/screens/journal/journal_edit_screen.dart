@@ -72,7 +72,13 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                       },
                     ),
                     elevation: 0.0,
-                    title: Text('일지수정', style: TextStyle(color: Colors.black)),
+                    title: SizedBox(
+                      height: height * 0.04,
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                          child: Text('일지수정', style: TextStyle(color: Colors.black))
+                      ),
+                    ),
                     centerTitle: true,
                     backgroundColor: Colors.white,
                   ),

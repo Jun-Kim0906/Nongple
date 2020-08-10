@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +51,6 @@ class _HomePageCardState extends State<HomePageCard> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-//    print('[Card] ${widget.facList.name} : ${widget.facList.bgUrl} }');
-//    print('[Card] ${name} : ${bgUrl} }');
     return Card(
       elevation: 4.0,
       semanticContainer: true,
@@ -69,7 +68,7 @@ class _HomePageCardState extends State<HomePageCard> {
                   ? Image(
                       image: CachedNetworkImageProvider(widget.facList.bgUrl),
                       fit: BoxFit.cover,
-                      color: Color.fromRGBO(255,255,255,0.2),
+                      color: Color.fromRGBO(255, 255, 255, 0.2),
                       colorBlendMode: BlendMode.modulate,
                     )
                   : Image.asset("assets/white.png"),
@@ -87,123 +86,120 @@ class _HomePageCardState extends State<HomePageCard> {
                               BlocProvider<TabBloc>(
                                 create: (context) => TabBloc(),
                               ),
-//                              BlocProvider<JournalMainBloc>(
-//                                create: (context) => JournalMainBloc()
-//                                ..add(PassFacilityItemToJournal(facility: widget.facList))
-//                                  ..add(GetJournalPictureList(fid: widget.facList.fid)),
-//                              ),
-//                              BlocProvider.value(
-//                                value: _homeBloc,
-//                              )
                             ],
-                            child: TabScreen(facList: widget.facList,),
-                          )
-                      ));
+                            child: TabScreen(
+                              facList: widget.facList,
+                            ),
+                          )));
             },
             child: Container(
-              height: height / 5,
+              height: height * 0.22,
               width: width,
               padding: EdgeInsets.fromLTRB(
                   width / 25, height / 35, width / 25, height / 60),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    flex: 2,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: width * 0.5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: height*0.01,
-                              ),
-                              SizedBox(
-                                height: height*0.033,
-                                width: width*0.7,
-                                child: FittedBox(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    widget.facList.name,
-                                    style: cardWidgetFacilityNameStyle,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: height*0.005,
-                              ),
-                              SizedBox(
-                                height: height*0.02,
-                                width: width*0.7,
-                                child: FittedBox(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    widget.facList.addr,
-                                    style: cardWidgetAddrStyle,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: height*0.09,
-                          width: width*0.28,
-                          child: FittedBox(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              widget.facList.temperature + degrees + 'C',
-                              style: cardWidgetWeatherDataStyle,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: width * 0.5,
+                        height: height * 0.1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: height * 0.01,
                             ),
+                            SizedBox(
+                              height: height * 0.04,
+                              width: width * 0.7,
+                              child: AutoSizeText(
+                                widget.facList.name,
+                                style: cardWidgetFacilityNameStyle,
+                                maxLines: 1,
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.005,
+                            ),
+                            SizedBox(
+                              height: height * 0.042,
+                              width: width * 0.7,
+                              child: AutoSizeText(
+                                widget.facList.addr,
+                                style: cardWidgetAddrStyle,
+                                minFontSize: 8,
+                                stepGranularity: 2,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.08,
+                        width: width * 0.25,
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            widget.facList.temperature + degrees + 'C',
+                            style: cardWidgetWeatherDataStyle,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   Expanded(
-                    child: Container(
-                      height: height / 5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Chip(
-                            backgroundColor: Colors.white,
-                            elevation: 1.0,
-                            label: Text(
-                              ' 자세히보기 ',
-                              style: cardWidgetDetailButtonStyle,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: height * 0.07,
+                          child: FittedBox(
+                            fit: BoxFit.fitHeight,
+                            child: Chip(
+                              backgroundColor: Colors.white,
+                              elevation: 1.0,
+                              label: AutoSizeText(
+                                ' 자세히보기 ',
+                                style: cardWidgetDetailButtonStyle,
+                                maxLines: 1,
+                              ),
                             ),
                           ),
-                          Container(
-                            child: Card(
-                              elevation: 2.0,
-                              child: (widget.facList.category == 1 || widget.facList.category == 2)
-                                  ? Icon(
-                                      CustomIcons.tractor,
-                                      color: Color(0xFF2F80ED),
-                                      size: 25,
-                                    )
-                                  : (widget.facList.category == 3)
-                                      ? Icon(
-                                          CustomIcons.cow,
-                                          color: Color(0xFF2F80ED),
-                                          size: 25,
-                                        )
-                                      : Icon(
-                                          CustomIcons.plant,
-                                          color: Color(0xFF2F80ED),
-                                          size: 25,
-                                        ),
-                              shape: CircleBorder(),
-                              clipBehavior: Clip.antiAlias,
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Card(
+                          elevation: 1.0,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: (widget.facList.category == 1 ||
+                                    widget.facList.category == 2)
+                                ? Icon(
+                                    CustomIcons.tractor,
+                                    color: Color(0xFF2F80ED),
+                                    size: 23,
+                                  )
+                                : (widget.facList.category == 3)
+                                    ? Icon(
+                                        CustomIcons.cow,
+                                        color: Color(0xFF2F80ED),
+                                        size: 23,
+                                      )
+                                    : Icon(
+                                        CustomIcons.plant,
+                                        color: Color(0xFF2F80ED),
+                                        size: 23,
+                                      ),
+                          ),
+                          shape: CircleBorder(),
+                          clipBehavior: Clip.antiAlias,
+                        ),
+                      ],
                     ),
                   ),
                 ],

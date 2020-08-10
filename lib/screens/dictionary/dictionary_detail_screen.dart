@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +32,8 @@ class _DictionaryDetailScreenState extends State<DictionaryDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return BlocListener(
       bloc: _dictionaryBloc,
       listener: (BuildContext context, DictionaryState state) {
@@ -57,9 +60,15 @@ class _DictionaryDetailScreenState extends State<DictionaryDetailScreen> {
                     Navigator.pop(context);
                   }),
               backgroundColor: Colors.white,
-              title: Text(
-                "농업 용어사전",
-                style: TextStyle(color: Colors.black),
+              title: SizedBox(
+                height: height * 0.032,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Text(
+                    "농업 용어사전",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
               ),
             ),
             body: Container(
@@ -76,7 +85,7 @@ class _DictionaryDetailScreenState extends State<DictionaryDetailScreen> {
                           alignment: Alignment.centerLeft,
                         ),
                         SizedBox(
-                          height: 23,
+                          height: height * 0.04,
                         ),
                         _content(state),
                       ],
@@ -95,7 +104,7 @@ class _DictionaryDetailScreenState extends State<DictionaryDetailScreen> {
     return Container(
       child: Text(
         name,
-        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -104,6 +113,7 @@ class _DictionaryDetailScreenState extends State<DictionaryDetailScreen> {
     return Container(
         child: Text(
       state.detailContent,
+          style: TextStyle(fontSize: 12),
     ));
   }
 }

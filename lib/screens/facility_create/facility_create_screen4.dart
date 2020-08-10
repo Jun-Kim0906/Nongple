@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +56,8 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen4> {
                       height: height*0.0959,
                       width: width*0.786,
                       child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        alignment: Alignment.centerLeft,
                         child: Text(
                           '축하합니다 ' + EmojiParser().emojify('🎉')+'\n시설 등록이 완료되었습니다.',
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.8),
@@ -68,26 +71,46 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen4> {
                       elevation: 4.0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                       child: Container(
+                        padding: EdgeInsets.fromLTRB(width*0.17, height*0.044, width*0.17, height*0.044),
                         width: width,
                         height: height/3,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Icon(
-                              state.facilityCategory == 4
-                                  ? CustomIcons.plant
-                                  : state.facilityCategory == 3 ? CustomIcons.cow : CustomIcons.tractor,
-                              size: width/3,
-                              color: Color(0xFF2F80ED),
+                            SizedBox(
+                              height: height * 0.14,
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Icon(
+                                  state.facilityCategory == 4
+                                      ? CustomIcons.plant
+                                      : state.facilityCategory == 3 ? CustomIcons.cow : CustomIcons.tractor,
+                                  size: width/3,
+                                  color: Color(0xFF2F80ED),
+                                ),
+                              ),
                             ),
-                            Text(
-                              state.facilityName,
-                              style: TextStyle(color: Colors.black, fontSize: 28.8, fontWeight: FontWeight.bold),
+                            SizedBox(
+                              height: height * 0.05,
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text(
+                                  state.facilityName,
+                                  style: TextStyle(color: Colors.black, fontSize: 28.8, fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ),
-                            Text(
-                              state.facilityAddr,
-                              style: TextStyle(fontSize: 16.6),
+                            Expanded(
+                              child: AutoSizeText(
+                                state.facilityAddr,
+                                style: TextStyle(fontSize: 16.6),
+                                textAlign: TextAlign.center,
+                                minFontSize: 2,
+                                stepGranularity: 2,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             )
                           ],
                         ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,7 @@ class _SetBackgroundScreenState extends State<SetBackgroundScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: bodyColor,
       appBar: AppBar(
@@ -40,9 +42,12 @@ class _SetBackgroundScreenState extends State<SetBackgroundScreen> {
             Navigator.pop(context);
           },
         ),
-        title: Text(
-          '배경화면 관리',
-          style: TextStyle(color: Colors.black),
+        title: SizedBox(
+          height: height * 0.04,
+          child: AutoSizeText(
+            '배경화면 관리',
+            style: settingAppBarStyle,
+          ),
         ),
         centerTitle: true,
       ),
