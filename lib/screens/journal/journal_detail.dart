@@ -1,172 +1,170 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/blocs/blocs.dart';
-import 'package:nongple/models/picture/picture.dart';
-import 'package:nongple/screens/journal/journal_edit_screen.dart';
-import 'package:nongple/utils/todays_date.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:nongple/utils/utils.dart';
+import 'package:nongple/screens/screens.dart';
+import 'package:nongple/widgets/loading/loading.dart';
 
 class JournalDetail extends StatefulWidget {
-
   @override
   _JournalDetailState createState() => _JournalDetailState();
 }
 
 class _JournalDetailState extends State<JournalDetail> {
   JournalMainBloc _journalMainBloc;
+  bool isBeforePageChanged = false;
+  bool isChanged = false;
+  double height;
+  double width;
 
   @override
   void initState() {
     super.initState();
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
+    _journalMainBloc.add(DetailPageLoad());
   }
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return BlocListener(
       bloc: _journalMainBloc,
-      listener: (context, state) {
-//        if (state.modifyState == true) {
-//          print('[journal detail page] modified image length : ${state.detailPageImage.length}');
-//        } else {
-//          print('[journal detail page] set modify state event now thrown');
-//        }
+      listener: (BuildContext context, JournalMainState state) {
+        if(state.isLoading==true && state.isDetailPageLoading ==true){
+          LoadingDialog.onLoading(context);
+          _journalMainBloc.add(GetDetailPagePictureList());
+        }else if(state.isLoading==false && state.isDetailPageLoading==true){
+          LoadingDialog.dismiss(context, (){
+            _journalMainBloc.add(PageLoaded());
+          });
+        }
       },
       child: BlocBuilder<JournalMainBloc, JournalMainState>(
-        builder: (context, state) {
-          var date = state.detailPageDate.toDate();
-          var formatDate = DateFormat('yyyy.MM.dd').format(date);
-          String weekday = daysOfWeek(index: date.weekday);
-        List<Picture> _image = state.pictureList;
-        _image = _image.where((data) => data.jid == state.detailPageJid).toList();
-        print('[journal detail page] image length : ${_image.length}');
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              leading: IconButton(
+          builder: (context, state) {
+        var date = state.journal.date.toDate();
+        var formatDate = DateFormat('yyyy.MM.dd').format(date);
+        String weekday = daysOfWeek(index: date.weekday);
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Color(0xFF828282),
+              ),
+              onPressed: () {
+                Navigator.pop(context, isBeforePageChanged);
+              },
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              IconButton(
                 icon: Icon(
-                  Icons.arrow_back_ios,
+                  Icons.more_vert,
                   color: Color(0xFF828282),
                 ),
                 onPressed: () {
-                  _journalMainBloc.add(AllDateSeleted(selectedDate: state.detailPageDate));
-                  _journalMainBloc.add(OnLoading());
-//                _image.clear();
-                  Navigator.pop(context);
+                  _settingModalBottomSheet(context, state);
                 },
               ),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: Color(0xFF828282),
-                  ),
-                  onPressed: () {
-                    _settingModalBottomSheet(context, state, _image);
-                  },
-                ),
-              ],
-            ),
-            body: Column(
-              children: [
-                (_image.isNotEmpty)
-                    ? Container(
-                  height: height * 0.6,
-//                        width: double.infinity,
-                  child: Swiper(
-                      layout: SwiperLayout.STACK,
-//                    layout: SwiperLayout.DEFAULT,
-                      itemHeight: height * 0.6,
-                      itemWidth: width,
-                      loop: true,
-                      itemCount: _image.length,
-                      control: SwiperControl(
-                          color: Color(0x00000000),
-                          disableColor: Color(0x00000000)),
-                      viewportFraction: 1.0,
-                      scale: 1.0,
-                      pagination: SwiperPagination(
-                        builder: DotSwiperPaginationBuilder(
-                          activeColor: Color(0xFF2F80ED),
-                        ),
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          margin: EdgeInsets.all(0.0),
-                          semanticContainer: true,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15.0),
-                              bottomRight: Radius.circular(15.0),
+            ],
+          ),
+          body: Column(
+            children: [
+              (state.detailPictureList.isNotEmpty)
+                  ? Container(
+                      height: height * 0.6,
+                      child: Swiper(
+                          layout: SwiperLayout.STACK,
+                          itemHeight: height * 0.6,
+                          itemWidth: width,
+                          loop: true,
+                          itemCount: state.detailPictureList.length,
+                          control: SwiperControl(
+                              color: Color(0x00000000),
+                              disableColor: Color(0x00000000)),
+                          viewportFraction: 1.0,
+                          scale: 1.0,
+                          pagination: SwiperPagination(
+                            builder: DotSwiperPaginationBuilder(
+                              activeColor: Color(0xFF2F80ED),
                             ),
                           ),
-                          child: Image(
-                            image: CachedNetworkImageProvider(
-                              _image[index].url,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Card(
+                              margin: EdgeInsets.all(0.0),
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15.0),
+                                  bottomRight: Radius.circular(15.0),
+                                ),
+                              ),
+                              child: Image(
+                                image: CachedNetworkImageProvider(
+                                  state.detailPictureList[index].url,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            );
+                          }),
+                    )
+                  : Container(),
+              Flexible(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(
+                        width * 0.1, height / 11, width * 0.1, 0.0),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            formatDate.toString() + ' ' + weekday,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25.0,
+                              color: Color(0xFFB8B8B8),
                             ),
-                            fit: BoxFit.fill,
                           ),
-                        );
-                      }),
-                )
-                    : Container(),
-                Flexible(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(
-                          width * 0.1, height / 11, width * 0.1, 0.0),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              formatDate.toString() + ' ' + weekday,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25.0,
-                                color: Color(0xFFB8B8B8),
-                              ),
+                          SizedBox(
+                            height: height * 0.06,
+                          ),
+                          Text(
+                            state.journal.content,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                              color: Color(0xFFB8B8B8),
                             ),
-                            SizedBox(
-                              height: height * 0.06,
-                            ),
-                            Text(
-                              state.detailPageContent,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0,
-                                color: Color(0xFFB8B8B8),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                )
-              ],
-            ),
-          );
-        },
-      ),
+                ),
+              )
+            ],
+          ),
+        );
+      }),
     );
   }
 
   void _settingModalBottomSheet(
-      context, JournalMainState state, List<Picture> _image) {
+      context, JournalMainState state) {
     showModalBottomSheet(
         context: context,
-        builder: (BuildContext c) {
+        builder: (BuildContext context) {
           return Wrap(
             children: <Widget>[
               Column(
@@ -181,30 +179,24 @@ class _JournalDetailState extends State<JournalDetail> {
                       '수정하기',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    onTap: () {
-                      Navigator.pushReplacement(
+                    onTap: () async {
+                      isChanged = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider<JournalCreateBloc>(
-                                        create: (BuildContext context) =>
-                                            JournalCreateBloc()
-                                              ..add(DateSeleted(
-                                                  selectedDate:
-                                                      state.detailPageDate))
-                                              ..add(SetCopyImageList(
-                                                  copyOfExistingImage: _image)),
-                                      ),
-                                      BlocProvider.value(
-                                        value: _journalMainBloc,
-                                      ),
-                                    ],
-                                    child: JournalEditScreen(
-                                      content: state.detailPageContent,
-                                    ),
-                                  )));
+                            builder: (BuildContext context) =>
+                                BlocProvider<JournalCreateBloc>(
+                              create: (BuildContext context) =>
+                                  JournalCreateBloc()..add(PassFid(fid: state.facility.fid))
+                                  ..add(PassExistJournalPictures(journal: state.journal, pictureList: state.detailPictureList)
+                                  )
+                                  ,
+                              child: JournalEditScreen(),
+                            ),
+                          ));
+                      if(isChanged==true){
+                        _journalMainBloc.add(DetailPageLoad(loadJournal: true));
+                        isBeforePageChanged = true;
+                      }
                     },
                   ),
                   ListTile(
@@ -232,7 +224,6 @@ class _JournalDetailState extends State<JournalDetail> {
     Widget cancelButton = GestureDetector(
       child: Text("아니요"),
       onTap: () {
-//        Navigator.pop(context);
         Navigator.pop(context);
       },
     );
@@ -242,15 +233,10 @@ class _JournalDetailState extends State<JournalDetail> {
         style: TextStyle(color: Colors.blue),
       ),
       onTap: () {
-        _journalMainBloc
-            .add(DeleteAll(fid: state.facility.fid, jid: state.detailPageJid));
-        _journalMainBloc.add(GetJournalPictureList(fid: state.facility.fid));
-        _journalMainBloc
-            .add(AllDateSeleted(selectedDate: state.detailPageDate));
-        _journalMainBloc.add(OnLoading());
+        _journalMainBloc.add(DeleteJournal());
         Navigator.pop(context);
         Navigator.pop(context);
-//        Navigator.pop(context);
+        Navigator.pop(context,true);
       },
     );
 
@@ -260,8 +246,8 @@ class _JournalDetailState extends State<JournalDetail> {
         borderRadius: BorderRadius.circular(20.0),
       ),
       content: Container(
-        height: MediaQuery.of(context).size.height - 550,
-        width: MediaQuery.of(context).size.width - 30,
+        height: height * 0.25,
+        width: width * 0.7,
         padding: EdgeInsets.fromLTRB(7.0, 5.0, 7.0, 5.0),
         color: Colors.white,
         child: Column(

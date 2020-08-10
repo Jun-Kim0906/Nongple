@@ -8,11 +8,11 @@ import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
 
 class TabScreen extends StatefulWidget {
-  final Facility facList;
+  final Facility facility;
 
   TabScreen({
     Key key,
-    this.facList,
+    this.facility,
   }) : super(key: key);
 
   @override
@@ -27,8 +27,6 @@ class _TabScreenState extends State<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
@@ -43,33 +41,27 @@ class _TabScreenState extends State<TabScreen> {
                 Navigator.pop(context);
               },
             ),
-            title: SizedBox(
-              height: height * 0.06,
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: Column(
-                  children: [
-                    (activeTab == AppTab.weather)
+            title: Column(
+              children: [
+                (activeTab == AppTab.weather)
+                    ? Text(
+                        '날씨',
+                        style: tabAppBarTitleStyle,
+                      )
+                    : (activeTab == AppTab.journal)
                         ? Text(
-                            '날씨',
+                            '일지',
                             style: tabAppBarTitleStyle,
                           )
-                        : (activeTab == AppTab.journal)
-                            ? Text(
-                                '일지',
-                                style: tabAppBarTitleStyle,
-                              )
-                            : Text(
-                                '용어사전',
-                                style: tabAppBarTitleStyle,
-                              ),
-                    Text(
-                      widget.facList.name,
-                      style: tabAppBarSubtitleStyle,
-                    ),
-                  ],
+                        : Text(
+                            '용어사전',
+                            style: tabAppBarTitleStyle,
+                          ),
+                Text(
+                  widget.facility.name,
+                  style: tabAppBarSubtitleStyle,
                 ),
-              ),
+              ],
             ),
             centerTitle: true,
           ),
@@ -77,14 +69,14 @@ class _TabScreenState extends State<TabScreen> {
               ? BlocProvider<WeatherBloc>(
                   create: (BuildContext context) => WeatherBloc(),
                   child: WeatherScreen(
-                    facility: widget.facList,
+                    facility: widget.facility,
                   ),
                 )
               : (activeTab == AppTab.journal)
                   ? BlocProvider<JournalMainBloc>(
                       create: (BuildContext context) => JournalMainBloc()
                         ..add(
-                            PassFacilityItemToJournal(facility: widget.facList)),
+                            PassFacility(facility: widget.facility)),
                       child: JournalMain())
                   : BlocProvider<DictionaryBloc>(
                       create: (BuildContext context) => DictionaryBloc(),

@@ -13,11 +13,11 @@ import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/custom_icons/custom_icons.dart';
 
 class HomePageCard extends StatefulWidget {
-  final Facility facList;
+  final Facility facility;
 
   HomePageCard({
     Key key,
-    this.facList,
+    this.facility,
   }) : super(key: key);
 
   @override
@@ -37,13 +37,13 @@ class _HomePageCardState extends State<HomePageCard> {
   @override
   void initState() {
     super.initState();
-    addr = widget.facList.addr;
-    bgUrl = widget.facList.bgUrl;
-    category = widget.facList.category;
-    fid = widget.facList.fid;
-    name = widget.facList.name;
-    temperature = widget.facList.temperature;
-    uid = widget.facList.uid;
+    addr = widget.facility.addr;
+    bgUrl = widget.facility.bgUrl;
+    category = widget.facility.category;
+    fid = widget.facility.fid;
+    name = widget.facility.name;
+    temperature = widget.facility.temperature;
+    uid = widget.facility.uid;
     _homeBloc = BlocProvider.of<HomeBloc>(context);
   }
 
@@ -64,9 +64,9 @@ class _HomePageCardState extends State<HomePageCard> {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: widget.facList.bgUrl.isNotEmpty
+              child: widget.facility.bgUrl.isNotEmpty
                   ? Image(
-                      image: CachedNetworkImageProvider(widget.facList.bgUrl),
+                      image: CachedNetworkImageProvider(widget.facility.bgUrl),
                       fit: BoxFit.cover,
                       color: Color.fromRGBO(255, 255, 255, 0.2),
                       colorBlendMode: BlendMode.modulate,
@@ -88,7 +88,7 @@ class _HomePageCardState extends State<HomePageCard> {
                               ),
                             ],
                             child: TabScreen(
-                              facList: widget.facList,
+                              facility: widget.facility,
                             ),
                           )));
             },
@@ -117,7 +117,7 @@ class _HomePageCardState extends State<HomePageCard> {
                               height: height * 0.04,
                               width: width * 0.7,
                               child: AutoSizeText(
-                                widget.facList.name,
+                                widget.facility.name,
                                 style: cardWidgetFacilityNameStyle,
                                 maxLines: 1,
                               ),
@@ -129,7 +129,7 @@ class _HomePageCardState extends State<HomePageCard> {
                               height: height * 0.042,
                               width: width * 0.7,
                               child: AutoSizeText(
-                                widget.facList.addr,
+                                widget.facility.addr,
                                 style: cardWidgetAddrStyle,
                                 minFontSize: 8,
                                 stepGranularity: 2,
@@ -147,7 +147,7 @@ class _HomePageCardState extends State<HomePageCard> {
                           fit: BoxFit.fitWidth,
                           alignment: Alignment.centerRight,
                           child: Text(
-                            widget.facList.temperature + degrees + 'C',
+                            widget.facility.temperature + degrees + 'C',
                             style: cardWidgetWeatherDataStyle,
                           ),
                         ),
@@ -177,14 +177,14 @@ class _HomePageCardState extends State<HomePageCard> {
                           elevation: 1.0,
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
-                            child: (widget.facList.category == 1 ||
-                                    widget.facList.category == 2)
+                            child: (widget.facility.category == 1 ||
+                                    widget.facility.category == 2)
                                 ? Icon(
                                     CustomIcons.tractor,
                                     color: Color(0xFF2F80ED),
                                     size: 23,
                                   )
-                                : (widget.facList.category == 3)
+                                : (widget.facility.category == 3)
                                     ? Icon(
                                         CustomIcons.cow,
                                         color: Color(0xFF2F80ED),
