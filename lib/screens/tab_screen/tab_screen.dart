@@ -8,11 +8,11 @@ import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/widgets.dart';
 
 class TabScreen extends StatefulWidget {
-  final Facility facList;
+  final Facility facility;
 
   TabScreen({
     Key key,
-    this.facList,
+    this.facility,
   }) : super(key: key);
 
   @override
@@ -58,7 +58,7 @@ class _TabScreenState extends State<TabScreen> {
                             style: tabAppBarTitleStyle,
                           ),
                 Text(
-                  widget.facList.name,
+                  widget.facility.name,
                   style: tabAppBarSubtitleStyle,
                 ),
               ],
@@ -69,14 +69,14 @@ class _TabScreenState extends State<TabScreen> {
               ? BlocProvider<WeatherBloc>(
                   create: (BuildContext context) => WeatherBloc(),
                   child: WeatherScreen(
-                    facility: widget.facList,
+                    facility: widget.facility,
                   ),
                 )
               : (activeTab == AppTab.journal)
                   ? BlocProvider<JournalMainBloc>(
                       create: (BuildContext context) => JournalMainBloc()
                         ..add(
-                            PassFacilityItemToJournal(facility: widget.facList)),
+                            PassFacility(facility: widget.facility)),
                       child: JournalMain())
                   : BlocProvider<DictionaryBloc>(
                       create: (BuildContext context) => DictionaryBloc(),

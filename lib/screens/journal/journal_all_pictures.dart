@@ -5,11 +5,9 @@ import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/models/models.dart';
 import 'package:nongple/screens/journal/journal.dart';
 import 'package:nongple/utils/utils.dart';
+import 'package:nongple/widgets/loading/loading.dart';
 
 class JournalAllPictures extends StatefulWidget {
-//  Facility facility;
-//
-//  JournalAllPictures({@required this.facility});
 
   @override
   _JournalAllPicturesState createState() => _JournalAllPicturesState();
@@ -23,6 +21,64 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
   void initState() {
     super.initState();
     _journalMainBloc = BlocProvider.of<JournalMainBloc>(context);
+    _journalMainBloc.add(PicturePageLoad());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    return BlocListener(
+      bloc: _journalMainBloc,
+      listener: (BuildContext context, JournalMainState state){
+        if(state.isLoading==true&&state.isPicturePageLoading==true){
+          LoadingDialog.onLoading(context);
+          _journalMainBloc.add(GetAllPicture());
+        }else if(state.isLoading==false && state.isPicturePageLoading==true){
+          LoadingDialog.dismiss(context, (){
+            _journalMainBloc.add(PageLoaded());
+          });
+        }
+      },
+      child: BlocBuilder<JournalMainBloc, JournalMainState>(
+        bloc: _journalMainBloc,
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: bodyColor,
+            appBar: AppBar(
+              backgroundColor: appBarColor,
+              elevation: 0.0,
+              leading: IconButton(
+                color: journalGoBackArrowColor,
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              title: Column(
+                children: [
+                  Text(
+                    '일지 전체보기',
+                    style: tabAppBarTitleStyle,
+                  ),
+                  Text(
+                    state.facility.name,
+                    style: tabAppBarSubtitleStyle,
+                  ),
+                ],
+              ),
+              centerTitle: true,
+            ),
+            body: GridView.builder(
+                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3),
+                itemCount: state.allPictureList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return _buildPhotoList(context, index, state);
+                }),
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildPhotoList(
@@ -34,97 +90,36 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
           Navigator.of(context).push(
 //              _createRoute(state.pictureList[index].url)
               PageRouteBuilder(
-            transitionDuration: Duration(seconds: 5),
-            pageBuilder: (_, __, ___) => JournalPictureDetail(
-              url: state.pictureList[index].url,
-              ismain: false,
-            ),
-            fullscreenDialog: true,
-            transitionsBuilder: (
-              BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child,
-            ) =>
-                FadeTransition(
-              opacity: animation,
-              child: child,
-            ),
-          ));
+                transitionDuration: Duration(seconds: 5),
+                pageBuilder: (_, __, ___) => JournalPictureDetail(
+                  url: state.allPictureList[index].url,
+                  ismain: false,
+                ),
+                fullscreenDialog: true,
+                transitionsBuilder: (
+                    BuildContext context,
+                    Animation<double> animation,
+                    Animation<double> secondaryAnimation,
+                    Widget child,
+                    ) =>
+                    FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    ),
+              ));
         },
         child: Hero(
-          tag: '${state.pictureList[index].url}+all',
+          tag: '${state.allPictureList[index].url}+all',
           child:
 
           Image.network(
-              state.pictureList[index].url,
+            state.allPictureList[index].url,
 
 //            state.pictureList[index].url,
             fit: BoxFit.fill,
           ),
         ),
       ),
-    );
-  }
-
-//  Route _createRoute(String url) {
-//    return PageRouteBuilder(
-//      pageBuilder: (context, animation, secondaryAnimation) => JournalPictureDetail(url: url,),
-//      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-//        var begin = Offset(0.0, 1.0);
-//        var end = Offset.zero;
-//        var curve = Curves.ease;
-//
-//        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-//
-//        return SlideTransition(
-//          position: animation.drive(tween),
-//          child: child,
-//        );
-//      },
-//    );
-//  }
-
-  @override
-  Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    return BlocBuilder<JournalMainBloc, JournalMainState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: bodyColor,
-          appBar: AppBar(
-            backgroundColor: appBarColor,
-            elevation: 0.0,
-            leading: IconButton(
-              color: journalGoBackArrowColor,
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            title: Column(
-              children: [
-                Text(
-                  '일지 전체보기',
-                  style: tabAppBarTitleStyle,
-                ),
-                Text(
-                  state.facility.name,
-                  style: tabAppBarSubtitleStyle,
-                ),
-              ],
-            ),
-            centerTitle: true,
-          ),
-          body: GridView.builder(
-              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3),
-              itemCount: state.pictureList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return _buildPhotoList(context, index, state);
-              }),
-        );
-      },
     );
   }
 }
