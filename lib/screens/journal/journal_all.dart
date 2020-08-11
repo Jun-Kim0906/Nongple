@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,17 +61,23 @@ class _JournalAllState extends State<JournalAll> {
                   Navigator.pop(context, isBeforePageChanged);
                 },
               ),
-              title: Column(
-                children: [
-                  Text(
-                    '일지 전체보기',
-                    style: tabAppBarTitleStyle,
+              title: SizedBox(
+                height: height * 0.054,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Column(
+                    children: [
+                      Text(
+                        '일지 전체보기',
+                        style: tabAppBarTitleStyle,
+                      ),
+                      Text(
+                        state.facility.name,
+                        style: tabAppBarSubtitleStyle,
+                      ),
+                    ],
                   ),
-                  Text(
-                    state.facility.name,
-                    style: tabAppBarSubtitleStyle,
-                  ),
-                ],
+                ),
               ),
               centerTitle: true,
             ),
@@ -171,77 +178,77 @@ class _JournalAllState extends State<JournalAll> {
                             );
                           },
                         )
-                      : Container(
-//                        width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height / 2,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Image.asset('assets/journal_default.png'),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.03,
-                                ),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  height: MediaQuery.of(context).size.height *
-                                      0.065,
-                                  child: ButtonTheme(
-                                    minWidth:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    child: RaisedButton(
-                                      color: Color(0xFF2F80ED),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
+                      : Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: height * 0.18,
+                            ),
+                            Image.asset('assets/journal_default.png'),
+                            SizedBox(
+                              height: height * 0.029,
+                            ),
+                            Container(
+                              width: width * 0.43,
+                              height: height * 0.058,
+                              child: ButtonTheme(
+                                minWidth: width * 0.43,
+                                child: RaisedButton(
+                                  color: Color(0xFF2F80ED),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: height * 0.025,
+                                        child: FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(
                                             '일지 작성하러 가기',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(color: Colors.white),
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                      onPressed: () async {
-                                        isChanged=await Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        BlocProvider<
-                                                            JournalCreateBloc>(
-                                                          create: (BuildContext
-                                                                  context) =>
-                                                              JournalCreateBloc()
-                                                                ..add(PassFid(
-                                                                    fid: state
-                                                                        .facility
-                                                                        .fid))
-                                                                ..add(DateSelected(
-                                                                    selectedDate:
-                                                                        state
-                                                                            .selectMonth)),
-                                                          child:
-                                                              JournalCreateScreen(),
-                                                        )));
-                                        if(isChanged==true){
-                                          _journalMainBloc.add(AllPageLoad());
-                                          isBeforePageChanged=true;
-                                        }
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
+                                    ],
+                                  ),
+                                  onPressed: () async {
+                                    isChanged=await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder:
+                                                (BuildContext context) =>
+                                                    BlocProvider<
+                                                        JournalCreateBloc>(
+                                                      create: (BuildContext
+                                                              context) =>
+                                                          JournalCreateBloc()
+                                                            ..add(PassFid(
+                                                                fid: state
+                                                                    .facility
+                                                                    .fid))
+                                                            ..add(DateSelected(
+                                                                selectedDate:
+                                                                    state
+                                                                        .selectMonth)),
+                                                      child:
+                                                          JournalCreateScreen(),
+                                                    )));
+                                    if(isChanged==true){
+                                      _journalMainBloc.add(AllPageLoad());
+                                      isBeforePageChanged=true;
+                                    }
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(10.0),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
+                      ),
                 ],
               ),
             ),

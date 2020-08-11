@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
-import 'package:nongple/screens/rss_screen/rss_add_facility.dart';
+import 'package:nongple/screens/rss_screen/rss_add.dart';
 import 'package:nongple/screens/rss_screen/rss_demo.dart';
 import 'package:nongple/utils/colors.dart';
 
@@ -43,69 +43,72 @@ class _RssMainScreenState extends State<RssMainScreen> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-//                        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 2,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Image.asset('assets/rss_default.png'),
-              SizedBox(
-                height:
-                MediaQuery.of(context).size.height * 0.03,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height:
-                MediaQuery.of(context).size.height * 0.065,
-                child: ButtonTheme(
-                  minWidth:
-                  MediaQuery.of(context).size.width * 0.5,
+      body: emptyList(),
+    );
+  }
+
+  Widget emptyList () {
+    return Container(
+      height: MediaQuery.of(context).size.height / 2,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Image.asset('assets/rss_default.png'),
+            SizedBox(
+              height:
+              MediaQuery.of(context).size.height * 0.03,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height:
+              MediaQuery.of(context).size.height * 0.065,
+              child: ButtonTheme(
+                minWidth:
+                MediaQuery.of(context).size.width * 0.5,
 //                                  height: ,
-                  child: FlatButton(
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '추가하기',
-                          style: TextStyle(
-                              color: Color(0xFF2F80ED),
-                            fontWeight: FontWeight.bold,
-                          ),
+                child: FlatButton(
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '추가하기',
+                        style: TextStyle(
+                          color: Color(0xFF2F80ED),
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>
-                            BlocProvider.value(
-                              value: _rssMainBloc,
-                              child: RssAddFacility(),
-                            )
-                        ),
-                      );
-                    },
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Color(0xFF2F80ED)),
-                    ),
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          BlocProvider.value(
+                            value: _rssMainBloc,
+                            child: RssAdd(),
+                          )
+                      ),
+                    );
+                  },
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color(0xFF2F80ED)),
                   ),
                 ),
               ),
-              RaisedButton(
-                child: Text('go to rss demo'),
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RSSDemo()),
-                  );
-                },
-              ),
-            ],
-          ),
+            ),
+            RaisedButton(
+              child: Text('go to rss demo'),
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RSSDemo()),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

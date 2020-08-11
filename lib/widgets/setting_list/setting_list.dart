@@ -86,23 +86,24 @@ class SettingTiles extends StatelessWidget {
           onTap: () {
             showAboutDialog(
               context: context,
+              applicationName: 'FarmND',
               applicationVersion: '1.0.0',
+              applicationLegalese: '개발자 : \nOat Kim / Grain Park\n(Prod. may2nd)',
               applicationIcon: SizedBox(
-                height: height * 0.2,
-                width: width * 0.3,
+                height: height * 0.05,
+                width: width * 0.1,
                 child: FittedBox(
-                  fit: BoxFit.fitWidth,
                   child: Image.asset('assets/launcher_icon.png'),
                 ),
               ),
 //              applicationLegalese: '개발자 : \nOat Kim / Grain Park\n(Prod. may2nd)',
               children: [
-                SizedBox(
-                    height: height * 0.1,
-                    width: width,
-                    child: AutoSizeText(
-                      '개발자 : \nOat Kim / Grain Park\n(Prod. may2nd)',
-                    )),
+//                SizedBox(
+//                    height: height * 0.2,
+//                    width: width,
+//                    child: AutoSizeText(
+//                      'version : 1.0.0 \n개발자 : \nOat Kim / Grain Park\n(Prod. may2nd)',
+//                    )),
               ],
             );
           },
