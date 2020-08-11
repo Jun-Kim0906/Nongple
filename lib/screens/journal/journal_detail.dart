@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -81,10 +82,10 @@ class _JournalDetailState extends State<JournalDetail> {
             children: [
               (state.detailPictureList.isNotEmpty)
                   ? Container(
-                      height: height * 0.6,
+                      height: height * 0.498,
                       child: Swiper(
                           layout: SwiperLayout.STACK,
-                          itemHeight: height * 0.6,
+                          itemHeight: height * 0.498,
                           itemWidth: width,
                           loop: true,
                           itemCount: state.detailPictureList.length,
@@ -124,20 +125,26 @@ class _JournalDetailState extends State<JournalDetail> {
                   scrollDirection: Axis.vertical,
                   child: Container(
                     padding: EdgeInsets.fromLTRB(
-                        width * 0.1, height / 11, width * 0.1, 0.0),
+                        width * 0.055, height*0.0625, width * 0.055, 0.0),
                     child: Center(
                       child: Column(
                         children: [
-                          Text(
-                            formatDate.toString() + ' ' + weekday,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25.0,
-                              color: Color(0xFFB8B8B8),
+                          SizedBox(
+                            height: height * 0.033,
+                            child: AutoSizeText(
+                              formatDate.toString() + ' ' + weekday,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                                color: Color(0xFFB8B8B8),
+                              ),
+                              minFontSize: 6,
+                              stepGranularity: 2,
+                              maxLines: 1,
                             ),
                           ),
                           SizedBox(
-                            height: height * 0.06,
+                            height: height * 0.029,
                           ),
                           Text(
                             state.journal.content,
@@ -167,52 +174,55 @@ class _JournalDetailState extends State<JournalDetail> {
         builder: (BuildContext context) {
           return Wrap(
             children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(
-                      Icons.create,
-                      color: Colors.black,
+              Container(
+                height: height * 0.222,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(
+                        Icons.create,
+                        color: Colors.black,
+                      ),
+                      title: Text(
+                        '수정하기',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                      onTap: () async {
+                        isChanged = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  BlocProvider<JournalCreateBloc>(
+                                create: (BuildContext context) =>
+                                    JournalCreateBloc()..add(PassFid(fid: state.facility.fid))
+                                    ..add(PassExistJournalPictures(journal: state.journal, pictureList: state.detailPictureList)
+                                    )
+                                    ,
+                                child: JournalEditScreen(),
+                              ),
+                            ));
+                        if(isChanged==true){
+                          _journalMainBloc.add(DetailPageLoad(loadJournal: true));
+                          isBeforePageChanged = true;
+                        }
+                      },
                     ),
-                    title: Text(
-                      '수정하기',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ListTile(
+                      leading: Icon(
+                        Icons.delete,
+                        color: Colors.black,
+                      ),
+                      title: Text(
+                        '삭제하기',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                      ),
+                      onTap: () {
+                        showAlertDialog(context, state);
+                      },
                     ),
-                    onTap: () async {
-                      isChanged = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                BlocProvider<JournalCreateBloc>(
-                              create: (BuildContext context) =>
-                                  JournalCreateBloc()..add(PassFid(fid: state.facility.fid))
-                                  ..add(PassExistJournalPictures(journal: state.journal, pictureList: state.detailPictureList)
-                                  )
-                                  ,
-                              child: JournalEditScreen(),
-                            ),
-                          ));
-                      if(isChanged==true){
-                        _journalMainBloc.add(DetailPageLoad(loadJournal: true));
-                        isBeforePageChanged = true;
-                      }
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.delete,
-                      color: Colors.black,
-                    ),
-                    title: Text(
-                      '삭제하기',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      showAlertDialog(context, state);
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           );

@@ -5,3 +5,4 @@ export 'journal/journal.dart';
 export 'weather/weather.dart';
 export 'picture/picture.dart';
 export 'dictionary/dictionary.dart';
+export 'rss/rss.dart';

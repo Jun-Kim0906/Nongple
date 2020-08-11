@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,7 +75,13 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
               },
             ),
             elevation: 0.0,
-            title: Text('일지작성', style: TextStyle(color: Colors.black)),
+            title: SizedBox(
+              height: height * 0.032,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                    child: Text('일지작성', style: TextStyle(color: Colors.black))
+                ),
+            ),
             centerTitle: true,
             backgroundColor: Colors.white,
           ),
@@ -82,7 +89,7 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
+                padding: EdgeInsets.fromLTRB(width*0.094, 0.0, width*0.094, 0.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -92,11 +99,18 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text(
-                            DateFormat('yyyy년 MM월 dd일')
-                                .format(state.selectedDate.toDate()),
-                            style: TextStyle(
-                                color: Color(0xFF929292), fontSize: 13.6),
+                          SizedBox(
+                            height: height * 0.042,
+                            width: width * 0.294,
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Text(
+                                DateFormat('yyyy년 MM월 dd일')
+                                    .format(state.selectedDate.toDate()),
+                                style: TextStyle(
+                                    color: Color(0xFF929292), fontSize: 13.6),
+                              ),
+                            ),
                           ),
                           Icon(
                             Icons.keyboard_arrow_down,
@@ -111,11 +125,11 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                     Card(
                       elevation: 4.0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Container(
-                        height: height * 0.45,
-                        padding: EdgeInsets.all(18.0),
+                        height: height * 0.449,
+                        padding: EdgeInsets.fromLTRB(width*0.047, height*0.025, width*0.047, height*0.025),
                         child: TextFormField(
                           onChanged: (value) {
                             _journalCreateBloc
@@ -125,6 +139,7 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                           maxLines: null,
                           autocorrect: false,
                           decoration: InputDecoration(
+                            hintStyle: TextStyle(fontSize: 13),
                             hintText: ' 오늘 일지를 수기로 작성해 주세요.',
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),
@@ -143,43 +158,11 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(
-                          child: Container(
-                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
-                              height: height * 0.07,
-                              child: OutlineButton(
-                                color: Colors.white,
-                                borderSide: BorderSide(
-                                  color: Color(0xFFDEDEDE),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.photo,
-                                      color: Color(0xFF757575),
-                                      size: height * 0.03,
-                                    ),
-                                    Text(
-                                      ' 갤러리',
-                                      style: TextStyle(
-                                          fontSize: 21.6,
-                                          color: Color(0xFF757575),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                onPressed: () {
-                                  getImage(state);
-                                },
-                              )),
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: height * 0.07,
-                            padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                        Container(
+                            height: height * 0.066,
+                            width: width * 0.402,
+                            padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
+//                            height: height * 0.07,
                             child: OutlineButton(
                               color: Colors.white,
                               borderSide: BorderSide(
@@ -191,23 +174,69 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Icon(
-                                    Icons.camera_alt,
+                                    Icons.photo,
                                     color: Color(0xFF757575),
                                     size: height * 0.03,
                                   ),
-                                  Text(
+                                  SizedBox(
+                                    height: height * 0.038,
+                                    width: width * 0.2,
+                                    child: AutoSizeText(
+                                      ' 갤러리',
+                                      style: TextStyle(
+                                          fontSize: 21.6,
+                                          color: Color(0xFF757575),
+                                          fontWeight: FontWeight.bold),
+                                      minFontSize: 10,
+                                      stepGranularity: 2,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {
+                                getImage(state);
+                              },
+                            )),
+                        Container(
+                          height: height * 0.066,
+                          width: width * 0.402,
+//                          height: height * 0.07,
+                          padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                          child: OutlineButton(
+                            color: Colors.white,
+                            borderSide: BorderSide(
+                              color: Color(0xFFDEDEDE),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.camera_alt,
+                                  color: Color(0xFF757575),
+                                  size: height * 0.03,
+                                ),
+                                SizedBox(
+                                  height: height * 0.038,
+                                  width: width * 0.2,
+                                  child: AutoSizeText(
                                     ' 사진 촬영',
                                     style: TextStyle(
                                         fontSize: 21.6,
                                         color: Color(0xFF757575),
                                         fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                getCameraImage();
-                              },
+                                    minFontSize: 10,
+                                    stepGranularity: 2,
+                                    maxLines: 1,
+                                  ),
+                                )
+                              ],
                             ),
+                            onPressed: () {
+                              getCameraImage();
+                            },
                           ),
                         ),
                       ],

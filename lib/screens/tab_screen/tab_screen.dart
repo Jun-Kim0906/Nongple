@@ -27,6 +27,8 @@ class _TabScreenState extends State<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
@@ -41,27 +43,33 @@ class _TabScreenState extends State<TabScreen> {
                 Navigator.pop(context);
               },
             ),
-            title: Column(
-              children: [
-                (activeTab == AppTab.weather)
-                    ? Text(
-                        '날씨',
-                        style: tabAppBarTitleStyle,
-                      )
-                    : (activeTab == AppTab.journal)
+            title: SizedBox(
+              height: height * 0.054,
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Column(
+                  children: [
+                    (activeTab == AppTab.weather)
                         ? Text(
-                            '일지',
+                            '날씨',
                             style: tabAppBarTitleStyle,
                           )
-                        : Text(
-                            '용어사전',
-                            style: tabAppBarTitleStyle,
-                          ),
-                Text(
-                  widget.facility.name,
-                  style: tabAppBarSubtitleStyle,
+                        : (activeTab == AppTab.journal)
+                            ? Text(
+                                '일지',
+                                style: tabAppBarTitleStyle,
+                              )
+                            : Text(
+                                '용어사전',
+                                style: tabAppBarTitleStyle,
+                              ),
+                    Text(
+                      widget.facility.name,
+                      style: tabAppBarSubtitleStyle,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
             centerTitle: true,
           ),

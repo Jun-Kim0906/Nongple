@@ -1,40 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'package:nongple/models/models.dart';
+import 'package:nongple/utils/rss_list/rss_list.dart';
 
 class RssMainState {
-  final List<Journal> journalList;
+  final List<Rss> suggestion;
 
   RssMainState({
-    @required this.journalList,
+    @required this.suggestion,
   });
 
   factory RssMainState.empty() {
     return RssMainState(
-      journalList: [],
+      suggestion: rssHardCoding,
     );
   }
 
   RssMainState copyWith({
-    List<Journal> journalList,
+    List<Rss> suggestion,
   }) {
     return RssMainState(
-      journalList: journalList ?? this.journalList,
+      suggestion: suggestion ?? this.suggestion,
     );
   }
 
   RssMainState update({
-    List<Journal> journalList,
+    List<Rss> suggestion,
   }) {
     return copyWith(
-      journalList: journalList,
+      suggestion: suggestion,
     );
   }
 
   @override
   String toString() {
     return '''RssMainState{
-    journalList: ${journalList.length},
+    suggestion: ${suggestion.length},
     }''';
   }
 }

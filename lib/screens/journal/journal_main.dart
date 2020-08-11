@@ -46,18 +46,26 @@ class _JournalMainState extends State<JournalMain> {
       },
       child: BlocBuilder<JournalMainBloc, JournalMainState>(
         builder: (context, state) {
+          width = MediaQuery.of(context).size.width;
           return Scaffold(
             backgroundColor: bodyColor,
             body: Padding(
-              padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
-              child: Column(
+              padding: EdgeInsets.fromLTRB(width*0.055, 0.0, width*0.055, 0.0),
+              child: ListView(
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '일자별 기록',
-                        style: journalBodyTitleStyle1,
+                      SizedBox(
+                        height: height * 0.043,
+                        width: width * 0.241,
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            '일자별 기록',
+                            style: journalBodyTitleStyle1,
+                          ),
+                        ),
                       ),
                       FlatButton(
                         onPressed: () async {
@@ -73,12 +81,22 @@ class _JournalMainState extends State<JournalMain> {
                             _journalMainBloc.add(MainPageLoad());
                           }
                         },
-                        child: Text(
-                          '전체보기 >',
-                          style: journalViewAllButtonStyle,
+                        child: SizedBox(
+                          height: height * 0.027,
+                          width: width * 0.177,
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              '전체보기 >',
+                              style: journalViewAllButtonStyle,
+                            ),
+                          ),
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: height * 0.023,
                   ),
                   state.mainThreeJournalList.isNotEmpty
                       ? ListView.builder(
@@ -107,10 +125,19 @@ class _JournalMainState extends State<JournalMain> {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(
                                     5.0, 0.0, 0.0, 8.0),
-                                child: Text(DateFormat('yyyy.MM')
-                                    .format(state
-                                    .mainThreeJournalList[index].date
-                                    .toDate())),
+                                child: SizedBox(
+                                  height: height * 0.023,
+                                  width: width * 0.127,
+                                  child: FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Text(DateFormat('yyyy.MM')
+                                        .format(state
+                                        .mainThreeJournalList[index].date
+                                        .toDate()),
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ),
                               ),
 //                                Text(DateFormat('yyyy.MM').format(state.journalList[index].date.toDate())),
                             Row(
@@ -161,12 +188,22 @@ class _JournalMainState extends State<JournalMain> {
                       fit: BoxFit.contain,
                     ),
                   ),
+//                  SizedBox(
+//                    height: height * 0.063,
+//                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '사진 기록',
-                        style: journalBodyTitleStyle1,
+                      SizedBox(
+                        height: height * 0.043,
+                        width: width * 0.18,
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            '사진 기록',
+                            style: journalBodyTitleStyle1,
+                          ),
+                        ),
                       ),
                       FlatButton(
                         onPressed: () {
@@ -179,34 +216,47 @@ class _JournalMainState extends State<JournalMain> {
                                         child: JournalAllPictures(),
                                       )));
                         },
-                        child: Text(
-                          '전체보기 >',
-                          style: journalViewAllButtonStyle,
+                        child: SizedBox(
+                          height: height * 0.027,
+                          width: width * 0.177,
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              '전체보기 >',
+                              style: journalViewAllButtonStyle,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  Flexible(
-                      child: Container(
-                        height: width * 0.2778,
-                        child: state.mainThreePictureList.isNotEmpty
-                            ? ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.mainThreePictureList.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return _imagewidget(context, index, state);
-                          },
-                        )
-                            : Container(
-                          height: height * 0.3,
-                        ),
-                      )),
+                  Container(
+                    height: width * 0.2778,
+                    child: state.mainThreePictureList.isNotEmpty
+                        ? ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: state.mainThreePictureList.length,
+                      itemBuilder: (BuildContext context, index) {
+                        return _imagewidget(context, index, state);
+                      },
+                    )
+                        : Container(
+                      height: height * 0.3,
+                    ),
+                  ),
                 ],
               ),
             ),
             floatingActionButton: FloatingActionButton.extended(
-              icon: Icon(Icons.add),
+              icon: SizedBox(
+                height: height * 0.019,
+                width: width * 0.019,
+                  child: FittedBox(
+                    fit: BoxFit.fitHeight,
+                      child: Icon(Icons.add)
+                  ),
+              ),
               onPressed: () async {
                 bool isChanged = await Navigator.push(
                     context,
@@ -220,7 +270,14 @@ class _JournalMainState extends State<JournalMain> {
                   _journalMainBloc.add(MainPageLoad());
                 }
               },
-              label: Text('오늘의 활동 기록하기'),
+              label: SizedBox(
+                height: height * 0.019,
+                  width: width * 0.325,
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                      child: Text('오늘의 활동 기록하기')
+                  ),
+              ),
             ),
             floatingActionButtonLocation:
             FloatingActionButtonLocation.centerFloat,
