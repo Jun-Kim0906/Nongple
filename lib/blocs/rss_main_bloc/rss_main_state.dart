@@ -1,40 +1,74 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'package:nongple/models/models.dart';
+import 'package:nongple/utils/rss_list/rss_list.dart';
 
 class RssMainState {
-  final List<Journal> journalList;
+  final List<Rss> suggestion;
+  final List<SearchRss> selectedList;
+  final List<RssOption> deletedList;
+  final List<RssOption> copiedList;
+  final List<RssOption> originalList;
+
 
   RssMainState({
-    @required this.journalList,
+    @required this.suggestion,
+    @required this.selectedList,
+    @required this.deletedList,
+    @required this.copiedList,
+    @required this.originalList,
   });
 
   factory RssMainState.empty() {
     return RssMainState(
-      journalList: [],
+      suggestion: rssHardCoding,
+      selectedList: [],
+        deletedList: [],
+        copiedList: [],
+      originalList: [],
     );
   }
 
   RssMainState copyWith({
-    List<Journal> journalList,
+    List<Rss> suggestion,
+    List<SearchRss> selectedList,
+    List<RssOption> deletedList,
+    List<RssOption> copiedList,
+    List<RssOption> originalList,
   }) {
     return RssMainState(
-      journalList: journalList ?? this.journalList,
+      suggestion: suggestion ?? this.suggestion,
+      selectedList: selectedList ?? this.selectedList,
+      deletedList: deletedList ?? this.deletedList,
+        copiedList: copiedList ?? this.copiedList,
+      originalList: originalList ?? this.originalList,
     );
   }
 
   RssMainState update({
-    List<Journal> journalList,
+    List<Rss> suggestion,
+    List<SearchRss> selectedList,
+    List<RssOption> deletedList,
+    List<RssOption> copiedList,
+    List<RssOption> originalList,
   }) {
     return copyWith(
-      journalList: journalList,
+      suggestion: suggestion,
+      selectedList: selectedList,
+      deletedList: deletedList,
+        copiedList: copiedList,
+      originalList: originalList,
     );
   }
 
   @override
   String toString() {
     return '''RssMainState{
-    journalList: ${journalList.length},
+    suggestion: ${suggestion.length},
+    selectedList: ${selectedList.length},
+    deletedList: ${deletedList.length},
+    copiedList: ${copiedList.length},
+    originalList: ${originalList.length},
     }''';
   }
 }

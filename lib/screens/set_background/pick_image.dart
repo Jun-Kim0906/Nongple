@@ -273,8 +273,8 @@ class _PickBackgroundState extends State<PickBackground> {
             ),
             SizedBox(
               height: height * 0.03,
+              width: width * 0.502,
               child: FittedBox(
-                fit: BoxFit.fitWidth,
                 child: Text('정말로 이 배경화면으로 저장 하시겠습니까?'),
               ),
             ),

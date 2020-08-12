@@ -49,7 +49,7 @@ showAlertDialog(BuildContext context) {
           ),
           SizedBox(
             height: height * 0.03,
-            width: width*0.5,
+            width: width * 0.5,
             child: FittedBox(
               child: AutoSizeText('정말로 로그아웃 하시겠습니까?'),
             ),

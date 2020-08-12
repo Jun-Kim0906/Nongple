@@ -48,23 +48,29 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
               backgroundColor: appBarColor,
               elevation: 0.0,
               leading: IconButton(
-                color: journalGoBackArrowColor,
+                color: goBackArrowColor,
                 icon: Icon(Icons.arrow_back_ios),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
-              title: Column(
-                children: [
-                  Text(
-                    '일지 전체보기',
-                    style: tabAppBarTitleStyle,
+              title: SizedBox(
+                height: height * 0.054,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Column(
+                    children: [
+                      Text(
+                        '일지 전체보기',
+                        style: tabAppBarTitleStyle,
+                      ),
+                      Text(
+                        state.facility.name,
+                        style: tabAppBarSubtitleStyle,
+                      ),
+                    ],
                   ),
-                  Text(
-                    state.facility.name,
-                    style: tabAppBarSubtitleStyle,
-                  ),
-                ],
+                ),
               ),
               centerTitle: true,
             ),

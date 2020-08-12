@@ -19,7 +19,7 @@ class JournalPictureDetail extends StatelessWidget {
         backgroundColor: appBarColor,
         elevation: 0.0,
         leading: IconButton(
-          color: journalGoBackArrowColor,
+          color: goBackArrowColor,
           icon: Icon(Icons.close),
           onPressed: () {
             Navigator.pop(context);

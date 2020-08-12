@@ -31,7 +31,7 @@ class DateIcon extends StatelessWidget {
         width: width/7,
         height: width/7,
         child: FittedBox(
-          fit: BoxFit.fitHeight,
+//          fit: BoxFit.fitHeight,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
