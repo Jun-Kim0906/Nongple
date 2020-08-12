@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'package:nongple/models/models.dart';
 import 'package:nongple/utils/rss_list/rss_list.dart';
@@ -7,25 +6,28 @@ class RssMainState {
   final List<Rss> suggestion;
   final List<SearchRss> selectedList;
   final List<RssOption> deletedList;
-  final List<RssOption> copiedList;
+  final List<RssOption> addedList;
   final List<RssOption> originalList;
 
+  final bool editButtonPressed;
 
   RssMainState({
     @required this.suggestion,
     @required this.selectedList,
     @required this.deletedList,
-    @required this.copiedList,
+    @required this.addedList,
     @required this.originalList,
+    @required this.editButtonPressed,
   });
 
   factory RssMainState.empty() {
     return RssMainState(
       suggestion: rssHardCoding,
       selectedList: [],
-        deletedList: [],
-        copiedList: [],
+      deletedList: [],
+      addedList: [],
       originalList: [],
+      editButtonPressed: false,
     );
   }
 
@@ -33,15 +35,17 @@ class RssMainState {
     List<Rss> suggestion,
     List<SearchRss> selectedList,
     List<RssOption> deletedList,
-    List<RssOption> copiedList,
+    List<RssOption> addedList,
     List<RssOption> originalList,
+    bool editButtonPressed,
   }) {
     return RssMainState(
       suggestion: suggestion ?? this.suggestion,
       selectedList: selectedList ?? this.selectedList,
       deletedList: deletedList ?? this.deletedList,
-        copiedList: copiedList ?? this.copiedList,
+      addedList: addedList ?? this.addedList,
       originalList: originalList ?? this.originalList,
+      editButtonPressed: editButtonPressed ?? this.editButtonPressed,
     );
   }
 
@@ -49,15 +53,17 @@ class RssMainState {
     List<Rss> suggestion,
     List<SearchRss> selectedList,
     List<RssOption> deletedList,
-    List<RssOption> copiedList,
+    List<RssOption> addedList,
     List<RssOption> originalList,
+    bool editButtonPressed,
   }) {
     return copyWith(
       suggestion: suggestion,
       selectedList: selectedList,
       deletedList: deletedList,
-        copiedList: copiedList,
+      addedList: addedList,
       originalList: originalList,
+      editButtonPressed: editButtonPressed,
     );
   }
 
@@ -67,8 +73,9 @@ class RssMainState {
     suggestion: ${suggestion.length},
     selectedList: ${selectedList.length},
     deletedList: ${deletedList.length},
-    copiedList: ${copiedList.length},
+    addedList: ${addedList.length},
     originalList: ${originalList.length},
+    editButtonPressed: $editButtonPressed,
     }''';
   }
 }
