@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/rss_main_bloc/rss_main.dart';
 import 'package:nongple/models/models.dart';
 import 'package:nongple/utils/colors.dart';
+import 'package:nongple/widgets/widgets.dart';
 
 class RssAdd extends StatefulWidget {
   @override
@@ -81,7 +82,7 @@ class _RssAddState extends State<RssAdd> {
                   textInputAction: TextInputAction.search,
                   controller: _search,
                   onChanged: (value) {
-                    _rssMainBloc.add(GetFeed());
+//                    _rssMainBloc.add(GetFeed());
                   },
 //              onSubmitted: (value) {},
                 ),
@@ -96,6 +97,12 @@ class _RssAddState extends State<RssAdd> {
               ],
             ),
           ),
+          bottomNavigationBar: BottomNavigationButton(
+              title: '완료',
+              onPressed: (){
+                Navigator.pop(context);
+                _rssMainBloc.add(CompleteButtonPressed());
+              }),
         );
       }
     );

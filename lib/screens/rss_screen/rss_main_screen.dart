@@ -6,6 +6,7 @@ import 'package:nongple/models/rss/rss.dart';
 import 'package:nongple/screens/rss_screen/rss_add.dart';
 import 'package:nongple/screens/rss_screen/rss_demo.dart';
 import 'package:nongple/utils/colors.dart';
+import 'package:nongple/widgets/widgets.dart';
 
 class RssMainScreen extends StatefulWidget {
   @override
@@ -19,34 +20,41 @@ class _RssMainScreenState extends State<RssMainScreen> {
   void initState() {
     super.initState();
     _rssMainBloc = BlocProvider.of<RssMainBloc>(context);
+    _rssMainBloc.add(GetRss());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: bodyColor,
-      appBar: AppBar(
-        elevation: 1.0,
-        backgroundColor: appBarColor,
-        leading: IconButton(
-          icon: Icon(
-            Icons.close,
-            color: Color(0xFF979797), // color grey
-          ),
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-            'RSS',
-          style: TextStyle(
-            color: Color(0xFF263238), // color black
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: emptyList(),
-    );
+    return BlocBuilder<RssMainBloc, RssMainState>(builder: (context, state) {
+      return Scaffold(
+        backgroundColor: bodyColor,
+        appBar: AppBar(
+            elevation: 1.0,
+            backgroundColor: appBarColor,
+            leading: IconButton(
+              icon: Icon(
+                Icons.close,
+                color: Color(0xFF979797), // color grey
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(
+              'RSS',
+              style: TextStyle(
+                color: Color(0xFF263238), // color black
+              ),
+            ),
+            centerTitle: true,
+            actions: state.originalList.isEmpty
+                ? null
+                : [
+                    FlatButton(child: Text('수정'), onPressed: () {}),
+                  ]),
+        body: state.originalList.isEmpty ? emptyList() : listSet(state),
+      );
+    });
   }
 
   Widget listSet(RssMainState state) {
@@ -58,11 +66,10 @@ class _RssMainScreenState extends State<RssMainScreen> {
           children: <Widget>[
             Expanded(
               child: ListView.builder(
-                itemCount: state.copiedList.length,
+                itemCount: state.originalList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
-                    onTap: () {
-                    },
+                    onTap: () {},
                     child: Table(
                       columnWidths: {
                         0: FractionColumnWidth(.3),
@@ -81,7 +88,7 @@ class _RssMainScreenState extends State<RssMainScreen> {
                               padding: EdgeInsets.fromLTRB(0, 26, 0, 26),
                               alignment: Alignment.centerLeft,
                               child: AutoSizeText(
-                                state.copiedList[index].name
+                                state.originalList[index].name
                                     .replaceFirst(" ", "\n"),
                                 style: TextStyle(
                                   fontSize: 16,
@@ -93,7 +100,7 @@ class _RssMainScreenState extends State<RssMainScreen> {
                           Container(
                             padding: EdgeInsets.fromLTRB(0, 26, 0, 26),
                             alignment: Alignment.centerLeft,
-                            child: Text(state.copiedList[index].option,
+                            child: Text(state.originalList[index].option,
                                 style: TextStyle(
                                   fontSize: 16,
                                   letterSpacing: -0.0615,
@@ -104,16 +111,15 @@ class _RssMainScreenState extends State<RssMainScreen> {
                             padding: EdgeInsets.fromLTRB(0, 26, 0, 26),
                             alignment: Alignment.centerLeft,
                             child: InkWell(
-                              child: Text(
-                                '삭제',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromRGBO(0, 61, 165, 1),
+                                child: Text(
+                                  '삭제',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(0, 61, 165, 1),
+                                  ),
                                 ),
-                              ),
-                              onTap: () {}
-                            ),
+                                onTap: () {}),
                           ),
                         ]),
                       ],
@@ -124,7 +130,7 @@ class _RssMainScreenState extends State<RssMainScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 30),
-              child:Container(
+              child: Container(
                 padding: EdgeInsets.only(bottom: 20),
                 height: 0,
               ),
@@ -135,7 +141,7 @@ class _RssMainScreenState extends State<RssMainScreen> {
     );
   }
 
-  Widget emptyList () {
+  Widget emptyList() {
     return Container(
       height: MediaQuery.of(context).size.height / 2,
       child: Center(
@@ -144,22 +150,18 @@ class _RssMainScreenState extends State<RssMainScreen> {
           children: [
             Image.asset('assets/rss_default.png'),
             SizedBox(
-              height:
-              MediaQuery.of(context).size.height * 0.03,
+              height: MediaQuery.of(context).size.height * 0.03,
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
-              height:
-              MediaQuery.of(context).size.height * 0.065,
+              height: MediaQuery.of(context).size.height * 0.065,
               child: ButtonTheme(
-                minWidth:
-                MediaQuery.of(context).size.width * 0.5,
+                minWidth: MediaQuery.of(context).size.width * 0.5,
 //                                  height: ,
                 child: FlatButton(
                   color: Colors.white,
                   child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         '추가하기',
@@ -173,12 +175,11 @@ class _RssMainScreenState extends State<RssMainScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>
-                          BlocProvider.value(
-                            value: _rssMainBloc,
-                            child: RssAdd(),
-                          )
-                      ),
+                      MaterialPageRoute(
+                          builder: (context) => BlocProvider.value(
+                                value: _rssMainBloc,
+                                child: RssAdd(),
+                              )),
                     );
                   },
                   shape: RoundedRectangleBorder(
@@ -189,7 +190,7 @@ class _RssMainScreenState extends State<RssMainScreen> {
             ),
             RaisedButton(
               child: Text('go to rss demo'),
-              onPressed: (){
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => RSSDemo()),

@@ -8,7 +8,7 @@ abstract class RssMainEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetFeed extends RssMainEvent {}
+class GetRss extends RssMainEvent {}
 
 class SelectedRssChanged extends RssMainEvent {
   final String name;
@@ -28,3 +28,7 @@ class SelectedRssChanged extends RssMainEvent {
     }''';
   }
 }
+
+class CompleteButtonPressed extends RssMainEvent{}
+
+class EditButtonPressed extends RssMainEvent{}
