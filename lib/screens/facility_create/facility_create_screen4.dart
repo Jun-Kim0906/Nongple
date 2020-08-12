@@ -56,7 +56,6 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen4> {
                       height: height*0.0959,
                       width: width*0.786,
                       child: FittedBox(
-                        fit: BoxFit.fitHeight,
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '축하합니다 ' + EmojiParser().emojify('🎉')+'\n시설 등록이 완료되었습니다.',

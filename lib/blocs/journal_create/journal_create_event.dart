@@ -30,7 +30,6 @@ class ContentChanged extends JournalCreateEvent{
   String toString() =>'ContentChanged {content: $content}';
 }
 
-
 class ImageSeleted extends JournalCreateEvent{
   final List<Asset> assetList;
   const ImageSeleted({@required this.assetList});
