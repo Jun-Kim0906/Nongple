@@ -47,7 +47,6 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapAuthenticationLoggedInToState() async* {
 //    yield AuthenticationSuccess((await _userRepository.getUser()).email);
-    print('가나다라마바사');
     try {
       UserUtil.setUser(User.fromSnapshot(await Firestore.instance
           .collection('User')

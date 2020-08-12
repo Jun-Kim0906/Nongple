@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 /// throughout all pages
 const bodyColor = Colors.white; // color white
 const appBarColor = Colors.white; // color white
-const goBackArrow = Color(0xFF9E9E9E); // color grey
+const goBackArrowColor = Color(0xFF9E9E9E); // color grey
 
 
 /// colors for journal page
-const journalGoBackArrowColor = Color(0xFF9E9E9E); // color grey
 const journalIconColor1 = Color(0xFFF4F4F4); // color grey
 const journalIconColor2 = Color(0xFF56CCF2); // color lightBlue
 const journalIconColor3 = Color(0xFFEB5757); // color red

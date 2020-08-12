@@ -37,7 +37,7 @@ class _TabScreenState extends State<TabScreen> {
             backgroundColor: appBarColor,
             elevation: 0.0,
             leading: IconButton(
-              color: journalGoBackArrowColor,
+              color: goBackArrowColor,
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.pop(context);

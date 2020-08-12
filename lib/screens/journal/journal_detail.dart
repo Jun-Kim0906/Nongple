@@ -82,10 +82,10 @@ class _JournalDetailState extends State<JournalDetail> {
             children: [
               (state.detailPictureList.isNotEmpty)
                   ? Container(
-                      height: height * 0.498,
+                      height: height * 0.6,
                       child: Swiper(
                           layout: SwiperLayout.STACK,
-                          itemHeight: height * 0.498,
+                          itemHeight: height * 0.6,
                           itemWidth: width,
                           loop: true,
                           itemCount: state.detailPictureList.length,
@@ -130,7 +130,7 @@ class _JournalDetailState extends State<JournalDetail> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: height * 0.033,
+                            height: height * 0.05,
                             child: AutoSizeText(
                               formatDate.toString() + ' ' + weekday,
                               style: TextStyle(
