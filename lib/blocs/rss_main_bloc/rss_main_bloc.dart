@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:charset_converter/charset_converter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/rss_main_bloc/rss_main.dart';
+import 'package:nongple/models/models.dart';
+import 'package:nongple/utils/random_id.dart';
+import 'package:nongple/utils/user_util/user_util.dart';
 import 'package:webfeed/webfeed.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
@@ -16,61 +19,34 @@ class RssMainBloc extends Bloc<RssMainEvent, RssMainState> {
   Stream<RssMainState> mapEventToState(event) async* {
     if (event is GetFeed) {
       yield* _mapGetFeedToState();
+    } else if(event is SelectedRssChanged) {
+      yield* _mapSelectedRssChangedToState(event);
     }
   }
 
-  Stream<RssMainState> _mapGetFeedToState() async* {
-    /// items to look for RSS
-    /// final String title;
-    /// final String author;
-    /// final String description;
-    /// final String link;
-    /// final List<RssItem> items;
+  Stream<RssMainState> _mapGetFeedToState() async* {}
 
+  Stream<RssMainState> _mapSelectedRssChangedToState (SelectedRssChanged event) async* {
+    List<SearchRss> tmpRss = state.selectedList;
+    List<RssOption> tmpAddedList = state.copiedList;
+    List<RssOption> tmpDeletedList = state.deletedList;
 
-    Xml2Json xml2json = Xml2Json();
+    String rid= Firestore.instance.collection('Rss').document().documentID;
+    String uid = UserUtil.getUser().uid;
 
-    final String FEED_URL = 'http://www.busan.go.kr/nbnews.rss';
-    var client = new http.Client();
+    if (event.isChecked){
+      tmpRss.add(SearchRss(name: event.name, option: event.option, url: event.url));
+      tmpAddedList.add(RssOption(name: event.name, option: event.option, url: event.url, uid: uid, rid: rid));
+      tmpDeletedList.removeWhere((element) => element.url == event.url);
+    }else{
+      tmpRss.removeWhere((element) => element.url == event.url);
+      RssOption tmpDelete = tmpAddedList.where((element) => element.url == event.url).single;
+      tmpAddedList.removeWhere((element) => element.url == event.url);
+      if(state.originalList.where((element) => element.url == event.url).isNotEmpty){
+        tmpDeletedList.add(tmpDelete);
+      }
+    }
 
-    /// RSS feed
-    await client.get("http://www.busan.go.kr/nbnews.rss").then((response) {
-//      var _decoded = RssFeed.parse(response.body);
-//      return _decoded.items.map((item) => RssModel(
-//        title: item.title,
-//        description: item.content.value,
-//        link: item.link,
-//        pubDate: item.pubDate,
-//      ));
-      return response.body;
-    }).then((bodyString) {
-      var channel = new RssFeed.parse(bodyString);
-      print(channel);
-      print('title : ${channel.title}');
-      print('author : ${channel.author}');
-      print('description : ${channel.description}');
-      print('link : ${channel.link}');
-      print('items length : ${channel.items.length}');
-      print('item[0] title : ${channel.items[0].title}');
-      print('item[0] description : ${channel.items[0].description}');
-      print('item[0] content : ${channel.items[0].content.value}');
-      print('item[0] content : ${channel.items[0].content.images}');
-      print('item[0] link : ${channel.items[0].link}');
-      print('item[0] pubDate : ${channel.items[0].pubDate}');
-      print('finish');
-
-      channel.items.forEach((element) => print(element.content));
-
-      return channel;
-    });
+    yield state.update(selectedList: tmpRss, copiedList: tmpAddedList, deletedList: tmpDeletedList);
   }
-}
-
-class RssModel {
-  final String title;
-  final String description;
-  final String link;
-  final String pubDate;
-
-  RssModel({this.title, this.description, this.link, this.pubDate});
 }

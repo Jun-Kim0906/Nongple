@@ -12,6 +12,8 @@ class RssAdd extends StatefulWidget {
 class _RssAddState extends State<RssAdd> {
   RssMainBloc _rssMainBloc;
   TextEditingController _search = TextEditingController();
+  double height;
+  double width;
 
   @override
   void initState() {
@@ -21,8 +23,8 @@ class _RssAddState extends State<RssAdd> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return BlocBuilder<RssMainBloc, RssMainState>(
       builder: (context, state) {
         return Scaffold(
@@ -120,28 +122,29 @@ class _RssAddState extends State<RssAdd> {
                     Row(
                       children: <Widget>[
                         Checkbox(
-//                            value: state.selection.contains(SearchRss(
-//                              name: rss.name,
-//                              option: rss.option[index],
-//                              url: rss.url[index],
-//                            ))
-//                                ? true
-//                                : false,
+                            value: state.selectedList.contains(SearchRss(
+                              name: rss.name,
+                              option: rss.option[index],
+                              url: rss.url[index],
+                            ))
+                                ? true
+                                : false,
                             onChanged: (value) {
-//                              _rssBloc.add(SelectedRssChanged(
-//                                  name: rss.name,
-//                                  option: rss.option[index],
-//                                  url: rss.url[index]));
+                              _rssMainBloc.add(SelectedRssChanged(
+                                isChecked: value,
+                                  name: rss.name,
+                                  option: rss.option[index],
+                                  url: rss.url[index]));
                             }),
                         InkWell(
                           child: Container(
                             child: Text(rss.option[index]),
                             height: 48,
-                            width: MediaQuery.of(context).size.width - 100,
+                            width: width*0.7,
                             alignment: Alignment.centerLeft,
                           ),
                           onTap: () {
-//                            _rssBloc.add(SelectedRssChanged(
+//                            _rssMainBloc.add(SelectedRssChanged(
 //                                name: rss.name,
 //                                option: rss.option[index],
 //                                url: rss.url[index]));

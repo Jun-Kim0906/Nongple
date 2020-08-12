@@ -48,7 +48,7 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
               backgroundColor: appBarColor,
               elevation: 0.0,
               leading: IconButton(
-                color: journalGoBackArrowColor,
+                color: goBackArrowColor,
                 icon: Icon(Icons.arrow_back_ios),
                 onPressed: () {
                   Navigator.pop(context);

@@ -316,8 +316,10 @@ class _JournalMainState extends State<JournalMain> {
           child: Hero(
             tag: '${state.mainThreePictureList[index].url}+main',
             child: Container(
-              height: height * 0.108,
-              width: height * 0.108,
+//              height: height * 0.108,
+//              width: height * 0.108,
+            height: height * 0.126,
+              width: height * 0.126,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 image: DecorationImage(

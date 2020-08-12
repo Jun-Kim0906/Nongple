@@ -7,7 +7,11 @@ class Rss extends Equatable {
   final List<String> option;
   final List<String> url;
 
-  Rss({@required this.name, @required this.option, @required this.url});
+  Rss({
+    @required this.name,
+    @required this.option,
+    @required this.url,
+  });
 
   List<Object> get props => [name, option, url];
 
@@ -65,28 +69,28 @@ class RssOption extends Equatable{
   }
 }
 
-//class SearchRss extends Equatable {
-//  final String name;
-//  final String option;
-//  final String url;
-//
-//  SearchRss({
-//    @required this.name,
-//    @required this.option,
-//    @required this.url,
-//  }) ;
-//
-//  List<Object> get props => [name, option, url];
-//
-//  factory SearchRss.fromDs(DocumentSnapshot ds) {
-//    return SearchRss(name: ds['name'], option: ds['option'], url: ds['url']);
-//  }
-//
-//  Map<String, String> toMap() {
-//    return {
-//      'name': name,
-//      'option': option,
-//      'url': url,
-//    };
-//  }
-//}
+class SearchRss extends Equatable {
+  final String name;
+  final String option;
+  final String url;
+
+  SearchRss({
+    @required this.name,
+    @required this.option,
+    @required this.url,
+  }) ;
+
+  List<Object> get props => [name, option, url];
+
+  factory SearchRss.fromDs(DocumentSnapshot ds) {
+    return SearchRss(name: ds['name'], option: ds['option'], url: ds['url']);
+  }
+
+  Map<String, String> toMap() {
+    return {
+      'name': name,
+      'option': option,
+      'url': url,
+    };
+  }
+}

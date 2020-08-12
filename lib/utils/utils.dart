@@ -7,3 +7,4 @@ export 'weather_util/api_addr.dart';
 export 'resize_picture.dart';
 export 'dictionary_util/dictionary.dart';
 export 'rss_list/rss_list.dart';
+export 'random_id.dart';
