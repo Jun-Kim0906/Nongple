@@ -64,18 +64,26 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
 
   Stream<JournalCreateState> _mapImageSeletedToState(
       List<Asset> assetList) async* {
-    yield state.update(assetList: assetList);
+    List<bool> _load =state.selectImageLoad;
+
+    for(int i = 0 ; i < assetList.length;i++){
+      _load.insert(0, false);
+    }
+    yield state.update(assetList: assetList, selectImageLoad: _load);
   }
 
   Stream<JournalCreateState> _mapAddImageFileToState(File imageFile) async* {
     List<File> _img = state.imageList;
+    List<bool> _load =state.selectImageLoad;
 
     if (!_img.contains(imageFile)) {
       _img.insert(0, await resizePicture(imageFile));
+      _load.insert(0, true);
     }
 
     yield state.update(
       imageList: _img,
+      selectImageLoad: _load
     );
   }
 

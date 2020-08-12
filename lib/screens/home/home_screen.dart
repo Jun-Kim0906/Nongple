@@ -55,12 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: height*0.09,
+                    height: height*0.079,
                     width: width,
                     child: AutoSizeText(
                       '$name 님\n오늘도 풍성한 하루 되세요',
                       style: homeMainTitle,
-                      maxLines: 2,
+                      maxLines: 3,
                     )
                   ),
                   SizedBox(
