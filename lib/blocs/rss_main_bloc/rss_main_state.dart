@@ -8,8 +8,11 @@ class RssMainState {
   final List<RssOption> deletedList;
   final List<RssOption> addedList;
   final List<RssOption> originalList;
+  final String search;
 
   final bool editButtonPressed;
+  final bool isLoading;
+  final bool isMainPageLoading;
 
   RssMainState({
     @required this.suggestion,
@@ -18,6 +21,9 @@ class RssMainState {
     @required this.addedList,
     @required this.originalList,
     @required this.editButtonPressed,
+    @required this.search,
+    @required this.isLoading,
+    @required this.isMainPageLoading,
   });
 
   factory RssMainState.empty() {
@@ -27,7 +33,10 @@ class RssMainState {
       deletedList: [],
       addedList: [],
       originalList: [],
+      search: '',
       editButtonPressed: false,
+      isLoading: false,
+      isMainPageLoading: false,
     );
   }
 
@@ -37,7 +46,10 @@ class RssMainState {
     List<RssOption> deletedList,
     List<RssOption> addedList,
     List<RssOption> originalList,
+    String search,
     bool editButtonPressed,
+    bool isLoading,
+    bool isMainPageLoading,
   }) {
     return RssMainState(
       suggestion: suggestion ?? this.suggestion,
@@ -45,7 +57,10 @@ class RssMainState {
       deletedList: deletedList ?? this.deletedList,
       addedList: addedList ?? this.addedList,
       originalList: originalList ?? this.originalList,
+      search: search?? this.search,
       editButtonPressed: editButtonPressed ?? this.editButtonPressed,
+      isLoading: isLoading ?? this.isLoading,
+      isMainPageLoading: isMainPageLoading ?? this.isMainPageLoading,
     );
   }
 
@@ -55,7 +70,10 @@ class RssMainState {
     List<RssOption> deletedList,
     List<RssOption> addedList,
     List<RssOption> originalList,
+    String search,
     bool editButtonPressed,
+    bool isLoading,
+    bool isMainPageLoading,
   }) {
     return copyWith(
       suggestion: suggestion,
@@ -63,7 +81,10 @@ class RssMainState {
       deletedList: deletedList,
       addedList: addedList,
       originalList: originalList,
+      search: search,
       editButtonPressed: editButtonPressed,
+      isLoading: isLoading,
+      isMainPageLoading: isMainPageLoading,
     );
   }
 
@@ -75,7 +96,10 @@ class RssMainState {
     deletedList: ${deletedList.length},
     addedList: ${addedList.length},
     originalList: ${originalList.length},
+    search: $search,
     editButtonPressed: $editButtonPressed,
+    isLoading: $isLoading,
+    isMainPageLoading: $isMainPageLoading,
     }''';
   }
 }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:nongple/models/models.dart';
 
 abstract class RssMainEvent extends Equatable {
   const RssMainEvent();
@@ -32,3 +33,34 @@ class SelectedRssChanged extends RssMainEvent {
 class CompleteButtonPressed extends RssMainEvent{}
 
 class EditButtonPressed extends RssMainEvent{}
+
+class DeleteRss extends RssMainEvent{
+  final RssOption deleteRss;
+  const DeleteRss({@required this.deleteRss});
+
+  @override
+  String toString() {
+    return 'DeleteRss{deleteRss: ${deleteRss.name} ${deleteRss.option}';
+  }
+}
+
+class MoveToAddPage extends RssMainEvent{
+  @override
+  String toString() {
+    return 'MoveToAddPage';
+  }
+}
+
+class SearchOnChanged extends RssMainEvent{
+  final String search;
+  const SearchOnChanged({@required this.search});
+
+  @override
+  String toString() {
+    return 'SearchOnChanged{search: $search}';
+  }
+}
+
+class LoadRssPage extends RssMainEvent{}
+
+class RssPageLoaded extends RssMainEvent{}

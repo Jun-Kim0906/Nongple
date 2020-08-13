@@ -20,6 +20,7 @@ class _RssAddState extends State<RssAdd> {
   void initState() {
     super.initState();
     _rssMainBloc = BlocProvider.of<RssMainBloc>(context);
+    _rssMainBloc.add(MoveToAddPage());
   }
 
   @override
@@ -52,7 +53,7 @@ class _RssAddState extends State<RssAdd> {
             centerTitle: true,
           ),
           body: Padding(
-            padding: EdgeInsets.fromLTRB(width*0.05, height*0.03, width*0.05, height*0.03),
+            padding: EdgeInsets.fromLTRB(width*0.05, height*0.03, width*0.05, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -82,9 +83,8 @@ class _RssAddState extends State<RssAdd> {
                   textInputAction: TextInputAction.search,
                   controller: _search,
                   onChanged: (value) {
-//                    _rssMainBloc.add(GetFeed());
+                    _rssMainBloc.add(SearchOnChanged(search: value));
                   },
-//              onSubmitted: (value) {},
                 ),
                 Expanded(
                   child: ListView.builder(
@@ -120,6 +120,11 @@ class _RssAddState extends State<RssAdd> {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: rss.option.length,
               itemBuilder: (context, index) {
+                bool abc = state.selectedList.contains(SearchRss(
+                  name: rss.name,
+                  option: rss.option[index],
+                  url: rss.url[index],
+                ));
                 return Column(
                   children: <Widget>[
                 Divider(
@@ -129,13 +134,7 @@ class _RssAddState extends State<RssAdd> {
                     Row(
                       children: <Widget>[
                         Checkbox(
-                            value: state.selectedList.contains(SearchRss(
-                              name: rss.name,
-                              option: rss.option[index],
-                              url: rss.url[index],
-                            ))
-                                ? true
-                                : false,
+                            value: abc,
                             onChanged: (value) {
                               _rssMainBloc.add(SelectedRssChanged(
                                 isChecked: value,
@@ -151,10 +150,11 @@ class _RssAddState extends State<RssAdd> {
                             alignment: Alignment.centerLeft,
                           ),
                           onTap: () {
-//                            _rssMainBloc.add(SelectedRssChanged(
-//                                name: rss.name,
-//                                option: rss.option[index],
-//                                url: rss.url[index]));
+                            _rssMainBloc.add(SelectedRssChanged(
+                              isChecked: !abc,
+                                name: rss.name,
+                                option: rss.option[index],
+                                url: rss.url[index]));
                           },
                         )
                       ],

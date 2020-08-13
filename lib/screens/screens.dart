@@ -9,3 +9,4 @@ export 'dictionary/screen.dart';
 export 'journal/journal.dart';
 export 'settings/settings.dart';
 export 'weather/weather_screen.dart';
+export 'rss_screen/rss.dart';

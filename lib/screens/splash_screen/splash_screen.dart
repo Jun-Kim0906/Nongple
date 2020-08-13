@@ -1,10 +1,6 @@
 
-import 'dart:async';
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.Dart';
-import 'package:nongple/utils/utils.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -58,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       fontSize: 80.0,
                       fontWeight: FontWeight.bold,
                     ),
-                    boxHeight: 300.0,
+                    boxHeight: height * 0.277,
                   ),
                 ),
               ),
