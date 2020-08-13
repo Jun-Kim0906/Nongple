@@ -16,13 +16,13 @@ class BottomNavigationButton extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
     return Container(
       width: width,
-      height: height * 0.08,
+      height: height * 0.086,
       child: RaisedButton(
         color: Color(0xFF2F80ED),
         child: SizedBox(
           height: height * 0.04,
+          width: width * 0.097,
           child: FittedBox(
-            fit: BoxFit.fitHeight,
             child: Text(
               _title ?? '다음',
               style: TextStyle(color: Colors.white, fontSize: 21.6),

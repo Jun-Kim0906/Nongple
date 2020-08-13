@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/home_bloc/home.dart';
@@ -5,11 +6,14 @@ import 'package:nongple/blocs/rss_main_bloc/rss_main.dart';
 import 'package:nongple/screens/rss_screen/rss_add.dart';
 import 'package:nongple/screens/rss_screen/rss_main_screen.dart';
 import 'package:nongple/screens/screens.dart';
+import 'package:webfeed/domain/media/media.dart';
 
 class ChipButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeBloc _homeBloc = BlocProvider.of<HomeBloc>(context);
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Row(
 //                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -25,7 +29,11 @@ class ChipButton extends StatelessWidget {
             ),
             label: Text(
               'RSS',
-              style: TextStyle(fontSize: 14.4),
+              style: TextStyle(
+                  fontSize: 14.4,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2F80ED),
+              ),
             ),
             onPressed: () {
               print("RSS");
@@ -54,7 +62,11 @@ class ChipButton extends StatelessWidget {
             ),
             label: Text(
               '설정',
-              style: TextStyle(fontSize: 14.4),
+              style: TextStyle(
+                  fontSize: 14.4,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2F80ED),
+              ),
             ),
             onPressed: () {
               print("설정");
