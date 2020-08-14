@@ -21,7 +21,7 @@ class BottomNavigationButton extends StatelessWidget {
         color: Color(0xFF2F80ED),
         child: SizedBox(
           height: height * 0.04,
-          width: width * 0.097,
+          width: width * 0.333,
           child: FittedBox(
             child: Text(
               _title ?? '다음',

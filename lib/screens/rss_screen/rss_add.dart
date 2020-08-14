@@ -57,12 +57,19 @@ class _RssAddState extends State<RssAdd> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '원하시는 지역 및 기관을 검색하세요',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
+                SizedBox(
+                  height: height * 0.04,
+                  width: width,
+                  child: FittedBox(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '원하시는 지역 및 기관을 검색하세요',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(height: height*0.04,),
@@ -109,63 +116,64 @@ class _RssAddState extends State<RssAdd> {
   }
 
   Widget expansionList(Rss rss, RssMainState state) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15),
-      child: ExpansionTile(
-        title: Text(rss.name),
-        children: <Widget>[
-          Container(
-            height: (48 * rss.option.length).toDouble(),
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: rss.option.length,
-              itemBuilder: (context, index) {
-                bool abc = state.selectedList.contains(SearchRss(
-                  name: rss.name,
-                  option: rss.option[index],
-                  url: rss.url[index],
-                ));
-                return Column(
-                  children: <Widget>[
-                Divider(
-                height: 0,
-                  color: Color.fromRGBO(242, 242, 242, 1),
-                ),
-                    Row(
-                      children: <Widget>[
-                        Checkbox(
-                            value: abc,
-                            onChanged: (value) {
-                              _rssMainBloc.add(SelectedRssChanged(
-                                isChecked: value,
-                                  name: rss.name,
-                                  option: rss.option[index],
-                                  url: rss.url[index]));
-                            }),
-                        InkWell(
-                          child: Container(
-                            child: Text(rss.option[index]),
-                            height: 48,
-                            width: width*0.7,
-                            alignment: Alignment.centerLeft,
-                          ),
-                          onTap: () {
+    return ExpansionTile(
+      tilePadding: EdgeInsets.all(0.0),
+      title: Text(rss.name, style: TextStyle(fontWeight: FontWeight.bold),),
+      children: <Widget>[
+        Container(
+          height: (48 * rss.option.length).toDouble(),
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: rss.option.length,
+            itemBuilder: (context, index) {
+              bool abc = state.selectedList.contains(SearchRss(
+                name: rss.name,
+                option: rss.option[index],
+                url: rss.url[index],
+              ));
+              return Column(
+                children: <Widget>[
+              Divider(
+              height: 0,
+                color: Color.fromRGBO(242, 242, 242, 1),
+              ),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                          value: abc,
+                          onChanged: (value) {
                             _rssMainBloc.add(SelectedRssChanged(
-                              isChecked: !abc,
+                              isChecked: value,
                                 name: rss.name,
                                 option: rss.option[index],
                                 url: rss.url[index]));
-                          },
-                        )
-                      ],
-                    ),
-                  ],
-                );
-              },
-            ),
-          )
-        ],
-      ),
+                          }),
+                      InkWell(
+                        child: Container(
+                          child: Text(
+                            rss.option[index],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          height: 48,
+                          width: width*0.7,
+                          alignment: Alignment.centerLeft,
+                        ),
+                        onTap: () {
+                          _rssMainBloc.add(SelectedRssChanged(
+                            isChecked: !abc,
+                              name: rss.name,
+                              option: rss.option[index],
+                              url: rss.url[index]));
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        )
+      ],
     );
   }
 }

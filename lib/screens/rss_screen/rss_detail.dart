@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:nongple/models/models.dart';
 import 'package:webfeed/webfeed.dart';
@@ -17,7 +18,6 @@ class RssDetail extends StatefulWidget {
 }
 
 class RssDetailState extends State<RssDetail> {
-  //
   String FEED_URL;
   RssFeed _feed;
   String _title;
