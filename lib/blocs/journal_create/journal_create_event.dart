@@ -7,46 +7,52 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:nongple/models/journal/journal.dart';
 import 'package:nongple/models/picture/picture.dart';
 
-class JournalCreateEvent extends Equatable{
+class JournalCreateEvent extends Equatable {
   const JournalCreateEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class DateSelected extends JournalCreateEvent{
+class DateSelected extends JournalCreateEvent {
   final Timestamp selectedDate;
+
   const DateSelected({@required this.selectedDate});
 
   @override
-  String toString()=>'SelectedDate: $selectedDate';
+  String toString() => 'SelectedDate: $selectedDate';
 }
 
-class ContentChanged extends JournalCreateEvent{
+class ContentChanged extends JournalCreateEvent {
   final String content;
+
   const ContentChanged({@required this.content});
 
   @override
-  String toString() =>'ContentChanged {content: $content}';
+  String toString() => 'ContentChanged {content: $content}';
 }
 
-class ImageSeleted extends JournalCreateEvent{
+class ImageSelected extends JournalCreateEvent {
   final List<Asset> assetList;
-  const ImageSeleted({@required this.assetList});
+
+  const ImageSelected({@required this.assetList});
 
   @override
   String toString() => 'assetList: $assetList';
 }
 
-class AddImageFile extends JournalCreateEvent{
+class AddImageFile extends JournalCreateEvent {
   final File imageFile;
-  const AddImageFile({@required this.imageFile});
+  final int index;
+
+  const AddImageFile({@required this.imageFile, int index})
+      : this.index = index ?? 0;
 
   @override
   String toString() => 'imageFile: ${imageFile.path}';
 }
 
-class DeleteImageFile extends JournalCreateEvent{
+class DeleteImageFile extends JournalCreateEvent {
   final File removedFile;
 
   const DeleteImageFile({@required this.removedFile});
@@ -64,14 +70,15 @@ class CheckSameDate extends JournalCreateEvent {
   String toString() => 'CheckSameDate { date : $date }';
 }
 
-class CompletePressed extends JournalCreateEvent{}
+class CompletePressed extends JournalCreateEvent {}
 
-class PopCheckSameDateDialog extends JournalCreateEvent{}
+class PopCheckSameDateDialog extends JournalCreateEvent {}
 
-class MoveToEdit extends JournalCreateEvent{}
+class MoveToEdit extends JournalCreateEvent {}
 
-class PassFid extends JournalCreateEvent{
+class PassFid extends JournalCreateEvent {
   final String fid;
+
   const PassFid({@required this.fid});
 
   @override
@@ -80,8 +87,9 @@ class PassFid extends JournalCreateEvent{
   }
 }
 
-class UploadJournal extends JournalCreateEvent{
+class UploadJournal extends JournalCreateEvent {
   final String fid;
+
   const UploadJournal({@required this.fid});
 
   @override
@@ -91,21 +99,24 @@ class UploadJournal extends JournalCreateEvent{
 }
 
 ///Edit Screen
-class EditPageLoad extends JournalCreateEvent{}
+class EditPageLoad extends JournalCreateEvent {}
 
-class EditPageLoaded extends JournalCreateEvent{}
+class EditPageLoaded extends JournalCreateEvent {}
 
-class LoadExistJournal extends JournalCreateEvent{}
+class LoadExistJournal extends JournalCreateEvent {}
 
-class PassExistJournalPictures extends JournalCreateEvent{
+class PassExistJournalPictures extends JournalCreateEvent {
   final Journal journal;
   final List<Picture> pictureList;
-  const PassExistJournalPictures({@required this.journal,@required this.pictureList});
+
+  const PassExistJournalPictures(
+      {@required this.journal, @required this.pictureList});
 }
 
-class DeleteExistPicture extends JournalCreateEvent{
+class DeleteExistPicture extends JournalCreateEvent {
   final int index;
+
   const DeleteExistPicture({@required this.index});
 }
 
-class UpdateJournal extends JournalCreateEvent{}
+class UpdateJournal extends JournalCreateEvent {}

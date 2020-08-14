@@ -52,6 +52,7 @@ class _JournalMainState extends State<JournalMain> {
             body: Padding(
               padding: EdgeInsets.fromLTRB(width*0.055, 0.0, width*0.055, 0.0),
               child: ListView(
+                physics: ClampingScrollPhysics(),
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,12 +149,16 @@ class _JournalMainState extends State<JournalMain> {
                                     date: now.date,
                                   ),
                                 ),
+                                SizedBox(
+                                  width: width*0.03,
+                                ),
                                 Expanded(
                                   child: Text(
                                     now.content == ''
                                         ? '입력한 내용이 없습니다.'
                                         : now.content,
                                     maxLines: 2,
+                                    overflow:TextOverflow.ellipsis,
                                     style: TextStyle(
                                         color: Color(0xFFB8B8B8)),
                                   ),
@@ -187,9 +192,6 @@ class _JournalMainState extends State<JournalMain> {
                       fit: BoxFit.contain,
                     ),
                   ),
-//                  SizedBox(
-//                    height: height * 0.063,
-//                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -230,14 +232,14 @@ class _JournalMainState extends State<JournalMain> {
                     ],
                   ),
                   Container(
-                    height: width * 0.2778,
+                    height: width * 0.296,
                     child: state.mainThreePictureList.isNotEmpty
                         ? ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemCount: state.mainThreePictureList.length,
                       itemBuilder: (BuildContext context, index) {
-                        return _imagewidget(context, index, state);
+                        return _imageWidget(context, index, state);
                       },
                     )
                         : Container(
@@ -286,11 +288,11 @@ class _JournalMainState extends State<JournalMain> {
     );
   }
 
-  Widget _imagewidget(BuildContext context, int index, JournalMainState state) {
+  Widget _imageWidget(BuildContext context, int index, JournalMainState state) {
     return Container(
         padding: EdgeInsets.all(10.0),
-        width: width * 0.2778,
-        height: width * 0.2778,
+        width: width * 0.296,
+        height: width * 0.296,
         child: InkWell(
           onTap: () {
             Navigator.of(context).push(PageRouteBuilder(
@@ -315,10 +317,8 @@ class _JournalMainState extends State<JournalMain> {
           child: Hero(
             tag: '${state.mainThreePictureList[index].url}+main',
             child: Container(
-              height: height * 0.108,
-              width: height * 0.108,
-//            height: height * 0.126,
-//              width: height * 0.126,
+            height: height * 0.126,
+              width: height * 0.126,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 image: DecorationImage(

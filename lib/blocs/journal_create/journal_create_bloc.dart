@@ -20,10 +20,10 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
       yield* _mapDateSelectedToState(event.selectedDate);
     } else if (event is ContentChanged) {
       yield* _mapContentChangedToState(event.content);
-    } else if (event is ImageSeleted) {
-      yield* _mapImageSeletedToState(event.assetList);
+    } else if (event is ImageSelected) {
+      yield* _mapImageSelectedToState(event.assetList);
     } else if (event is AddImageFile) {
-      yield* _mapAddImageFileToState(event.imageFile);
+      yield* _mapAddImageFileToState(event.imageFile, event.index);
     } else if (event is DeleteImageFile) {
       yield* _mapDeleteImageFileToState(event.removedFile);
     } else if (event is CheckSameDate) {
@@ -62,28 +62,25 @@ class JournalCreateBloc extends Bloc<JournalCreateEvent, JournalCreateState> {
     yield state.update(content: content);
   }
 
-  Stream<JournalCreateState> _mapImageSeletedToState(
+  Stream<JournalCreateState> _mapImageSelectedToState(
       List<Asset> assetList) async* {
-    List<bool> _load =state.selectImageLoad;
-
-    for(int i = 0 ; i < assetList.length;i++){
-      _load.insert(0, false);
+    List<File> bufferList = state.imageList;
+    for(int i =0; i<assetList.length; i++){
+      bufferList.insert(0, null);
     }
-    yield state.update(assetList: assetList, selectImageLoad: _load);
+    yield state.update(assetList: assetList, imageList: bufferList);
   }
 
-  Stream<JournalCreateState> _mapAddImageFileToState(File imageFile) async* {
+  Stream<JournalCreateState> _mapAddImageFileToState(File imageFile, int index) async* {
     List<File> _img = state.imageList;
-    List<bool> _load =state.selectImageLoad;
 
     if (!_img.contains(imageFile)) {
-      _img.insert(0, await resizePicture(imageFile));
-      _load.insert(0, true);
+      _img.removeAt(index);
+      _img.insert(index, await resizePicture(imageFile));
     }
 
     yield state.update(
       imageList: _img,
-      selectImageLoad: _load
     );
   }
 

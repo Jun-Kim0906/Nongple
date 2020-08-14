@@ -1,14 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
-import 'package:nongple/models/models.dart';
 import 'package:nongple/screens/journal/journal.dart';
 import 'package:nongple/utils/utils.dart';
 import 'package:nongple/widgets/loading/loading.dart';
 
 class JournalAllPictures extends StatefulWidget {
-
   @override
   _JournalAllPicturesState createState() => _JournalAllPicturesState();
 }
@@ -29,12 +28,13 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
     height = MediaQuery.of(context).size.height;
     return BlocListener(
       bloc: _journalMainBloc,
-      listener: (BuildContext context, JournalMainState state){
-        if(state.isLoading==true&&state.isPicturePageLoading==true){
+      listener: (BuildContext context, JournalMainState state) {
+        if (state.isLoading == true && state.isPicturePageLoading == true) {
           LoadingDialog.onLoading(context);
           _journalMainBloc.add(GetAllPicture());
-        }else if(state.isLoading==false && state.isPicturePageLoading==true){
-          LoadingDialog.dismiss(context, (){
+        } else if (state.isLoading == false &&
+            state.isPicturePageLoading == true) {
+          LoadingDialog.dismiss(context, () {
             _journalMainBloc.add(PageLoaded());
           });
         }
@@ -94,35 +94,30 @@ class _JournalAllPicturesState extends State<JournalAllPictures> {
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(
-//              _createRoute(state.pictureList[index].url)
               PageRouteBuilder(
-                transitionDuration: Duration(seconds: 5),
-                pageBuilder: (_, __, ___) => JournalPictureDetail(
-                  url: state.allPictureList[index].url,
-                  ismain: false,
-                ),
-                fullscreenDialog: true,
-                transitionsBuilder: (
-                    BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                    Widget child,
-                    ) =>
-                    FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    ),
-              ));
+            transitionDuration: Duration(milliseconds: 500),
+            pageBuilder: (_, __, ___) => JournalPictureDetail(
+              url: state.allPictureList[index].url,
+              ismain: false,
+            ),
+            fullscreenDialog: true,
+            transitionsBuilder: (
+              BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child,
+            ) =>
+                FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          ));
         },
         child: Hero(
           tag: '${state.allPictureList[index].url}+all',
-          child:
-
-          Image.network(
-            state.allPictureList[index].url,
-
-//            state.pictureList[index].url,
-            fit: BoxFit.fill,
+          child: CachedNetworkImage(
+            imageUrl: state.allPictureList[index].url,
+            fit: BoxFit.fitWidth,
           ),
         ),
       ),

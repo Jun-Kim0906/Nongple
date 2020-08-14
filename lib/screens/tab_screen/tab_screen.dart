@@ -43,13 +43,13 @@ class _TabScreenState extends State<TabScreen> {
                 Navigator.pop(context);
               },
             ),
-            title: SizedBox(
-              height: height * 0.054,
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: Column(
-                  children: [
-                    (activeTab == AppTab.weather)
+            title: Column(
+              children: [
+                SizedBox(
+                  width: width*0.0833,
+                  height: height*0.0329,
+                  child: FittedBox(
+                    child: (activeTab == AppTab.weather)
                         ? Text(
                             '날씨',
                             style: tabAppBarTitleStyle,
@@ -63,14 +63,15 @@ class _TabScreenState extends State<TabScreen> {
                                 '용어사전',
                                 style: tabAppBarTitleStyle,
                               ),
-                    Text(
-                      widget.facility.name,
-                      style: tabAppBarSubtitleStyle,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                Text(
+                  widget.facility.name,
+                  style: tabAppBarSubtitleStyle,
+                ),
+              ],
             ),
+
             centerTitle: true,
           ),
           body: (activeTab == AppTab.weather)

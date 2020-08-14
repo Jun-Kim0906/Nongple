@@ -30,7 +30,7 @@ TextStyle cardWidgetAddProjButton =
 
 
 // tab pages appbar style
-TextStyle tabAppBarTitleStyle = TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold);
+TextStyle tabAppBarTitleStyle = TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold);
 TextStyle tabAppBarSubtitleStyle = TextStyle(fontSize: 12, color: Colors.black);
 
 
