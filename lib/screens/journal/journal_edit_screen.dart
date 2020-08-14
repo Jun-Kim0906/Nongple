@@ -375,22 +375,22 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
       BuildContext context, int index, JournalCreateState state) {
     return Container(
         padding: EdgeInsets.all(10.0),
-//        width: width * 0.143,
-        height: height * 0.134,
-        width: height * 0.134,
+        width: height * 0.143,
+//        height: height * 0.134,
+//        width: height * 0.134,
         child: Stack(
           children: <Widget>[
             Align(
               alignment: FractionalOffset.bottomLeft,
               child: Container(
-//                height: height * 0.108,
-//                width: height * 0.108,
-                height: height * 0.126,
-                width: height * 0.126,
+                height: height * 0.108,
+                width: height * 0.108,
+//                height: height * 0.126,
+//                width: height * 0.126,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
-//                    fit: BoxFit.cover,
+                    fit: BoxFit.cover,
                     image: FileImage(
                       state.imageList[index],
                     ),
@@ -406,8 +406,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                         DeleteImageFile(removedFile: state.imageList[index]));
                   },
                   child: SizedBox(
-                    height: height * 0.023,
-                    width: height * 0.023,
+                    height: height * 0.027,
+                    width: height * 0.027,
                     child: FittedBox(
                       child: Icon(
                         Icons.cancel,
@@ -424,22 +424,22 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
       BuildContext context, int index, JournalCreateState state) {
     return Container(
         padding: EdgeInsets.all(10.0),
-//        width: height * 0.143,
-    height: height * 0.134,
-        width: height * 0.134,
+        width: height * 0.143,
+//    height: height * 0.134,
+//        width: height * 0.134,
         child: Stack(
           children: <Widget>[
             Align(
               alignment: FractionalOffset.bottomLeft,
               child: Container(
-//                height: height * 0.108,
-//                width: height * 0.108,
-              height: height * 0.126,
-                width: height * 0.126,
+                height: height * 0.108,
+                width: height * 0.108,
+//              height: height * 0.126,
+//                width: height * 0.126,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
-//                    fit: BoxFit.cover,
+                    fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
                       state.existPictureList[index].url,
                     ),
@@ -454,8 +454,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                     _journalCreateBloc.add(DeleteExistPicture(index: index));
                   },
                   child: SizedBox(
-                    height: height * 0.023,
-                    width: height * 0.023,
+                    height: height * 0.027,
+                    width: height * 0.027,
                     child: FittedBox(
                       child: Icon(
                         Icons.cancel,

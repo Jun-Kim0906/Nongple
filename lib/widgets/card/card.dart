@@ -67,7 +67,8 @@ class _HomePageCardState extends State<HomePageCard> {
               child: widget.facility.bgUrl.isNotEmpty
                   ? Image(
                       image: CachedNetworkImageProvider(widget.facility.bgUrl),
-                      fit: BoxFit.cover,
+//                image: NetworkImage(widget.facility.bgUrl),
+                fit: BoxFit.cover,
                       color: Color.fromRGBO(255, 255, 255, 0.2),
                       colorBlendMode: BlendMode.modulate,
                     )

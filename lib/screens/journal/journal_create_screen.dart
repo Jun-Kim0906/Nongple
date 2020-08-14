@@ -323,22 +323,22 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
       BuildContext context, int index, JournalCreateState state) {
     return Container(
         padding: EdgeInsets.all(10.0),
-//        width: height * 0.143,
-        height: height * 0.134,
-        width: height * 0.134,
+        width: height * 0.143,
+//        height: height * 0.134,
+//        width: height * 0.134,
         child: Stack(
           children: <Widget>[
             Align(
               alignment: FractionalOffset.bottomLeft,
               child: Container(
-//                height: height * 0.108,
-//                width: height * 0.108,
-                height: height * 0.126,
-                width: height * 0.126,
+                height: height * 0.108,
+                width: height * 0.108,
+//                height: height * 0.126,
+//                width: height * 0.126,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
-//                    fit: BoxFit.cover,
+                    fit: BoxFit.cover,
                     image: FileImage(
                       state.imageList[index],
                     ),
@@ -354,8 +354,8 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                         DeleteImageFile(removedFile: state.imageList[index]));
                   },
                   child: SizedBox(
-                    height: height * 0.023,
-                    width: height * 0.023,
+                    height: height * 0.027,
+                    width: height * 0.027,
                     child: FittedBox(
                       child: Icon(
                         Icons.cancel,

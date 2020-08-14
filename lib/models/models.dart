@@ -6,3 +6,4 @@ export 'weather/weather.dart';
 export 'picture/picture.dart';
 export 'dictionary/dictionary.dart';
 export 'rss/rss.dart';
+export 'background/background.dart';
