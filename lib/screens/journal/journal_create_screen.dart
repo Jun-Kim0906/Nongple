@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +12,6 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nongple/screens/screens.dart';
-import 'package:nongple/models/models.dart';
 
 class JournalCreateScreen extends StatefulWidget {
   @override
@@ -62,7 +59,7 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
       },
       child: BlocBuilder<JournalCreateBloc, JournalCreateState>(
           builder: (context, state) {
-            bufferDate = state.selectedDate.toDate();
+        bufferDate = state.selectedDate.toDate();
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
@@ -77,19 +74,19 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
             elevation: 0.0,
             title: SizedBox(
               height: height * 0.032,
-                child: FittedBox(
+              child: FittedBox(
                   fit: BoxFit.fitHeight,
-                    child: Text('일지작성', style: TextStyle(color: Colors.black))
-                ),
+                  child: Text('일지작성', style: TextStyle(color: Colors.black))),
             ),
             centerTitle: true,
             backgroundColor: Colors.white,
           ),
           body: ListView(
-//            mainAxisAlignment: MainAxisAlignment.start,
+            physics: ClampingScrollPhysics(),
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.fromLTRB(width*0.094, 0.0, width*0.094, 0.0),
+                padding:
+                    EdgeInsets.fromLTRB(width * 0.094, 0.0, width * 0.094, 0.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -129,7 +126,8 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                       ),
                       child: Container(
                         height: height * 0.449,
-                        padding: EdgeInsets.fromLTRB(width*0.047, height*0.025, width*0.047, height*0.025),
+                        padding: EdgeInsets.fromLTRB(width * 0.047,
+                            height * 0.025, width * 0.047, height * 0.025),
                         child: TextFormField(
                           onChanged: (value) {
                             _journalCreateBloc
@@ -179,17 +177,12 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                                     size: height * 0.03,
                                   ),
                                   SizedBox(
-                                    height: height * 0.038,
-                                    width: width * 0.2,
-                                    child: AutoSizeText(
-                                      ' 갤러리',
-                                      style: TextStyle(
-                                          fontSize: 21.6,
-                                          color: Color(0xFF757575),
-                                          fontWeight: FontWeight.bold),
-                                      minFontSize: 10,
-                                      stepGranularity: 2,
-                                      maxLines: 1,
+                                    height: height * 0.0356,
+                                    width: width * 0.1361,
+                                    child: FittedBox(
+                                      child: Text(
+                                        ' 갤러리',
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -219,17 +212,12 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                                   size: height * 0.03,
                                 ),
                                 SizedBox(
-                                  height: height * 0.038,
-                                  width: width * 0.2,
-                                  child: AutoSizeText(
-                                    ' 사진 촬영',
-                                    style: TextStyle(
-                                        fontSize: 21.6,
-                                        color: Color(0xFF757575),
-                                        fontWeight: FontWeight.bold),
-                                    minFontSize: 10,
-                                    stepGranularity: 2,
-                                    maxLines: 1,
+                                  height: height * 0.0356,
+                                  width: width * 0.191,
+                                  child: FittedBox(
+                                    child: Text(
+                                      ' 사진 촬영',
+                                    ),
                                   ),
                                 )
                               ],
@@ -248,17 +236,16 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                 ),
               ),
               Container(
-                height: height * 0.143,
+                height: width * 0.3,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  physics: ClampingScrollPhysics(),
                   itemCount: state.imageList.length,
                   itemBuilder: (BuildContext context, int index) {
                     return index == 0
                         ? Row(
                             children: <Widget>[
                               SizedBox(
-                                width: 30.0,
+                                width: 30,
                               ),
                               _imageWidget(context, index, state),
                             ],
@@ -299,11 +286,11 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
 
     try {
       if (resultList.isNotEmpty) {
-        _journalCreateBloc.add(ImageSeleted(assetList: resultList));
+        _journalCreateBloc.add(ImageSelected(assetList: resultList));
         for (int i = 0; i < resultList.length; i++) {
           ByteData a = await resultList[i].getByteData();
           File file = await writeToFile(a, i);
-          _journalCreateBloc.add(AddImageFile(imageFile: file));
+          _journalCreateBloc.add(AddImageFile(imageFile: file, index: i));
         }
       }
     } catch (e) {
@@ -321,51 +308,54 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
 
   Widget _imageWidget(
       BuildContext context, int index, JournalCreateState state) {
+    bool isNull = state.imageList[index] == null;
     return Container(
-        padding: EdgeInsets.all(10.0),
-//        width: height * 0.143,
-        height: height * 0.134,
-        width: height * 0.134,
-        child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: FractionalOffset.bottomLeft,
-              child: Container(
-//                height: height * 0.108,
-//                width: height * 0.108,
-                height: height * 0.126,
-                width: height * 0.126,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-//                    fit: BoxFit.cover,
-                    image: FileImage(
-                      state.imageList[index],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Align(
-                alignment: FractionalOffset.topRight,
-                child: InkWell(
-                  onTap: () {
-                    _journalCreateBloc.add(
-                        DeleteImageFile(removedFile: state.imageList[index]));
-                  },
-                  child: SizedBox(
-                    height: height * 0.023,
-                    width: height * 0.023,
-                    child: FittedBox(
-                      child: Icon(
-                        Icons.cancel,
-                        color: Color(0xFF6F6F6F),
+        padding: EdgeInsets.all(5.0),
+        height: width*0.3,
+        width: width*0.3,
+        child: isNull
+            ? Center(
+                child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Color.fromARGB(255, 0, 61, 165)),
+              ))
+            : Stack(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Container(
+                      height: width * 0.25,
+                      width: width * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        image: DecorationImage(
+                          image: FileImage(
+                            state.imageList[index],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                )),
-          ],
-        ));
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: () {
+                          _journalCreateBloc.add(DeleteImageFile(
+                              removedFile: state.imageList[index]));
+                        },
+                        child: SizedBox(
+                          height: width * 0.05,
+                          width: width * 0.05,
+                          child: FittedBox(
+                            child: Icon(
+                              Icons.cancel,
+                              color: Color(0xFF6F6F6F),
+                            ),
+                          ),
+                        ),
+                      )),
+                ],
+              ));
   }
 
   showAlertDialog(BuildContext context, JournalCreateState state) {

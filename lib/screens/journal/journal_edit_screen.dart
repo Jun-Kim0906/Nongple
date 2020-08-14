@@ -47,9 +47,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
         } else if (state.isLoading == false && state.editPageLoading == true) {
           LoadingDialog.dismiss(context, () {
             _journalCreateBloc.add(EditPageLoaded());
-            _textEditingController =
-                TextEditingController(text: state.content);
-            textController=false;
+            _textEditingController = TextEditingController(text: state.content);
+            textController = false;
           });
         } else if (state.createCompletePressed == true &&
             state.uploadComplete == false) {
@@ -58,13 +57,13 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
         } else if (state.createCompletePressed == true &&
             state.uploadComplete == true) {
           LoadingDialog.dismiss(context, () {});
-          Navigator.pop(context,true);
+          Navigator.pop(context, true);
           Navigator.pop(context, true);
         }
       },
       child: BlocBuilder<JournalCreateBloc, JournalCreateState>(
           builder: (context, state) {
-        if (textController&&state.existJournal.jid!=null) {
+        if (textController && state.existJournal.jid != null) {
           _textEditingController =
               TextEditingController(text: state.existJournal.content);
           textController = false;
@@ -84,19 +83,19 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
             elevation: 0.0,
             title: SizedBox(
               height: height * 0.032,
-                child: FittedBox(
+              child: FittedBox(
                   fit: BoxFit.fitHeight,
-                    child: Text('일지수정', style: TextStyle(color: Colors.black))
-                ),
+                  child: Text('일지수정', style: TextStyle(color: Colors.black))),
             ),
             centerTitle: true,
             backgroundColor: Colors.white,
           ),
           body: ListView(
-//            mainAxisAlignment: MainAxisAlignment.start,
+            physics: ClampingScrollPhysics(),
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.fromLTRB(width*0.094, 0.0, width*0.094, 0.0),
+                padding:
+                    EdgeInsets.fromLTRB(width * 0.094, 0.0, width * 0.094, 0.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -129,8 +128,9 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Container(
-                            height: height * 0.449,
-                        padding: EdgeInsets.fromLTRB(width*0.047, height*0.025, width*0.047, height*0.025),
+                        height: height * 0.449,
+                        padding: EdgeInsets.fromLTRB(width * 0.047,
+                            height * 0.025, width * 0.047, height * 0.025),
                         child: state.editPageLoading
                             ? TextFormField(
                                 minLines: 25,
@@ -178,7 +178,7 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Container(
-                          height: height * 0.066,
+                            height: height * 0.066,
                             width: width * 0.402,
                             padding: EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
 //                            height: height * 0.07,
@@ -218,7 +218,6 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                               },
                             )),
                         Container(
-//                          height: height * 0.07,
                           height: height * 0.066,
                           width: width * 0.402,
                           padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
@@ -260,65 +259,65 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                         ),
                       ],
                     ),
-//                    SizedBox(
-//                      height: height * 0.02,
-//                    ),
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
                   ],
                 ),
               ),
-//              SizedBox(
-//                height: height * 0.029,
-//              ),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                padding: EdgeInsets.fromLTRB(30.0, 0, 0, 0),
-                width: MediaQuery.of(context).size.width,
-                height: height * 0.143,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  dragStartBehavior: DragStartBehavior.start,
-                  scrollDirection: Axis.horizontal,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: state.existPictureList.length == 0
-                      ? 1
-                      : state.existPictureList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    print(
-                        'copy list length : ${state.existPictureList.length}');
-                    return Row(
-                      children: [
-                        (state.existPictureList.length == 0)
-                            ? Container()
-                            : _existingImageWidget(context, index, state),
-                        (state.existPictureList.length == 0 ||
-                                index == state.existPictureList.length - 1)
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                physics: ClampingScrollPhysics(),
-                                itemCount: state.imageList.length,
-                                itemBuilder:
-                                    (BuildContext context, int index) {
-                                  return index == 0
-                                      ? Row(
-                                          children: <Widget>[
-                                            _imageWidget(
-                                                context, index, state),
-                                          ],
-                                        )
-                                      : _imageWidget(context, index, state);
-                                },
-                              )
-                            : Container(),
-                      ],
-                    );
-                  },
-                )),
+                    width: MediaQuery.of(context).size.width,
+                    height: width * 0.3,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      dragStartBehavior: DragStartBehavior.start,
+                      scrollDirection: Axis.horizontal,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: state.existPictureList.length == 0
+                          ? 1
+                          : state.existPictureList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        print(
+                            'copy list length : ${state.existPictureList.length}');
+                        return Row(
+                          children: [
+                            (state.existPictureList.length == 0)
+                                ? SizedBox(
+                                    width: 30,
+                                  )
+                                : index == 0
+                                    ? Row(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: 30,
+                                          ),
+                                          _existingImageWidget(
+                                              context, index, state),
+                                        ],
+                                      )
+                                    : _existingImageWidget(
+                                        context, index, state),
+                            (state.existPictureList.length == 0 ||
+                                    index == state.existPictureList.length - 1)
+                                ? ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    physics: ClampingScrollPhysics(),
+                                    itemCount: state.imageList.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return _imageWidget(
+                                          context, index, state);
+                                    },
+                                  )
+                                : Container(),
+                          ],
+                        );
+                      },
+                    )),
               ),
-//              SizedBox(
-//                height: height * 0.019,
-//              ),
             ],
           ),
           bottomNavigationBar: BottomNavigationButton(
@@ -351,11 +350,11 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
 
     try {
       if (resultList.isNotEmpty) {
-        _journalCreateBloc.add(ImageSeleted(assetList: resultList));
+        _journalCreateBloc.add(ImageSelected(assetList: resultList));
         for (int i = 0; i < resultList.length; i++) {
           ByteData a = await resultList[i].getByteData();
           File file = await writeToFile(a, i);
-          _journalCreateBloc.add(AddImageFile(imageFile: file));
+          _journalCreateBloc.add(AddImageFile(imageFile: file, index: i));
         }
       }
     } catch (e) {
@@ -373,73 +372,72 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
 
   Widget _imageWidget(
       BuildContext context, int index, JournalCreateState state) {
+    bool isNull = state.imageList[index] == null;
     return Container(
-        padding: EdgeInsets.all(10.0),
-//        width: width * 0.143,
-        height: height * 0.134,
-        width: height * 0.134,
-        child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: FractionalOffset.bottomLeft,
-              child: Container(
-//                height: height * 0.108,
-//                width: height * 0.108,
-                height: height * 0.126,
-                width: height * 0.126,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-//                    fit: BoxFit.cover,
-                    image: FileImage(
-                      state.imageList[index],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Align(
-                alignment: FractionalOffset.topRight,
-                child: InkWell(
-                  onTap: () {
-                    _journalCreateBloc.add(
-                        DeleteImageFile(removedFile: state.imageList[index]));
-                  },
-                  child: SizedBox(
-                    height: height * 0.023,
-                    width: height * 0.023,
-                    child: FittedBox(
-                      child: Icon(
-                        Icons.cancel,
-                        color: Color(0xFF6F6F6F),
+        padding: EdgeInsets.all(5.0),
+        height: width * 0.3,
+        width: width * 0.3,
+        child: isNull
+            ? Center(
+                child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Color.fromARGB(255, 0, 61, 165)),
+              ))
+            : Stack(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Container(
+                      height: width * 0.25,
+                      width: width * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        image: DecorationImage(
+                          image: FileImage(
+                            state.imageList[index],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                )),
-          ],
-        ));
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: () {
+                          _journalCreateBloc.add(DeleteImageFile(
+                              removedFile: state.imageList[index]));
+                        },
+                        child: SizedBox(
+                          height: width * 0.05,
+                          width: width * 0.05,
+                          child: FittedBox(
+                            child: Icon(
+                              Icons.cancel,
+                              color: Color(0xFF6F6F6F),
+                            ),
+                          ),
+                        ),
+                      )),
+                ],
+              ));
   }
 
   Widget _existingImageWidget(
       BuildContext context, int index, JournalCreateState state) {
     return Container(
-        padding: EdgeInsets.all(10.0),
-//        width: height * 0.143,
-    height: height * 0.134,
-        width: height * 0.134,
+        padding: EdgeInsets.all(5.0),
+        height: width * 0.3,
+        width: width * 0.3,
         child: Stack(
           children: <Widget>[
             Align(
-              alignment: FractionalOffset.bottomLeft,
+              alignment: Alignment.bottomLeft,
               child: Container(
-//                height: height * 0.108,
-//                width: height * 0.108,
-              height: height * 0.126,
-                width: height * 0.126,
+                height: width * 0.25,
+                width: width * 0.25,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(20.0),
                   image: DecorationImage(
-//                    fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
                       state.existPictureList[index].url,
                     ),
@@ -448,14 +446,14 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
               ),
             ),
             Align(
-                alignment: FractionalOffset.topRight,
+                alignment: Alignment.topRight,
                 child: InkWell(
                   onTap: () {
                     _journalCreateBloc.add(DeleteExistPicture(index: index));
                   },
                   child: SizedBox(
-                    height: height * 0.023,
-                    width: height * 0.023,
+                    height: width * 0.05,
+                    width: width * 0.05,
                     child: FittedBox(
                       child: Icon(
                         Icons.cancel,

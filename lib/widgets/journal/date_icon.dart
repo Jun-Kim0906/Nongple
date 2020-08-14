@@ -1,10 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nongple/utils/utils.dart';
-import 'package:webfeed/domain/media/media.dart';
 
 class DateIcon extends StatelessWidget {
   final Timestamp date;
@@ -26,12 +24,9 @@ class DateIcon extends StatelessWidget {
       color: dayOfWeek == 6? journalIconColor2:dayOfWeek==7?journalIconColor3:journalIconColor1
       ,
       child: Container(
-//        decoration: BoxDecoration(
-//        ),
-        width: width/7,
-        height: width/7,
+        width: width*0.1389,
+        height: width*0.1389,
         child: FittedBox(
-//          fit: BoxFit.fitHeight,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

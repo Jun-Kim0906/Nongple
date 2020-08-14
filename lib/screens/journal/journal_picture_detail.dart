@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:nongple/utils/utils.dart';
 
 class JournalPictureDetail extends StatelessWidget {
-  String url;
-  bool ismain;
-  double height;
+  final String url;
+  final bool ismain;
 
   JournalPictureDetail({@required this.url, @required this.ismain});
 
+  double height;
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;

@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,23 +60,23 @@ class _JournalAllState extends State<JournalAll> {
                   Navigator.pop(context, isBeforePageChanged);
                 },
               ),
-              title: SizedBox(
-                height: height * 0.054,
-                child: FittedBox(
-                  fit: BoxFit.fitHeight,
-                  child: Column(
-                    children: [
-                      Text(
+              title: Column(
+                children: [
+                  SizedBox(
+                    height: height * 0.0328,
+                    width: width*0.255,
+                    child: FittedBox(
+                      child: Text(
                         '일지 전체보기',
                         style: tabAppBarTitleStyle,
                       ),
-                      Text(
-                        state.facility.name,
-                        style: tabAppBarSubtitleStyle,
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  Text(
+                    state.facility.name,
+                    style: tabAppBarSubtitleStyle,
+                  ),
+                ],
               ),
               centerTitle: true,
             ),
@@ -87,28 +86,33 @@ class _JournalAllState extends State<JournalAll> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   FlatButton(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          DateFormat('yyyy년 MM월')
-                              .format(state.selectMonth.toDate()),
-                          style: TextStyle(
-                              color: Color(0xFF929292), fontSize: 13.6),
+                    child: SizedBox(
+                      width: width*0.25,
+                      height: height*0.0356,
+                      child: FittedBox(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              DateFormat('yyyy년 MM월')
+                                  .format(state.selectMonth.toDate()),
+                              style: TextStyle(
+                                  color: Color(0xFF929292), fontSize: 13.6),
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Color(0xFF929292),
+                            ),
+                          ],
                         ),
-                        Icon(
-                          Icons.keyboard_arrow_down,
-                          color: Color(0xFF929292),
-                        ),
-                      ],
+                      ),
                     ),
                     onPressed: () {
                       DatePicker.showDatePicker(
                         context,
                         onConfirm: (date, i) {
-                          print('confirm $date');
                           if (date != state.selectMonth) {
                             _journalMainBloc.add(SelectMonthChanged(
                                 changedMonth: Timestamp.fromDate(date)));
@@ -128,8 +132,6 @@ class _JournalAllState extends State<JournalAll> {
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             Journal now = state.monthlyJournalList[index];
-                            print(
-                                'journal all listview builder item content: ${now.content}');
                             return InkWell(
                               child: Container(
                                 child: Column(
@@ -144,12 +146,14 @@ class _JournalAllState extends State<JournalAll> {
                                             date: now.date,
                                           ),
                                         ),
+                                        SizedBox(width: width*0.03,),
                                         Expanded(
                                           child: Text(
                                             now.content == ''
                                                 ? '입력한 내용이 없습니다.'
                                                 : now.content,
                                             maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 color: Color(0xFFB8B8B8)),
                                           ),

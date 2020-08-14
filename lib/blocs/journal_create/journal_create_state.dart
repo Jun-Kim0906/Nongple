@@ -24,7 +24,6 @@ class JournalCreateState {
   final bool isLoading;
 
   ///test
-  final List<bool> selectImageLoad;
 
   JournalCreateState({
     @required this.selectedDate,
@@ -43,7 +42,6 @@ class JournalCreateState {
     @required this.isLoading,
     @required this.existJournal,
 
-    @required this.selectImageLoad,
   });
 
   factory JournalCreateState.empty() {
@@ -77,9 +75,6 @@ class JournalCreateState {
       isLoading: false,
       editPageLoading: false,
       existJournal: Journal(content: '',date: Timestamp.now()),
-
-
-      selectImageLoad: [],
     );
   }
 
@@ -99,9 +94,6 @@ class JournalCreateState {
     bool editPageLoading,
     bool isLoading,
     Journal existJournal,
-
-
-    List<bool> selectImageLoad,
   }) {
     return JournalCreateState(
       selectedDate: selectedDate ?? this.selectedDate,
@@ -119,9 +111,6 @@ class JournalCreateState {
       editPageLoading: editPageLoading ?? this.editPageLoading,
       isLoading: isLoading ?? this.isLoading,
       existJournal: existJournal ?? this.existJournal,
-
-
-      selectImageLoad: selectImageLoad ?? this.selectImageLoad,
     );
   }
 
@@ -141,9 +130,6 @@ class JournalCreateState {
     bool editPageLoading,
     bool isLoading,
     Journal existJournal,
-
-
-    List<bool> selectImageLoad,
   }) {
     return copyWith(
       selectedDate: selectedDate,
@@ -161,9 +147,6 @@ class JournalCreateState {
       editPageLoading: editPageLoading,
       isLoading: isLoading,
       existJournal: existJournal,
-
-
-      selectImageLoad: selectImageLoad,
     );
   }
 
@@ -184,7 +167,6 @@ class JournalCreateState {
     uploadComplete: $uploadComplete,
     editPageLoading: $editPageLoading,
     isLoading: $isLoading,
-    selectImageLoad: $selectImageLoad,
     }''';
   }
 }

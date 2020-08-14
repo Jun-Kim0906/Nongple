@@ -78,89 +78,91 @@ class _JournalDetailState extends State<JournalDetail> {
               ),
             ],
           ),
-          body: Column(
-            children: [
-              (state.detailPictureList.isNotEmpty)
-                  ? Container(
-                      height: height * 0.6,
-                      child: Swiper(
-                          layout: SwiperLayout.STACK,
-                          itemHeight: height * 0.6,
-                          itemWidth: width,
-                          loop: true,
-                          itemCount: state.detailPictureList.length,
-                          control: SwiperControl(
-                              color: Color(0x00000000),
-                              disableColor: Color(0x00000000)),
-                          viewportFraction: 1.0,
-                          scale: 1.0,
-                          pagination: SwiperPagination(
-                            builder: DotSwiperPaginationBuilder(
-                              activeColor: Color(0xFF2F80ED),
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            physics: ClampingScrollPhysics(),
+            child: Column(
+              children: [
+                (state.detailPictureList.isNotEmpty)
+                    ? Container(
+                        height: height * 0.6,
+                        child: Swiper(
+                            layout: SwiperLayout.STACK,
+                            itemHeight: height * 0.6,
+                            itemWidth: width,
+                            loop: true,
+                            itemCount: state.detailPictureList.length,
+                            control: SwiperControl(
+                                color: Color(0x00000000),
+                                disableColor: Color(0x00000000)),
+                            viewportFraction: 1.0,
+                            scale: 1.0,
+                            pagination: SwiperPagination(
+                              builder: DotSwiperPaginationBuilder(
+                                activeColor: Color(0xFF2F80ED),
+                              ),
                             ),
-                          ),
-                          itemBuilder: (BuildContext context, int index) {
-                            return Card(
-                              margin: EdgeInsets.all(0.0),
-                              semanticContainer: true,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15.0),
-                                  bottomRight: Radius.circular(15.0),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Card(
+                                margin: EdgeInsets.all(0.0),
+                                semanticContainer: true,
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(15.0),
+                                    bottomRight: Radius.circular(15.0),
+                                  ),
                                 ),
-                              ),
-                              child: Image(
-                                image: CachedNetworkImageProvider(
-                                  state.detailPictureList[index].url,
+                                child: Image(
+                                  image: CachedNetworkImageProvider(
+                                    state.detailPictureList[index].url,
+                                  ),
+                                  fit: BoxFit.fill,
                                 ),
-                                fit: BoxFit.fill,
-                              ),
-                            );
-                          }),
-                    )
-                  : Container(),
-              Flexible(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(
-                        width * 0.055, height*0.0625, width * 0.055, 0.0),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: height * 0.05,
-                            child: AutoSizeText(
-                              formatDate.toString() + ' ' + weekday,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                                color: Color(0xFFB8B8B8),
-                              ),
-                              minFontSize: 6,
-                              stepGranularity: 2,
-                              maxLines: 1,
-                            ),
-                          ),
-                          SizedBox(
-                            height: height * 0.029,
-                          ),
-                          Text(
-                            state.journal.content,
+                              );
+                            }),
+                      )
+                    : Container(),
+                Container(
+                  padding: EdgeInsets.fromLTRB(
+                      width * 0.055, height*0.0625, width * 0.055, 0.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: height * 0.05,
+                          child: AutoSizeText(
+                            formatDate.toString() + ' ' + weekday,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 15.0,
+                              fontSize: 18.0,
                               color: Color(0xFFB8B8B8),
                             ),
+                            minFontSize: 6,
+                            stepGranularity: 2,
+                            maxLines: 1,
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          height: height * 0.029,
+                        ),
+                        Text(
+                          state.journal.content,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0,
+                            color: Color(0xFFB8B8B8),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              )
-            ],
+                SizedBox(
+                  height: height*0.05,
+                )
+              ],
+            ),
           ),
         );
       }),
