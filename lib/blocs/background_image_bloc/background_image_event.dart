@@ -21,3 +21,17 @@ class UpdateBgUrl extends BgEvent{
   @override
   String toString()=>'UpdateBgUrl { imageFile : $imageFile }';
 }
+
+class SaveBgImage extends BgEvent {
+  final File imageFile;
+  final String fid;
+  const SaveBgImage({this.imageFile, this.fid});
+
+  @override
+  List<Object> get props => [imageFile, fid];
+
+  @override
+  String toString() {
+    return 'SaveBgImage { imageFile : $imageFile, fid : $fid }';
+  }
+}

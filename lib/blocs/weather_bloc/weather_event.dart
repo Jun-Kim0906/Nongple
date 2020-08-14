@@ -1,7 +1,6 @@
 
 
 import 'package:equatable/equatable.dart';
-import 'package:nongple/blocs/home_bloc/home_bloc.dart';
 
 class WeatherEvent extends Equatable {
   const WeatherEvent();

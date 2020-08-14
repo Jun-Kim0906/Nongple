@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       fontSize: 80.0,
                       fontWeight: FontWeight.bold,
                     ),
-                    boxHeight: height * 0.277,
+//                    boxHeight: height * 0.277,
                   ),
                 ),
               ),

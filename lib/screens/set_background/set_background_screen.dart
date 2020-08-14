@@ -62,7 +62,7 @@ class _SetBackgroundScreenState extends State<SetBackgroundScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   return BlocProvider.value(
                     value: _homeBloc,
-                    child: FacilityListForBackground(facList: state.facList[index]),
+                    child: FacilityListForBackground(facility: state.facList[index]),
                   );
                 });
           } else {
