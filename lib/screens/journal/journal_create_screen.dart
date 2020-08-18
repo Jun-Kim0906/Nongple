@@ -324,8 +324,8 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Container(
-                      height: width * 0.25,
-                      width: width * 0.25,
+                      height: width * 0.26,
+                      width: width * 0.26,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.0),
                         image: DecorationImage(
@@ -344,8 +344,8 @@ class _JournalCreateScreenState extends State<JournalCreateScreen> {
                               removedFile: state.imageList[index]));
                         },
                         child: SizedBox(
-                          height: width * 0.05,
-                          width: width * 0.05,
+                          height: width * 0.055,
+                          width: width * 0.055,
                           child: FittedBox(
                             child: Icon(
                               Icons.cancel,

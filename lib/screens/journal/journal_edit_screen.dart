@@ -388,8 +388,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Container(
-                      height: width * 0.25,
-                      width: width * 0.25,
+                      height: width * 0.26,
+                      width: width * 0.26,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         image: DecorationImage(
@@ -408,8 +408,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                               removedFile: state.imageList[index]));
                         },
                         child: SizedBox(
-                          height: width * 0.05,
-                          width: width * 0.05,
+                          height: width * 0.055,
+                          width: width * 0.055,
                           child: FittedBox(
                             child: Icon(
                               Icons.cancel,
@@ -433,8 +433,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
-                height: width * 0.25,
-                width: width * 0.25,
+                height: width * 0.26,
+                width: width * 0.26,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   image: DecorationImage(
@@ -452,8 +452,8 @@ class _JournalEditScreenState extends State<JournalEditScreen> {
                     _journalCreateBloc.add(DeleteExistPicture(index: index));
                   },
                   child: SizedBox(
-                    height: width * 0.05,
-                    width: width * 0.05,
+                    height: width * 0.055,
+                    width: width * 0.055,
                     child: FittedBox(
                       child: Icon(
                         Icons.cancel,
