@@ -185,7 +185,6 @@ class _PickBackgroundState extends State<PickBackground> {
                 Flexible(
                   flex: 1,
                   child: Container(
-                    width: width / 2.3,
                     child: OutlineButton(
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(width * 0.01,
