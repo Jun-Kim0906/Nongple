@@ -61,8 +61,6 @@ dependencies:
   random_string: ^2.1.0
   charset_converter: ^1.0.3
   auto_size_text: ^2.1.0
-  flutter_cache_manager: ^1.4.1
-  flutter_cache_manager_firebase: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:

@@ -35,3 +35,34 @@ class SaveBgImage extends BgEvent {
     return 'SaveBgImage { imageFile : $imageFile, fid : $fid }';
   }
 }
+
+class GetImageList extends BgEvent {
+  final String fid;
+
+  const GetImageList({this.fid});
+
+  @override
+  List<Object> get props => [fid];
+
+  @override
+  String toString() {
+    return 'GetImageList { fid : $fid }';
+  }
+}
+
+class EditImageList extends BgEvent {}
+
+class PressCheckBox extends BgEvent {
+  final String bgid;
+  const PressCheckBox({this.bgid});
+
+  @override
+  List<Object> get props => [bgid];
+
+  @override
+  String toString() {
+    return 'PressCheckBox { bgid : $bgid }';
+  }
+}
+
+class RevertToInitialState extends BgEvent {}

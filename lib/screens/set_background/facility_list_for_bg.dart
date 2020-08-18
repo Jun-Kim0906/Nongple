@@ -62,7 +62,7 @@ class FacilityListForBackground extends StatelessWidget {
                           value: _homeBloc,
                         ),
                         BlocProvider<BgBloc>(
-                          create: (BuildContext context) => BgBloc()..add(UpdateBgUrl(null)),
+                          create: (BuildContext context) => BgBloc(),
                         )
                       ],
                       child: PickBackground(facility: facility),

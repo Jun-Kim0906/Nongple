@@ -1,10 +1,10 @@
 export './login/login_screen.dart';
-export 'home/home_screen.dart';
+export 'home/home.dart';
 export 'splash_screen/splash_screen.dart';
 export 'register/register_screen.dart';
-export 'set_background/set_background_screen.dart';
+export 'set_background/background.dart';
 export 'facility_create/create_screen.dart';
-export 'tab_screen/tab_screen.dart';
+export 'tab_screen/tab.dart';
 export 'dictionary/screen.dart';
 export 'journal/journal.dart';
 export 'settings/settings.dart';

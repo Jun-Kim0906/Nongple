@@ -46,7 +46,8 @@ class _TabScreenState extends State<TabScreen> {
             title: Column(
               children: [
                 SizedBox(
-                  width: width*0.0833,
+//                  width: width*0.0833,
+                width: width * 0.163,
                   height: height*0.0329,
                   child: FittedBox(
                     child: (activeTab == AppTab.weather)

@@ -9,37 +9,50 @@ import 'package:nongple/models/background/background.dart';
 class BgState {
   final File imageFile;
   final List<Background> bg;
+  final bool editState;
+  final bool checkBoxState;
 
-//  const BgUrlSet({this.imageFile, this.bg});
   BgState({
     @required this.imageFile,
     @required this.bg,
+    @required this.editState,
+    @required this.checkBoxState,
   });
 
   factory BgState.empty() {
     return BgState(
       imageFile: null,
       bg: [],
+      editState: false,
+      checkBoxState: false,
     );
   }
 
   BgState copyWith({
     File imageFile,
     List<Background> bg,
+    bool editState,
+    bool checkBoxState,
   }) {
     return BgState(
       imageFile: imageFile ?? this.imageFile,
       bg: bg ?? this.bg,
+      editState: editState ?? this.editState,
+      checkBoxState: checkBoxState ?? this.checkBoxState,
     );
   }
 
   BgState update({
     File imageFile,
     List<Background> bg,
+    bool editState,
+    bool checkBoxState,
   }) {
     return copyWith(
       imageFile: imageFile,
       bg: bg,
+      editState: editState,
+      checkBoxState: checkBoxState,
     );
   }
 
@@ -48,34 +61,8 @@ class BgState {
     return '''BgState { 
     imageFile : $imageFile, 
     bg list : ${bg.length},
+    editState : $editState,
+    checkBoxState : $checkBoxState,
     }''';
   }
 }
-
-//class InitialBgUrl extends BgState{}
-//
-//class BgUrlSet extends BgState{
-//  final File imageFile;
-//  final List<Background> bg;
-//
-////  const BgUrlSet({this.imageFile, this.bg});
-//  BgUrlSet({imageFile, bg})
-//      : this.imageFile = imageFile ?? null, this.bg = bg ?? [];
-//
-//  BgUrlSet copyWith({File imageFile, List<Background> bg}) {
-//    return BgUrlSet(
-//      imageFile: imageFile ?? this.imageFile,
-//      bg: bg ?? this.bg,
-//    );
-//  }
-//
-//  List<Object> get props => [imageFile, bg];
-//
-//  @override
-//  String toString() {
-//    return '''BgUrlSet {
-//    imageFile : $imageFile,
-//    bg list : ${bg.length},
-//    }''';
-//  }
-//}

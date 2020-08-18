@@ -68,11 +68,15 @@ class _PickBackgroundState extends State<PickBackground> {
               centerTitle: true,
               actions: [
                 FlatButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BgImageList(bg: state.bg)),
+                          builder: (context) => BlocProvider.value(
+                            value: _bgBloc..add(GetImageList(fid: widget.facility.fid)),
+                            child: BgImageList(),
+                          )
+                      ),
                     );
                   },
                   child: Text(
@@ -101,23 +105,23 @@ class _PickBackgroundState extends State<PickBackground> {
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
                           child: (widget.facility.category == 1 ||
-                              widget.facility.category == 2)
+                                  widget.facility.category == 2)
                               ? Icon(
-                            CustomIcons.tractor,
-                            color: Color(0xFF2F80ED),
-                            size: 30,
-                          )
+                                  CustomIcons.tractor,
+                                  color: Color(0xFF2F80ED),
+                                  size: 30,
+                                )
                               : (widget.facility.category == 3)
-                              ? Icon(
-                            CustomIcons.cow,
-                            color: Color(0xFF2F80ED),
-                            size: 30,
-                          )
-                              : Icon(
-                            CustomIcons.plant,
-                            color: Color(0xFF2F80ED),
-                            size: 30,
-                          ),
+                                  ? Icon(
+                                      CustomIcons.cow,
+                                      color: Color(0xFF2F80ED),
+                                      size: 30,
+                                    )
+                                  : Icon(
+                                      CustomIcons.plant,
+                                      color: Color(0xFF2F80ED),
+                                      size: 30,
+                                    ),
                         ),
                       ),
                     ),
@@ -127,8 +131,8 @@ class _PickBackgroundState extends State<PickBackground> {
                     width: width * 0.644,
                     child: AutoSizeText(
                       widget.facility.name,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 23),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
                       maxLines: 1,
                     ),
                   ),
@@ -154,12 +158,11 @@ class _PickBackgroundState extends State<PickBackground> {
                               borderRadius: BorderRadius.circular(10.0),
                               child: state.imageFile != null
                                   ? Image.file(
-                                state.imageFile,
-                                fit: BoxFit.cover,
-                                color:
-                                Color.fromRGBO(255, 255, 255, 100),
-                                colorBlendMode: BlendMode.modulate,
-                              )
+                                      state.imageFile,
+                                      fit: BoxFit.cover,
+                                      color: Color.fromRGBO(255, 255, 255, 100),
+                                      colorBlendMode: BlendMode.modulate,
+                                    )
                                   : Image.asset("assets/white.png"),
                             ),
                           ),
@@ -192,8 +195,7 @@ class _PickBackgroundState extends State<PickBackground> {
                           child: FittedBox(
                             fit: BoxFit.fitHeight,
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Icon(
                                   Icons.collections,
@@ -241,7 +243,7 @@ class _PickBackgroundState extends State<PickBackground> {
     if (imageFile != null) {
       _bgBloc.add(UpdateBgUrl(imageFile));
     } else {
-      throw Exception('Image file does not exist');
+      print('[pick background image] Image Selection Canceled');
     }
   }
 
@@ -265,7 +267,8 @@ class _PickBackgroundState extends State<PickBackground> {
         maxLines: 1,
       ),
       onTap: () async {
-        _bgBloc.add(SaveBgImage(imageFile: state.imageFile, fid: widget.facility.fid));
+        _bgBloc.add(
+            SaveBgImage(imageFile: state.imageFile, fid: widget.facility.fid));
         _homeBloc.add((ListLoading()));
         Navigator.of(context).popUntil((route) => route.isFirst);
       },
