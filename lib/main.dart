@@ -7,6 +7,7 @@ import 'package:nongple/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:nongple/blocs/blocs.dart';
 import 'package:nongple/data_repository/user_repository/user_repository.dart';
 import 'package:nongple/screens/screens.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,10 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return BlocProvider.value(
             value: _authenticationBloc,
             child: MaterialApp(

@@ -117,7 +117,7 @@ class _RssAddState extends State<RssAdd> {
 
   Widget expansionList(Rss rss, RssMainState state) {
     return ExpansionTile(
-      tilePadding: EdgeInsets.all(0.0),
+//      tilePadding: EdgeInsets.all(0.0),
       title: Text(rss.name, style: TextStyle(fontWeight: FontWeight.bold),),
       children: <Widget>[
         Container(
