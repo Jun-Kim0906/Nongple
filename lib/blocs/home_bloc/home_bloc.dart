@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:nongple/data_repository/data_repository.dart';
 import 'package:nongple/models/facility/facility.dart';
 import 'package:nongple/models/weather/weather.dart';
 import 'package:nongple/utils/todays_date.dart';
@@ -20,6 +21,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       yield* _mapGetFacilityListToState();
     } else if(event is ListLoading){
       yield* _mapListLoadingToState();
+    } else if(event is DeleteFacility){
+      yield* _mapDeleteFacilityToState(event.fid);
     }
   }
 
@@ -137,5 +140,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Stream<HomeState> _mapListLoadingToState() async*{
     yield Loading();
+  }
+
+  Stream<HomeState> _mapDeleteFacilityToState(String fid) async*{
+    // delete everything related to facility from firebase and storage
+    await FacilityRepository().deleteFacility(fid: fid, uid: UserUtil.getUser().uid);
+
+//    yield Loading();
   }
 }

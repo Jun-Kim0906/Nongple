@@ -12,3 +12,17 @@ abstract class HomeEvent extends Equatable{
 class ListLoading extends HomeEvent{}
 
 class GetFacilityList extends HomeEvent{}
+
+class DeleteFacility extends HomeEvent {
+  final String fid;
+  const DeleteFacility({this.fid});
+
+  List<Object> get props => [fid];
+
+  @override
+  String toString() {
+    return '''DeleteFacility { 
+    fid : $fid,
+    }''';
+  }
+}

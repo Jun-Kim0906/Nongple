@@ -81,6 +81,9 @@ class _HomePageCardState extends State<HomePageCard> {
                   MaterialPageRoute(
                       builder: (context) => MultiBlocProvider(
                             providers: [
+                              BlocProvider.value(
+                                value: _homeBloc,
+                              ),
                               BlocProvider<TabBloc>(
                                 create: (context) => TabBloc(),
                               ),
