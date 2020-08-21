@@ -70,7 +70,7 @@ class _FacilityCreateScreenState extends State<FacilityCreateScreen4> {
                       elevation: 4.0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
                       child: Container(
-                        padding: EdgeInsets.fromLTRB(width*0.17, height*0.044, width*0.17, height*0.044),
+                        padding: EdgeInsets.fromLTRB(0.0, height*0.044, 0.0, height*0.044),
                         width: width,
                         height: height/3,
                         child: Column(
