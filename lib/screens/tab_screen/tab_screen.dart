@@ -20,9 +20,12 @@ class TabScreen extends StatefulWidget {
 }
 
 class _TabScreenState extends State<TabScreen> {
+  HomeBloc _homeBloc;
+
   @override
   void initState() {
     super.initState();
+    _homeBloc = BlocProvider.of<HomeBloc>(context);
   }
 
   @override
@@ -72,8 +75,17 @@ class _TabScreenState extends State<TabScreen> {
                 ),
               ],
             ),
-
             centerTitle: true,
+            actions: [
+              IconButton(
+                onPressed: (){
+                  _homeBloc.add(DeleteFacility(fid: widget.facility.fid));
+                  _homeBloc.add(ListLoading());
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.delete, color: Colors.black,),
+              ),
+            ],
           ),
           body: (activeTab == AppTab.weather)
               ? BlocProvider<WeatherBloc>(

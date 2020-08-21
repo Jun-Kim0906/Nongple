@@ -38,15 +38,16 @@ class SaveBgImage extends BgEvent {
 
 class GetImageList extends BgEvent {
   final String fid;
+  final String currentBgUrl;
 
-  const GetImageList({this.fid});
+  const GetImageList({this.fid, this.currentBgUrl});
 
   @override
-  List<Object> get props => [fid];
+  List<Object> get props => [fid, currentBgUrl];
 
   @override
   String toString() {
-    return 'GetImageList { fid : $fid }';
+    return 'GetImageList { fid : $fid, currentBgUrl : $currentBgUrl }';
   }
 }
 
@@ -54,15 +55,23 @@ class EditImageList extends BgEvent {}
 
 class PressCheckBox extends BgEvent {
   final String bgid;
-  const PressCheckBox({this.bgid});
+  final String bgUrl;
+  final String fid;
+  const PressCheckBox({this.bgid, this.bgUrl, this.fid});
 
   @override
-  List<Object> get props => [bgid];
+  List<Object> get props => [bgid, bgUrl, fid];
 
   @override
   String toString() {
-    return 'PressCheckBox { bgid : $bgid }';
+    return '''PressCheckBox { 
+    bgid : $bgid, 
+    bgUrl : $bgUrl,
+    fid : $fid,
+    }''';
   }
 }
 
 class RevertToInitialState extends BgEvent {}
+
+class DeleteSelectedImage extends BgEvent {}

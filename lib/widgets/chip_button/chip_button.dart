@@ -68,15 +68,17 @@ class ChipButton extends StatelessWidget {
                   color: Color(0xFF2F80ED),
               ),
             ),
-            onPressed: () {
-              print("설정");
-              Navigator.push(
+            onPressed: () async{
+              bool isChanged = await Navigator.push(
                   context, MaterialPageRoute(builder: (context) =>
                   BlocProvider.value(
                     value: _homeBloc,
                     child: Settings(),
                   )
               ));
+              if(isChanged){
+                _homeBloc.add(ListLoading());
+              }
             }),
       ],
     );

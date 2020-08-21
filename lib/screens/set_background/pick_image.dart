@@ -32,6 +32,7 @@ class _PickBackgroundState extends State<PickBackground> {
   BgBloc _bgBloc;
   HomeBloc _homeBloc;
   FirebaseStorage storage = FirebaseStorage.instance;
+  bool isChanged=false;
 
   @override
   void initState() {
@@ -55,7 +56,7 @@ class _PickBackgroundState extends State<PickBackground> {
                 color: Colors.blue[600],
                 icon: Icon(Icons.clear),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, isChanged);
                 },
               ),
               title: SizedBox(
@@ -68,12 +69,22 @@ class _PickBackgroundState extends State<PickBackground> {
               centerTitle: true,
               actions: [
                 FlatButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    isChanged = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BlocProvider.value(
-                            value: _bgBloc..add(GetImageList(fid: widget.facility.fid)),
+                          builder: (context) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: _bgBloc
+                                  ..add(GetImageList(
+                                      fid: widget.facility.fid,
+                                      currentBgUrl: widget.facility.bgUrl)),
+                              ),
+                              BlocProvider.value(
+                                value: _homeBloc,
+                              ),
+                            ],
                             child: BgImageList(),
                           )
                       ),
@@ -268,8 +279,10 @@ class _PickBackgroundState extends State<PickBackground> {
       onTap: () async {
         _bgBloc.add(
             SaveBgImage(imageFile: state.imageFile, fid: widget.facility.fid));
-        _homeBloc.add((ListLoading()));
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.pop(context);
+        Navigator.pop(context, true);
+//        _homeBloc.add((ListLoading()));
+//        Navigator.of(context).popUntil((route) => route.isFirst);
       },
     );
 
